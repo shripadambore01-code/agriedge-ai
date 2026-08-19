@@ -3,83 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriVoice - Offline-First Hybrid AI Assistant</title>
+    <title>AgriVoice - Farmer Field Voice Assistant</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="app-container">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="brand">
-                <div class="logo-icon"><i class="fa-solid fa-seedling"></i></div>
-                <div>
-                    <h1>AgriVoice AI</h1>
-                    <p class="subtitle">Offline-First Hybrid Voice Assistant for Farmers</p>
+    <div class="app-layout">
+        <!-- Top Utility Bar -->
+        <header class="top-nav">
+            <div class="nav-brand">
+                <div class="brand-badge">
+                    <i class="fa-solid fa-wheat-awn"></i>
+                </div>
+                <div class="brand-title">
+                    <div class="brand-row">
+                        <h2>AgriVoice</h2>
+                        <span class="version-tag">v1.0 Offline-First</span>
+                    </div>
+                    <p class="brand-desc">Voice Advisory System for Field Agriculture</p>
                 </div>
             </div>
 
-            <!-- Live Status & Mode Controls -->
-            <div class="header-controls">
-                <div class="status-badge" id="netStatusBadge">
-                    <span class="dot checking"></span>
-                    <span id="netStatusText">Checking Net...</span>
+            <!-- Field Diagnostics Pill Strip -->
+            <div class="telemetry-bar">
+                <div class="telemetry-pill" id="netStatusPill" title="Field Network Status">
+                    <span class="pulse-dot checking"></span>
+                    <span class="pill-label" id="netStatusLabel">Detecting Signal...</span>
                 </div>
 
-                <div class="mode-control">
-                    <label for="smartModeSelect"><i class="fa-solid fa-sliders"></i> Mode:</label>
-                    <select id="smartModeSelect">
-                        <option value="off">🔴 Pure Offline (Forced Local)</option>
-                        <option value="auto" selected>🟡 Auto Hybrid (Local + Smart Fallback)</option>
-                        <option value="on">🟢 Online Smart Priority (Gemini)</option>
-                    </select>
+                <div class="telemetry-pill" id="ragStatusPill" title="Local Agricultural Knowledge Base">
+                    <i class="fa-solid fa-database pill-icon"></i>
+                    <span>RAG Index: <strong>8 Records</strong></span>
+                </div>
+
+                <!-- Engine Mode Selector -->
+                <div class="mode-selector-wrapper">
+                    <label for="smartModeSelect" class="selector-label">Processing Engine:</label>
+                    <div class="custom-select-box">
+                        <select id="smartModeSelect">
+                            <option value="off">🔒 Offline Default (Llama 3.2 3B)</option>
+                            <option value="auto" selected>⚡ Hybrid Auto (Local + Cloud Boost)</option>
+                            <option value="on">🌐 Cloud Priority (Gemini Flash)</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down select-arrow"></i>
+                    </div>
                 </div>
             </div>
         </header>
 
-        <!-- Main Workspace -->
-        <main class="chat-workspace">
-            <!-- Messages Container -->
-            <div class="messages-container" id="messagesContainer">
-                <!-- Welcome Banner -->
-                <div class="message assistant welcome-card">
-                    <div class="card-icon"><i class="fa-solid fa-wheat-awn"></i></div>
-                    <div class="card-content">
-                        <h3>Namaste / Welcome to AgriVoice</h3>
-                        <p>Ask any question regarding <strong>crop diseases, pest control, fertilizers, irrigation, or PM-KISAN schemes</strong>.</p>
-                        <p class="hint"><i class="fa-solid fa-shield-halved"></i> <strong>Core Guarantee:</strong> Voice input, local RAG retrieval, and voice output are 100% offline.</p>
+        <!-- Main Body Grid -->
+        <div class="main-grid">
+            <!-- Left Sidebar: Quick Agricultural Workflows -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3 class="section-title"><i class="fa-solid fa-compass"></i> Field Quick Actions</h3>
+                    <div class="quick-chips">
+                        <button class="chip-btn" data-query="How do I identify and treat Yellow Rust in wheat crops?">
+                            <i class="fa-solid fa-seedling"></i>
+                            <span>Wheat Yellow Rust</span>
+                        </button>
+                        <button class="chip-btn" data-query="How to control Pink Bollworm in cotton crops?">
+                            <i class="fa-solid fa-bug"></i>
+                            <span>Cotton Pink Bollworm</span>
+                        </button>
+                        <button class="chip-btn" data-query="What are symptoms of Rice Blast disease and what is the spray dosage?">
+                            <i class="fa-solid fa-leaf"></i>
+                            <span>Rice Blast Treatment</span>
+                        </button>
+                        <button class="chip-btn" data-query="How do I treat Early Blight concentric spots on tomato plants?">
+                            <i class="fa-solid fa-circle-dot"></i>
+                            <span>Tomato Early Blight</span>
+                        </button>
+                        <button class="chip-btn" data-query="What are signs of Nitrogen deficiency in crops and how to fix with Urea?">
+                            <i class="fa-solid fa-flask"></i>
+                            <span>Nitrogen Deficiency</span>
+                        </button>
+                        <button class="chip-btn" data-query="What are the benefits and maintenance steps for drip irrigation systems?">
+                            <i class="fa-solid fa-faucet-drip"></i>
+                            <span>Drip Maintenance</span>
+                        </button>
+                        <button class="chip-btn" data-query="What is the PM-KISAN subsidy scheme and what documents are required?">
+                            <i class="fa-solid fa-building-columns"></i>
+                            <span>PM-KISAN Rs 6000 Scheme</span>
+                        </button>
+                        <button class="chip-btn" data-query="How does PMFBY Crop Insurance work and what is the claim deadline?">
+                            <i class="fa-solid fa-shield-heart"></i>
+                            <span>PMFBY Crop Insurance</span>
+                        </button>
                     </div>
                 </div>
-            </div>
 
-            <!-- Live Processing Visualizer -->
-            <div class="processing-bar hidden" id="processingBar">
-                <div class="spinner"></div>
-                <span id="processingText">Processing query...</span>
-            </div>
+                <!-- Evaluator Architecture Info Card -->
+                <div class="sidebar-card">
+                    <div class="card-header-mini">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <h4>Architecture Specs</h4>
+                    </div>
+                    <ul class="spec-list">
+                        <li><span>Voice In:</span> <strong>faster-whisper (Offline)</strong></li>
+                        <li><span>Retrieval:</span> <strong>ChromaDB / JSON RAG</strong></li>
+                        <li><span>Local LLM:</span> <strong>Llama 3.2 3B Q4_K_M</strong></li>
+                        <li><span>Cloud LLM:</span> <strong>Gemini 2.5 Flash</strong></li>
+                        <li><span>Voice Out:</span> <strong>Piper TTS (Offline)</strong></li>
+                    </ul>
+                </div>
+            </aside>
 
-            <!-- Input Controls Area -->
-            <div class="input-deck">
-                <div class="voice-section">
-                    <button class="mic-button" id="micButton" title="Click to speak">
-                        <i class="fa-solid fa-microphone"></i>
-                    </button>
-                    <span class="mic-status" id="micStatus">Tap microphone to speak</span>
+            <!-- Main Conversation & Audio Interface -->
+            <section class="conversation-panel">
+                <!-- Dialogue History Stream -->
+                <div class="dialogue-stream" id="messagesContainer">
+                    <!-- Default Field Advisory Welcome Banner -->
+                    <div class="dialogue-card assistant-entry welcome-banner">
+                        <div class="entry-header">
+                            <div class="agent-avatar">
+                                <i class="fa-solid fa-tractor"></i>
+                            </div>
+                            <div class="agent-meta">
+                                <h3>Farmer Field Assistant Ready</h3>
+                                <span class="meta-status">100% Offline Capable • Local RAG Active</span>
+                            </div>
+                        </div>
+                        <div class="entry-body">
+                            <p>Press the <strong>Microphone button</strong> below or select a quick topic from the left panel to ask about crop diseases, pest outbreaks, fertilizer dosages, or government welfare schemes.</p>
+                            <div class="feature-pills">
+                                <span class="feature-tag"><i class="fa-solid fa-microphone-lines"></i> Offline Voice In</span>
+                                <span class="feature-tag"><i class="fa-solid fa-brain"></i> On-Device Reasoning</span>
+                                <span class="feature-tag"><i class="fa-solid fa-volume-high"></i> Offline Voice Out</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <form class="text-input-form" id="chatForm">
-                    <input type="text" id="textQueryInput" placeholder="Or type your agricultural question here..." autocomplete="off">
-                    <button type="submit" id="sendButton"><i class="fa-solid fa-paper-plane"></i></button>
-                </form>
-            </div>
-        </main>
+                <!-- Processing / Loading Indicator -->
+                <div class="stream-loader hidden" id="processingBar">
+                    <div class="wave-spinner">
+                        <span></span><span></span><span></span><span></span>
+                    </div>
+                    <span id="processingText" class="loader-text">Analyzing query with Local Agricultural RAG...</span>
+                </div>
 
-        <!-- Evaluation Info Footer -->
-        <footer class="app-footer">
-            <div class="footer-item"><i class="fa-solid fa-microchip"></i> <strong>Local Brain:</strong> Llama 3.2 3B (GGUF CPU)</div>
-            <div class="footer-item"><i class="fa-solid fa-cloud"></i> <strong>Cloud Brain:</strong> Google Gemini Flash</div>
-            <div class="footer-item"><i class="fa-solid fa-volume-high"></i> <strong>TTS:</strong> Piper ONNX (100% Offline)</div>
-        </footer>
+                <!-- Bottom Input Console -->
+                <div class="input-console">
+                    <div class="voice-hero-bar">
+                        <button class="voice-trigger-btn" id="micButton" title="Click to Record Farmer Question">
+                            <div class="mic-ripple"></div>
+                            <i class="fa-solid fa-microphone mic-icon"></i>
+                        </button>
+                        <div class="voice-state-text">
+                            <h4 id="micStatusTitle">Press Microphone to Speak</h4>
+                            <p id="micStatusSubtitle">Works without internet connection</p>
+                        </div>
+                    </div>
+
+                    <!-- Manual Text Submission Bar -->
+                    <form class="text-query-bar" id="chatForm">
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-keyboard input-icon"></i>
+                            <input type="text" id="textQueryInput" placeholder="Type crop question or pest symptom..." autocomplete="off">
+                        </div>
+                        <button type="submit" class="submit-btn" id="sendButton" title="Send Question">
+                            <span>Ask Assistant</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </div>
     </div>
 
     <!-- Hidden audio element for speech playback -->

@@ -1,7 +1,7 @@
-﻿// AgriVoice Frontend Logic
+﻿// AgriVoice Field Voice Assistant Logic
 
-const netStatusBadge = document.getElementById("netStatusBadge");
-const netStatusText = document.getElementById("netStatusText");
+const netStatusPill = document.getElementById("netStatusPill");
+const netStatusLabel = document.getElementById("netStatusLabel");
 const smartModeSelect = document.getElementById("smartModeSelect");
 const messagesContainer = document.getElementById("messagesContainer");
 const processingBar = document.getElementById("processingBar");
@@ -9,7 +9,8 @@ const processingText = document.getElementById("processingText");
 const chatForm = document.getElementById("chatForm");
 const textQueryInput = document.getElementById("textQueryInput");
 const micButton = document.getElementById("micButton");
-const micStatus = document.getElementById("micStatus");
+const micStatusTitle = document.getElementById("micStatusTitle");
+const micStatusSubtitle = document.getElementById("micStatusSubtitle");
 const audioPlayer = document.getElementById("audioPlayer");
 
 let isRecording = false;
@@ -20,20 +21,25 @@ let audioChunks = [];
 async function checkSystemStatus() {
     try {
         const res = await fetch("/api/status");
-        if (!res.ok) throw new Error("Status failed");
+        if (!res.ok) throw new Error("Status error");
         const data = await res.json();
 
-        const dot = netStatusBadge.querySelector(".dot");
-        dot.className = "dot " + (data.internet_connected ? "online" : "offline");
-        netStatusText.textContent = data.internet_connected ? "🌐 Online" : "🔴 Offline";
+        const dot = netStatusPill.querySelector(".pulse-dot");
+        if (data.internet_connected) {
+            dot.className = "pulse-dot online";
+            netStatusLabel.innerHTML = "Signal: <strong>Connected</strong>";
+        } else {
+            dot.className = "pulse-dot offline";
+            netStatusLabel.innerHTML = "Signal: <strong>Offline (Field Mode)</strong>";
+        }
     } catch (e) {
-        const dot = netStatusBadge.querySelector(".dot");
-        dot.className = "dot offline";
-        netStatusText.textContent = "🔴 Server / Offline";
+        const dot = netStatusPill.querySelector(".pulse-dot");
+        dot.className = "pulse-dot offline";
+        netStatusLabel.innerHTML = "Signal: <strong>Offline</strong>";
     }
 }
 
-setInterval(checkSystemStatus, 5000);
+setInterval(checkSystemStatus, 6000);
 checkSystemStatus();
 
 // 2. Mode Change Handler
@@ -44,62 +50,86 @@ smartModeSelect.addEventListener("change", async (e) => {
     try {
         await fetch("/api/set-mode", { method: "POST", body: formData });
     } catch (err) {
-        console.error("Failed to set mode:", err);
+        console.error("Failed to sync mode:", err);
     }
 });
 
-// 3. Render Message Helper
-function appendUserMessage(text) {
-    const msgDiv = document.createElement("div");
-    msgDiv.className = "message user";
-    msgDiv.innerHTML = `<strong>Farmer:</strong> ${text}`;
-    messagesContainer.appendChild(msgDiv);
+// 3. Quick Action Chips
+document.querySelectorAll(".chip-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const query = btn.getAttribute("data-query");
+        if (query) {
+            executeTextQuery(query);
+        }
+    });
+});
+
+// 4. Message Rendering Helpers
+function appendUserDialogue(text) {
+    const card = document.createElement("div");
+    card.className = "dialogue-card user-entry";
+    card.innerHTML = `
+        <strong><i class="fa-solid fa-user"></i> Farmer Inquiry</strong>
+        <div>${text}</div>
+    `;
+    messagesContainer.appendChild(card);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
-function appendAssistantMessage(data) {
-    const msgDiv = document.createElement("div");
-    msgDiv.className = "message assistant";
+function appendAssistantDialogue(data) {
+    const card = document.createElement("div");
+    card.className = "dialogue-card assistant-entry";
 
     const isOfflineBrain = data.offline;
     const badgeClass = isOfflineBrain ? "local" : "cloud";
     const badgeIcon = isOfflineBrain ? "fa-microchip" : "fa-cloud";
+    const confidencePct = Math.round((data.rag_confidence || 0) * 100);
 
-    msgDiv.innerHTML = `
-        <div class="brain-badge ${badgeClass}">
-            <i class="fa-solid ${badgeIcon}"></i>
-            <span>Answered by: ${data.brain}</span>
+    card.innerHTML = `
+        <div class="brain-header-bar">
+            <div class="brain-badge ${badgeClass}">
+                <i class="fa-solid ${badgeIcon}"></i>
+                <span>${data.brain}</span>
+            </div>
+            ${data.audio_url ? `
+                <button class="play-voice-btn" onclick="playAudio('${data.audio_url}')">
+                    <i class="fa-solid fa-volume-high"></i> Replay Voice
+                </button>
+            ` : ""}
         </div>
-        <div class="answer-text">${data.answer}</div>
+
+        <div class="answer-body">${data.answer}</div>
+
         ${data.rag_context ? `
-            <details class="rag-details">
-                <summary><i class="fa-solid fa-database"></i> Local RAG Context (Confidence: ${(data.rag_confidence * 100).toFixed(0)}%)</summary>
-                <pre>${data.rag_context}</pre>
+            <details class="rag-accordion">
+                <summary>
+                    <i class="fa-solid fa-book-bookmark"></i>
+                    <span>Local Knowledge Context (Confidence: ${confidencePct}%)</span>
+                </summary>
+                <div class="rag-content-block">${data.rag_context}</div>
             </details>
         ` : ""}
     `;
 
-    messagesContainer.appendChild(msgDiv);
+    messagesContainer.appendChild(card);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-    // Play synthesized voice output
+    // Automatically play synthesized speech audio
     if (data.audio_url) {
-        audioPlayer.src = data.audio_url;
-        audioPlayer.play().catch(e => console.log("Audio autoplay prevented:", e));
+        playAudio(data.audio_url);
     }
 }
 
-// 4. Text Query Submission
-chatForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const query = textQueryInput.value.trim();
-    if (!query) return;
+function playAudio(url) {
+    audioPlayer.src = url;
+    audioPlayer.play().catch(e => console.log("Autoplay note:", e));
+}
 
-    appendUserMessage(query);
-    textQueryInput.value = "";
-
+// 5. Text Query Submission
+async function executeTextQuery(query) {
+    appendUserDialogue(query);
     processingBar.classList.remove("hidden");
-    processingText.textContent = "Analyzing query with RAG & Brain router...";
+    processingText.textContent = "Retrieving local agricultural knowledge...";
 
     try {
         const res = await fetch("/api/chat", {
@@ -108,65 +138,75 @@ chatForm.addEventListener("submit", async (e) => {
             body: JSON.stringify({ query: query, mode: smartModeSelect.value })
         });
 
-        if (!res.ok) throw new Error("API request failed");
+        if (!res.ok) throw new Error("Server error");
         const data = await res.json();
-        appendAssistantMessage(data);
+        appendAssistantDialogue(data);
     } catch (err) {
-        appendAssistantMessage({
-            brain: "System Error Handler",
+        appendAssistantDialogue({
+            brain: "Offline Safety Fallback",
             offline: true,
-            answer: `Sorry, there was an issue processing your request: ${err.message}`,
+            answer: `System notice: Could not complete query (${err.message}). Please ensure server is running.`,
             rag_context: ""
         });
     } finally {
         processingBar.classList.add("hidden");
     }
+}
+
+chatForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const query = textQueryInput.value.trim();
+    if (!query) return;
+    textQueryInput.value = "";
+    executeTextQuery(query);
 });
 
-// 5. Voice Recording & Offline STT Handling
+// 6. Voice Recording & Offline STT
 micButton.addEventListener("click", async () => {
     if (!isRecording) {
-        // Start recording
+        // Start Audio Recording
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             mediaRecorder = new MediaRecorder(stream);
             audioChunks = [];
 
-            mediaRecorder.ondataavailable = (event) => {
-                if (event.data.size > 0) audioChunks.push(event.data);
+            mediaRecorder.ondataavailable = (e) => {
+                if (e.data.size > 0) audioChunks.push(e.data);
             };
 
             mediaRecorder.onstop = async () => {
                 const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-                await sendVoiceQuery(audioBlob);
+                await submitVoiceQuery(audioBlob);
                 stream.getTracks().forEach(track => track.stop());
             };
 
             mediaRecorder.start();
             isRecording = true;
             micButton.classList.add("recording");
-            micStatus.textContent = "Listening... Tap to stop";
+            micStatusTitle.textContent = "Recording Farmer Question...";
+            micStatusSubtitle = "Tap again to finish & process";
         } catch (err) {
-            console.error("Microphone error:", err);
-            alert("Could not access microphone. Please check permissions or type your question.");
+            console.error("Microphone permission failed:", err);
+            alert("Microphone access is unavailable. You can also type or use Quick Action topics.");
         }
     } else {
-        // Stop recording
+        // Stop Audio Recording
         if (mediaRecorder && mediaRecorder.state !== "inactive") {
             mediaRecorder.stop();
         }
         isRecording = false;
         micButton.classList.remove("recording");
-        micStatus.textContent = "Tap microphone to speak";
+        micStatusTitle.textContent = "Press Microphone to Speak";
+        micStatusSubtitle.textContent = "Works without internet connection";
     }
 });
 
-async function sendVoiceQuery(audioBlob) {
+async function submitVoiceQuery(audioBlob) {
     processingBar.classList.remove("hidden");
-    processingText.textContent = "Transcribing voice offline with Whisper...";
+    processingText.textContent = "Transcribing voice offline with faster-whisper...";
 
     const formData = new FormData();
-    formData.append("audio_file", audioBlob, "voice_input.wav");
+    formData.append("audio_file", audioBlob, "farmer_speech.wav");
     formData.append("mode", smartModeSelect.value);
 
     try {
@@ -175,15 +215,15 @@ async function sendVoiceQuery(audioBlob) {
             body: formData
         });
 
-        if (!res.ok) throw new Error("Voice API request failed");
+        if (!res.ok) throw new Error("Voice processing error");
         const data = await res.json();
-        appendUserMessage(data.transcription);
-        appendAssistantMessage(data);
+        appendUserDialogue(data.transcription);
+        appendAssistantDialogue(data);
     } catch (err) {
-        appendAssistantMessage({
+        appendAssistantDialogue({
             brain: "Offline Voice Handler",
             offline: true,
-            answer: `Voice processing error: ${err.message}`,
+            answer: `Voice error: ${err.message}`,
             rag_context: ""
         });
     } finally {

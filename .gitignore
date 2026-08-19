@@ -1,0 +1,41 @@
+# Environment variables & secrets
+.env
+*.env
+
+# Python caches
+__pycache__/
+*.py[cod]
+*.class
+*.so
+.pytest_cache/
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+
+# Large Model weights (GGUF, ONNX, PyTorch, CTranslate2)
+models/*.gguf
+models/*.onnx
+models/*.bin
+models/whisper/
+models/piper/
+models/llm/
+
+# Vector Database storage & embeddings cache
+chroma_db/
+faiss_index/
+.cache/
+
+# Audio temporary files
+*.wav
+*.mp3
+*.ogg
+temp_audio/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

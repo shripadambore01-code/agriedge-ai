@@ -1,0 +1,66 @@
+﻿[
+  {
+    "id": "wheat_yellow_rust",
+    "topic": "Wheat Disease",
+    "crop": "Wheat",
+    "question": "How do I identify and manage Yellow Rust in wheat crops?",
+    "content": "Yellow Rust (Puccinia striiformis) in wheat appears as yellowish-orange powdery stripes or pustules on the upper leaves. In severe cases, it spreads to the leaf sheath and ears. Management: Spray Propiconazole 25% EC @ 1 ml/liter of water or Tebuconazole 25.9% EC @ 1 ml/liter at the first appearance of symptoms. Avoid excessive nitrogen fertilizer and ensure balanced NPK with irrigation.",
+    "keywords": ["wheat", "yellow rust", "fungus", "propiconazole", "leaves", "disease"]
+  },
+  {
+    "id": "rice_blast",
+    "topic": "Rice Disease",
+    "crop": "Rice / Paddy",
+    "question": "What are the symptoms and treatment for Rice Blast disease?",
+    "content": "Rice Blast (Magnaporthe oryzae) produces spindle-shaped / diamond-shaped lesions with brown borders and grey/white centers on leaves, leaf collars, nodes, and panicles (neck blast). Management: Seed treatment with Tricyclazole 75% WP @ 2g/kg seed. Foliar spray of Tricyclazole 75% WP @ 0.6g/liter or Isoprothiolane 40% EC @ 1.5 ml/liter when lesions appear on 2-5% of leaves.",
+    "keywords": ["rice", "paddy", "blast", "tricyclazole", "leaf blast", "neck blast"]
+  },
+  {
+    "id": "cotton_pink_bollworm",
+    "topic": "Cotton Pest",
+    "crop": "Cotton",
+    "question": "How to control Pink Bollworm infestation in cotton?",
+    "content": "Pink Bollworm (Pectinophora gossypiella) damages squares, flowers, and bolls, causing rosette flowers and premature boll opening. Control: Install Pheromone traps @ 5-8 traps/acre for monitoring. If trap catches exceed 8 moths/day for 3 consecutive days, spray Profenofos 50% EC @ 2 ml/liter or Emamectin Benzoate 5% SG @ 0.4 g/liter. Release Trichogramma parasitoids early in the season.",
+    "keywords": ["cotton", "pink bollworm", "pest", "pheromone traps", "profenofos", "emamectin"]
+  },
+  {
+    "id": "tomato_early_blight",
+    "topic": "Tomato Disease",
+    "crop": "Tomato",
+    "question": "How do I treat Early Blight on tomato plants?",
+    "content": "Early Blight (Alternaria solani) causes dark brown circular spots with concentric rings (target board pattern) on older lower leaves. Management: Spray Mancozeb 75% WP @ 2.5 g/liter or Chlorothalonil 75% WP @ 2 g/liter at 10-14 day intervals. Avoid overhead sprinkler irrigation and remove affected lower leaves.",
+    "keywords": ["tomato", "early blight", "alternaria", "mancozeb", "concentric rings", "leaf spot"]
+  },
+  {
+    "id": "soil_nitrogen_deficiency",
+    "topic": "Soil & Nutrients",
+    "crop": "General Crops",
+    "question": "What are signs of Nitrogen deficiency in crops and how to fix it?",
+    "content": "Nitrogen deficiency causes general yellowing (chlorosis) of older lower leaves starting from the leaf tip towards the base (V-shaped pattern in corn/maize), stunted plant growth, and thin stalks. Treatment: Apply Urea (46% N) as top-dressing or spray 1-2% Urea foliar solution for quick recovery. Incorporate green manure crops like dhaincha or sunn hemp.",
+    "keywords": ["nitrogen", "deficiency", "chlorosis", "yellow leaves", "urea", "fertilizer", "soil"]
+  },
+  {
+    "id": "drip_irrigation_guidance",
+    "topic": "Irrigation",
+    "crop": "General / Vegetables / Fruits",
+    "question": "What are the advantages and maintenance tips for drip irrigation?",
+    "content": "Drip irrigation saves 40-70% water and increases fertilizer efficiency via fertigation. Maintenance: Flush lateral lines every 15 days by opening end caps. Acid wash lines using 0.5-1% Hydrochloric acid or Phosphoric acid if emitters get clogged due to hard water/calcium deposits. Backwash screen and disc filters weekly.",
+    "keywords": ["irrigation", "drip", "water saving", "fertigation", "clogging", "maintenance"]
+  },
+  {
+    "id": "pm_kisan_scheme",
+    "topic": "Government Scheme",
+    "crop": "All Farmers",
+    "question": "What is the PM-KISAN scheme and how do farmers benefit?",
+    "content": "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN) provides financial assistance of Rs. 6,000 per year in three equal 4-monthly installments of Rs. 2,000 directly into bank accounts of landholding farmer families via DBT. Registration requires Aadhaar, land ownership records (7/12 extract / RoR), and active bank account linked to Aadhaar with e-KYC completed.",
+    "keywords": ["pm kisan", "scheme", "subsidy", "6000", "government", "financial aid", "ekyc"]
+  },
+  {
+    "id": "pm_fby_crop_insurance",
+    "topic": "Government Scheme",
+    "crop": "All Crops",
+    "question": "How does PMFBY (Crop Insurance Scheme) protect farmers?",
+    "content": "Pradhan Mantri Fasal Bima Yojana (PMFBY) covers crop losses caused by non-preventable natural risks (drought, flood, pests, storms). Farmer premium share: 2% for Kharif crops, 1.5% for Rabi food/oilseed crops, and 5% for annual commercial/horticultural crops. Claim notification for localized calamities must be submitted within 72 hours via the Crop Insurance App or toll-free helpline 14447.",
+    "keywords": ["pmfby", "crop insurance", "drought", "flood", "claim", "premium", "loss compensation"]
+  }
+]

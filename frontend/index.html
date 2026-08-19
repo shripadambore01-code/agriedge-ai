@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriVoice - Offline-First Hybrid AI Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="logo-icon"><i class="fa-solid fa-seedling"></i></div>
+                <div>
+                    <h1>AgriVoice AI</h1>
+                    <p class="subtitle">Offline-First Hybrid Voice Assistant for Farmers</p>
+                </div>
+            </div>
+
+            <!-- Live Status & Mode Controls -->
+            <div class="header-controls">
+                <div class="status-badge" id="netStatusBadge">
+                    <span class="dot checking"></span>
+                    <span id="netStatusText">Checking Net...</span>
+                </div>
+
+                <div class="mode-control">
+                    <label for="smartModeSelect"><i class="fa-solid fa-sliders"></i> Mode:</label>
+                    <select id="smartModeSelect">
+                        <option value="off">🔴 Pure Offline (Forced Local)</option>
+                        <option value="auto" selected>🟡 Auto Hybrid (Local + Smart Fallback)</option>
+                        <option value="on">🟢 Online Smart Priority (Gemini)</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="chat-workspace">
+            <!-- Messages Container -->
+            <div class="messages-container" id="messagesContainer">
+                <!-- Welcome Banner -->
+                <div class="message assistant welcome-card">
+                    <div class="card-icon"><i class="fa-solid fa-wheat-awn"></i></div>
+                    <div class="card-content">
+                        <h3>Namaste / Welcome to AgriVoice</h3>
+                        <p>Ask any question regarding <strong>crop diseases, pest control, fertilizers, irrigation, or PM-KISAN schemes</strong>.</p>
+                        <p class="hint"><i class="fa-solid fa-shield-halved"></i> <strong>Core Guarantee:</strong> Voice input, local RAG retrieval, and voice output are 100% offline.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Processing Visualizer -->
+            <div class="processing-bar hidden" id="processingBar">
+                <div class="spinner"></div>
+                <span id="processingText">Processing query...</span>
+            </div>
+
+            <!-- Input Controls Area -->
+            <div class="input-deck">
+                <div class="voice-section">
+                    <button class="mic-button" id="micButton" title="Click to speak">
+                        <i class="fa-solid fa-microphone"></i>
+                    </button>
+                    <span class="mic-status" id="micStatus">Tap microphone to speak</span>
+                </div>
+
+                <form class="text-input-form" id="chatForm">
+                    <input type="text" id="textQueryInput" placeholder="Or type your agricultural question here..." autocomplete="off">
+                    <button type="submit" id="sendButton"><i class="fa-solid fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </main>
+
+        <!-- Evaluation Info Footer -->
+        <footer class="app-footer">
+            <div class="footer-item"><i class="fa-solid fa-microchip"></i> <strong>Local Brain:</strong> Llama 3.2 3B (GGUF CPU)</div>
+            <div class="footer-item"><i class="fa-solid fa-cloud"></i> <strong>Cloud Brain:</strong> Google Gemini Flash</div>
+            <div class="footer-item"><i class="fa-solid fa-volume-high"></i> <strong>TTS:</strong> Piper ONNX (100% Offline)</div>
+        </footer>
+    </div>
+
+    <!-- Hidden audio element for speech playback -->
+    <audio id="audioPlayer" class="hidden"></audio>
+
+    <script src="app.js"></script>
+</body>
+</html>

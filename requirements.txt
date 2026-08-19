@@ -1,0 +1,33 @@
+# ========================================================
+# AgriVoice AI: Core Dependencies (CPU & Offline Optimized)
+# ========================================================
+
+# Web & API Framework
+fastapi>=0.110.0
+uvicorn[standard]>=0.28.0
+python-multipart>=0.0.9
+pydantic>=2.6.0
+python-dotenv>=1.0.1
+requests>=2.31.0
+
+# Vector Database & Embeddings (Offline RAG)
+chromadb>=0.4.24
+sentence-transformers>=2.5.1
+
+# Offline Local LLM Inference
+llama-cpp-python>=0.2.75
+
+# Offline Speech-to-Text (STT)
+faster-whisper>=1.0.1
+
+# Offline Text-to-Speech (TTS)
+piper-tts>=1.2.0
+
+# Google Gemini API (Smart Online Fallback)
+google-genai>=0.1.1
+google-generativeai>=0.8.0
+
+# Utilities & Audio processing
+numpy>=1.24.0
+soundfile>=0.12.1
+colorama>=0.4.6

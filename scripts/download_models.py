@@ -1,4 +1,4 @@
-﻿"""
+"""
 Model Downloader Utility for AgriVoice
 Downloads offline GGUF, Piper TTS ONNX, and faster-whisper assets with explicit size warnings.
 """

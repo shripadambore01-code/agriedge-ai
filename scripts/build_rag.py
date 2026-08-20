@@ -1,4 +1,4 @@
-﻿"""
+"""
 RAG Knowledge Ingestion Script
 Builds and verifies the local agricultural knowledge base.
 """

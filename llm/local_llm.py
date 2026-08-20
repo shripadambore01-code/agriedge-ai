@@ -1,4 +1,4 @@
-﻿"""
+"""
 Local Offline LLM Wrapper (llama-cpp-python)
 Runs quantized GGUF models directly on CPU with zero internet.
 """

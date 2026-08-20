@@ -1,4 +1,4 @@
-﻿# Models Directory
+# Models Directory
 
 This directory stores all local offline model weights.
 

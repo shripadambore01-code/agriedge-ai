@@ -1,4 +1,4 @@
-﻿"""
+"""
 Google Gemini API Client (Online Smart Brain)
 Used optionally for complex queries when internet and API key are available.
 """

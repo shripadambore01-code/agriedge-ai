@@ -1,4 +1,4 @@
-﻿"""
+"""
 Internet Connectivity Detector
 Fast, lightweight check without loading heavy HTTP libraries.
 """

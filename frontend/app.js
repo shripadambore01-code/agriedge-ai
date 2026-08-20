@@ -1,4 +1,4 @@
-﻿// AgriVoice Field Voice Assistant Logic
+// AgriVoice Field Voice Assistant Logic
 // Supports both Local FastAPI Backend and Standalone GitHub Pages Deployment
 
 const netStatusPill = document.getElementById("netStatusPill");

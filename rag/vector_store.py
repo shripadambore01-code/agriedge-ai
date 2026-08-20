@@ -1,4 +1,4 @@
-﻿"""
+"""
 Agricultural Knowledge Base - Local Offline Vector Store & Retriever
 Retrieves relevant farming practices, pest management, and crop advisories.
 """

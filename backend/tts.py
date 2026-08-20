@@ -1,4 +1,4 @@
-﻿"""
+"""
 Offline Text-to-Speech Module (Piper TTS)
 Synthesizes speech 100% locally on CPU — ensuring voice output never needs internet.
 """

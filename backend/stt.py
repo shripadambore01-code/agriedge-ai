@@ -1,4 +1,4 @@
-﻿"""
+"""
 Offline Speech-to-Text Module (faster-whisper)
 Transcribes farmer audio queries 100% locally on CPU without internet.
 """

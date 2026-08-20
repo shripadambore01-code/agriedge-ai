@@ -1,4 +1,4 @@
-﻿"""
+"""
 AgriVoice FastAPI Backend
 Orchestrates offline STT, RAG, Dual-Brain Router (Local LLM vs Gemini), and offline TTS.
 """

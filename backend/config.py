@@ -1,4 +1,4 @@
-﻿import os
+import os
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -24,5 +24,13 @@ PORT = int(os.getenv("PORT", "8000"))
 # RAG paths
 RAG_DATA_FILE = BASE_DIR / "rag" / "data" / "agri_knowledge.json"
 CHROMA_PERSIST_DIR = BASE_DIR / "chroma_db"
-TEMP_AUDIO_DIR = BASE_DIR / "temp_audio"
+
+# Temporary audio directory (use /tmp on serverless environments like Vercel)
+if os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"):
+    import tempfile
+    TEMP_AUDIO_DIR = Path(tempfile.gettempdir()) / "temp_audio"
+else:
+    TEMP_AUDIO_DIR = BASE_DIR / "temp_audio"
+
 TEMP_AUDIO_DIR.mkdir(parents=True, exist_ok=True)
+

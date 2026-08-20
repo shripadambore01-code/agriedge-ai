@@ -1,0 +1,12 @@
+﻿# ========================================================
+# AgriVoice AI: Heavy Local Offline Models (8GB CPU Machine)
+# ========================================================
+-r requirements.txt
+llama-cpp-python>=0.2.75
+faster-whisper>=1.0.1
+piper-tts>=1.2.0
+chromadb>=0.4.24
+sentence-transformers>=2.5.1
+numpy>=1.24.0
+soundfile>=0.12.1
+colorama>=0.4.6

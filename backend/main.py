@@ -48,7 +48,23 @@ class TextQueryRequest(BaseModel):
     query: str
     mode: str = "auto"
 
+@app.get("/")
+def read_root():
+    """Root endpoint for status check and API metadata."""
+    return {
+        "status": "online",
+        "service": "AgriVoice AI Assistant",
+        "endpoints": {
+            "status": "/api/status",
+            "chat": "/api/chat",
+            "voice": "/api/voice",
+            "set_mode": "/api/set-mode",
+            "docs": "/docs"
+        }
+    }
+
 @app.get("/api/status")
+@app.get("/status")
 def get_system_status():
     """Returns real-time status of internet connection, mode, and models."""
     is_online = check_internet_connection()
@@ -62,6 +78,7 @@ def get_system_status():
     }
 
 @app.post("/api/set-mode")
+@app.post("/set-mode")
 def set_smart_mode(mode: str = Form(...)):
     """Updates smart routing mode ('off', 'auto', 'on')."""
     if mode.lower() not in ["off", "auto", "on"]:
@@ -70,6 +87,7 @@ def set_smart_mode(mode: str = Form(...)):
     return {"status": "success", "mode": router.mode}
 
 @app.post("/api/chat")
+@app.post("/chat")
 def process_text_query(req: TextQueryRequest):
     """Processes a text query through RAG, Dual-Brain Router, and TTS."""
     if not req.query.strip():
@@ -102,6 +120,7 @@ def process_text_query(req: TextQueryRequest):
     }
 
 @app.post("/api/voice")
+@app.post("/voice")
 async def process_voice_query(audio_file: UploadFile = File(...), mode: str = Form("auto")):
     """Processes recorded audio input via Offline STT, RAG, Dual-Brain Router, and TTS."""
     # Save uploaded audio file
@@ -144,6 +163,7 @@ async def process_voice_query(audio_file: UploadFile = File(...), mode: str = Fo
     }
 
 @app.get("/api/audio/{filename}")
+@app.get("/audio/{filename}")
 def serve_audio_file(filename: str):
     """Serves synthesized speech audio files."""
     audio_path = TEMP_AUDIO_DIR / filename
@@ -151,12 +171,16 @@ def serve_audio_file(filename: str):
         raise HTTPException(status_code=404, detail="Audio file not found")
     return FileResponse(path=str(audio_path), media_type="audio/wav")
 
-# Mount frontend directory for web UI
+# Mount frontend directory for local standalone web UI execution
 frontend_dir = Path(__file__).resolve().parent.parent / "frontend"
-if frontend_dir.exists():
-    app.mount("/", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")
+if not os.getenv("VERCEL") and frontend_dir.exists():
+    try:
+        app.mount("/local-ui", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")
+    except Exception:
+        pass
 
 if __name__ == "__main__":
     import uvicorn
     print(f"🌾 Starting AgriVoice Assistant on http://{HOST}:{PORT}")
     uvicorn.run("backend.main:app", host=HOST, port=PORT, reload=True)
+

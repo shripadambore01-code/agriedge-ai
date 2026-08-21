@@ -3127,6 +3127,279 @@ body {
         grid-template-columns: repeat(7, 90px);
     }
     .journey-timeline-track {
+/* ==========================================================================
+   Phase 8: Farm Economics & Profit Calculator Styles
+   ========================================================================== */
+
+.economics-hero-card {
+    background: linear-gradient(135deg, #064e3b 0%, #047857 60%, #059669 100%);
+    border-radius: var(--radius-md);
+    margin: 18px 18px 14px 18px;
+    padding: 24px 28px;
+    color: #ffffff;
+    box-shadow: 0 6px 20px rgba(6, 78, 59, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.profit-hero-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.profit-badge {
+    background: #34d399;
+    color: #064e3b;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 12px;
+    align-self: flex-start;
+    font-family: var(--font-mono);
+}
+
+.profit-amount {
+    font-size: 38px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+    font-family: var(--font-mono);
+}
+
+.profit-sub {
+    font-size: 13px;
+    color: #a7f3d0;
+    font-weight: 500;
+}
+
+.profit-hero-right {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.hero-stat-pill {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 8px;
+    padding: 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    font-size: 12.5px;
+}
+
+.hero-stat-pill strong {
+    font-size: 14px;
+    font-family: var(--font-mono);
+    color: #ffffff;
+}
+
+/* Economics Metrics Grid */
+.econ-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 0 18px 14px 18px;
+}
+
+.econ-metric-box {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.econ-m-label {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.econ-m-val {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-main);
+    font-family: var(--font-mono);
+}
+
+.econ-metric-box small {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.trend-tag {
+    color: #059669;
+    font-weight: 700;
+}
+
+/* Market Advisory Card */
+.market-advisory-card {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: var(--radius-md);
+    margin: 0 18px 14px 18px;
+    padding: 16px 20px;
+}
+
+.market-advisory-header {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+}
+
+.market-icon {
+    width: 40px;
+    height: 40px;
+    background: #f59e0b;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.market-advisory-header h4 {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #92400e;
+    margin-bottom: 2px;
+}
+
+.market-advisory-header p {
+    font-size: 12.5px;
+    color: #78350f;
+    line-height: 1.35;
+}
+
+/* Cost Breakdown Card */
+.cost-breakdown-card {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    margin: 0 18px 18px 18px;
+    padding: 20px;
+    box-shadow: 0 4px 16px rgba(45, 106, 79, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.cost-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.cost-card-header h4 {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--primary-950);
+}
+
+.cost-card-header p {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.btn-recalc-econ {
+    background: var(--primary-700);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 6px 14px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-recalc-econ:hover {
+    background: var(--primary-800);
+}
+
+.cost-table-wrap {
+    overflow-x: auto;
+}
+
+.cost-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+}
+
+.cost-table th {
+    background: #f8fafc;
+    color: #475569;
+    font-weight: 700;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.cost-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.cost-table tr:hover {
+    background: #f8fafc;
+}
+
+.cost-input-per-acre {
+    width: 110px;
+    padding: 4px 8px;
+    font-size: 13px;
+    font-family: var(--font-mono);
+    border: 1px solid var(--border-medium);
+    border-radius: 4px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .app-layout {
+        height: auto;
+        min-height: 96vh;
+    }
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+    .sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--border-light);
+    }
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    .health-breakdown-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .current-weather-grid {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .forecast-strip {
+        grid-template-columns: repeat(7, 90px);
+    }
+    .journey-timeline-track {
         justify-content: flex-start;
     }
     .dossier-grid {
@@ -3160,7 +3433,18 @@ body {
     .split-grid {
         grid-template-columns: 1fr 1fr;
     }
+    .econ-metrics-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .economics-hero-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .profit-hero-right {
+        width: 100%;
+    }
 }
+
 
 
 

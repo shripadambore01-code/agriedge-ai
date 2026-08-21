@@ -399,6 +399,51 @@ def calculate_custom_soil_endpoint(req: CustomSoilReportRequest):
     )
     return report.model_dump()
 
+# ==========================================
+# Phase 8: Farm Economics & Profit Calculator
+# ==========================================
+from backend.economics import (
+    calculate_farm_economics,
+    EconomicsReport
+)
+
+class CustomEconomicsRequest(BaseModel):
+    crop_name: Optional[str] = None
+    variety: Optional[str] = None
+    farm_size: Optional[float] = None
+    custom_yield_qtl_per_acre: Optional[float] = None
+    custom_mandi_price: Optional[float] = None
+    custom_costs: Optional[Dict[str, float]] = None
+
+@app.get("/api/economics/report")
+@app.get("/economics/report")
+def get_farm_economics_endpoint():
+    """Calculates ROI, net profit, breakeven, and Mandi marketing advice using active farm profile."""
+    report = calculate_farm_economics(
+        crop_name=active_farm_profile.current_crop,
+        variety=active_farm_profile.variety,
+        farm_size_acres=active_farm_profile.farm_size
+    )
+    return report.model_dump()
+
+@app.post("/api/economics/calculate-custom")
+@app.post("/economics/calculate-custom")
+def calculate_custom_economics_endpoint(req: CustomEconomicsRequest):
+    """Calculates custom economics with farmer-provided costs, yield, and Mandi price."""
+    crop = req.crop_name or active_farm_profile.current_crop
+    var = req.variety or active_farm_profile.variety
+    size = req.farm_size or active_farm_profile.farm_size
+
+    report = calculate_farm_economics(
+        crop_name=crop,
+        variety=var,
+        farm_size_acres=size,
+        custom_yield_qtl_per_acre=req.custom_yield_qtl_per_acre,
+        custom_mandi_price=req.custom_mandi_price,
+        custom_costs=req.custom_costs
+    )
+    return report.model_dump()
+
 @app.post("/api/set-mode")
 
 

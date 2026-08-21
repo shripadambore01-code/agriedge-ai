@@ -85,6 +85,18 @@ const languageSelect = document.getElementById("languageSelect");
 // 9-Language Localization Dictionary for Field Agriculture
 const TRANSLATIONS = {
     en: {
+        tab_economics: "Farm Economics",
+        lbl_projected_net_profit: "Estimated Net Profit for Your Harvest",
+        lbl_gross_revenue: "Gross Revenue:",
+        lbl_total_input_cost: "Total Cost of Cultivation:",
+        lbl_expected_yield: "Expected Yield",
+        lbl_mandi_price: "Mandi Live Price",
+        lbl_msp_benchmark: "Govt. MSP Benchmark",
+        lbl_breakeven_price: "Break-Even Price",
+        lbl_market_strategy_title: "Smart Mandi Selling Strategy",
+        lbl_cost_breakdown_title: "Cost of Cultivation Breakdown",
+        lbl_cost_breakdown_sub: "Benchmark estimates based on your crop and acreage (Edit numbers to customize your farm budget)",
+        btn_recalc_profit: "Recalculate Profit",
         tab_soil: "Soil & Fertilizer",
         soil_title: "Soil Health Card & Fertilizer Dosage Calculator",
         soil_sub: "Scientific N-P-K & Micronutrient calibration based on laboratory Soil Test Crop Response (STCR)",
@@ -195,6 +207,18 @@ const TRANSLATIONS = {
         signal_web_offline: "Signal: <strong>Offline (Field Mode)</strong>"
     },
     hi: {
+        tab_economics: "खेत अर्थशास्त्र और मुनाफा",
+        lbl_projected_net_profit: "आपकी फसल का अनुमानित शुद्ध लाभ",
+        lbl_gross_revenue: "कुल अनुमानित आय:",
+        lbl_total_input_cost: "खेती की कुल लागत:",
+        lbl_expected_yield: "अनुमानित पैदावार",
+        lbl_mandi_price: "मंडी लाइव भाव",
+        lbl_msp_benchmark: "सरकारी MSP समर्थन मूल्य",
+        lbl_breakeven_price: "लागत वसूली भाव",
+        lbl_market_strategy_title: "स्मार्ट मंडी बिक्री रणनीति",
+        lbl_cost_breakdown_title: "खेती लागत का संपूर्ण विवरण",
+        lbl_cost_breakdown_sub: "फसल और रकबे के आधार पर लागत अनुमान (अपनी लागत दर्ज कर सकते हैं)",
+        btn_recalc_profit: "लाभ की पुनर्गणना करें",
         tab_soil: "मिट्टी स्वास्थ्य व खाद गणना",
         soil_title: "मृदा स्वास्थ्य कार्ड और उर्वरक खुराक कैलकुलेटर",
         soil_sub: "प्रयोगशाला मिट्टी परीक्षण के आधार पर N-P-K और सूक्ष्म पोषक तत्वों की सटीक गणना",
@@ -305,6 +329,18 @@ const TRANSLATIONS = {
         signal_web_offline: "सिग्नल: <strong>ऑफ़लाइन (फील्ड मोड)</strong>"
     },
     mr: {
+        tab_economics: "शेत अर्थशास्त्र व नफा",
+        lbl_projected_net_profit: "आपल्या पिकाचा अंदाजित निव्वळ नफा",
+        lbl_gross_revenue: "एकूण अंदाजित उत्पन्न:",
+        lbl_total_input_cost: "शेतीचा एकूण उत्पादन खर्च:",
+        lbl_expected_yield: "अंदाजित उत्पादन",
+        lbl_mandi_price: "मार्केट लाईव्ह भाव",
+        lbl_msp_benchmark: "शासकीय हमीभाव (MSP)",
+        lbl_breakeven_price: "खर्च भरपाई दर",
+        lbl_market_strategy_title: "स्मार्ट कृषी उत्पन्न विक्री धोरण",
+        lbl_cost_breakdown_title: "शेती उत्पादन खर्चाचा तपशील",
+        lbl_cost_breakdown_sub: "पीक व क्षेत्रानुसार खर्चाचा अंदाज (आपण बदल करू शकता)",
+        btn_recalc_profit: "नफ्याची पुनर्गणना करा",
         tab_soil: "माती आरोग्य व खत गणना",
         soil_title: "मृदा आरोग्य पत्रिका व खत मात्रा कॅल्क्युलेटर",
         soil_sub: "प्रयोगशाळा माती तपासणी अहवालानुसार N-P-K आणि सूक्ष्म अन्नद्रव्यांची अचूक मात्रा",
@@ -1593,17 +1629,19 @@ const tabJourneyBtn = document.getElementById("tabJourneyBtn");
 const tabDoctorBtn = document.getElementById("tabDoctorBtn");
 const tabIrrigationBtn = document.getElementById("tabIrrigationBtn");
 const tabSoilBtn = document.getElementById("tabSoilBtn");
+const tabEconomicsBtn = document.getElementById("tabEconomicsBtn");
 const tabChatBtn = document.getElementById("tabChatBtn");
 const dashboardView = document.getElementById("dashboardView");
 const journeyView = document.getElementById("journeyView");
 const doctorView = document.getElementById("doctorView");
 const irrigationView = document.getElementById("irrigationView");
 const soilView = document.getElementById("soilView");
+const economicsView = document.getElementById("economicsView");
 const chatView = document.getElementById("chatView");
 
 function switchMainView(viewName) {
-    [tabDashboardBtn, tabJourneyBtn, tabDoctorBtn, tabIrrigationBtn, tabSoilBtn, tabChatBtn].forEach(btn => { if (btn) btn.classList.remove("active"); });
-    [dashboardView, journeyView, doctorView, irrigationView, soilView, chatView].forEach(view => { if (view) view.classList.add("hidden"); });
+    [tabDashboardBtn, tabJourneyBtn, tabDoctorBtn, tabIrrigationBtn, tabSoilBtn, tabEconomicsBtn, tabChatBtn].forEach(btn => { if (btn) btn.classList.remove("active"); });
+    [dashboardView, journeyView, doctorView, irrigationView, soilView, economicsView, chatView].forEach(view => { if (view) view.classList.add("hidden"); });
 
     if (viewName === "dashboardView") {
         if (tabDashboardBtn) tabDashboardBtn.classList.add("active");
@@ -1620,6 +1658,9 @@ function switchMainView(viewName) {
     } else if (viewName === "soilView") {
         if (tabSoilBtn) tabSoilBtn.classList.add("active");
         if (soilView) soilView.classList.remove("hidden");
+    } else if (viewName === "economicsView") {
+        if (tabEconomicsBtn) tabEconomicsBtn.classList.add("active");
+        if (economicsView) economicsView.classList.remove("hidden");
     } else {
         if (tabChatBtn) tabChatBtn.classList.add("active");
         if (chatView) chatView.classList.remove("hidden");
@@ -1631,6 +1672,7 @@ if (tabJourneyBtn) tabJourneyBtn.addEventListener("click", () => switchMainView(
 if (tabDoctorBtn) tabDoctorBtn.addEventListener("click", () => switchMainView("doctorView"));
 if (tabIrrigationBtn) tabIrrigationBtn.addEventListener("click", () => switchMainView("irrigationView"));
 if (tabSoilBtn) tabSoilBtn.addEventListener("click", () => switchMainView("soilView"));
+if (tabEconomicsBtn) tabEconomicsBtn.addEventListener("click", () => switchMainView("economicsView"));
 if (tabChatBtn) tabChatBtn.addEventListener("click", () => switchMainView("chatView"));
 
 let completedTasksState = JSON.parse(localStorage.getItem("agriedge_completed_tasks") || "{}");
@@ -2189,7 +2231,7 @@ async function loadSmartWeather() {
         };
     }
 
-// Hook into save profile to reload dashboard, weather, crop journey, irrigation, and soil health instantly
+// Hook into save profile to reload dashboard, weather, crop journey, irrigation, soil health, and economics instantly
 const origSaveFarmProfileData = saveFarmProfileData;
 saveFarmProfileData = async function(profileData) {
     await origSaveFarmProfileData(profileData);
@@ -2198,6 +2240,7 @@ saveFarmProfileData = async function(profileData) {
     await loadCropJourney();
     await loadIrrigationAdvisor();
     await loadSoilHealthRecommendation(activeSoilPreset);
+    await loadFarmEconomics();
 };
 
 // Initial Smart Weather Load
@@ -2933,6 +2976,174 @@ if (recalcFertilizerBtn) {
 
 // Initial Soil Health Load
 loadSoilHealthRecommendation();
+
+// ==========================================================================
+// Phase 8: Farm Economics & Profit Calculator Client Engine
+// ==========================================================================
+
+let activeEconomicsReport = null;
+
+function renderFarmEconomicsUI(report) {
+    activeEconomicsReport = report;
+
+    const roiBadgeEl = document.getElementById("econRoiBadge");
+    const netProfitEl = document.getElementById("econNetProfit");
+    const grossRevEl = document.getElementById("econGrossRevenue");
+    const totalCostEl = document.getElementById("econTotalCost");
+    const yieldValEl = document.getElementById("econYieldVal");
+    const yieldSubEl = document.getElementById("econYieldSub");
+    const mandiPriceEl = document.getElementById("econMandiPriceVal");
+    const priceTrendEl = document.getElementById("econPriceTrend");
+    const mspValEl = document.getElementById("econMspVal");
+    const breakevenValEl = document.getElementById("econBreakevenVal");
+    const advisoryEl = document.getElementById("econMarketAdvisory");
+    const costTableBody = document.getElementById("costTableBody");
+
+    if (roiBadgeEl) {
+        roiBadgeEl.textContent = `${report.roi_percentage >= 0 ? '+' : ''}${report.roi_percentage}% ROI`;
+        roiBadgeEl.style.background = report.roi_percentage >= 50 ? "#34d399" : (report.roi_percentage >= 0 ? "#fef08a" : "#fca5a5");
+        roiBadgeEl.style.color = report.roi_percentage >= 50 ? "#064e3b" : (report.roi_percentage >= 0 ? "#713f12" : "#7f1d1d");
+    }
+
+    if (netProfitEl) {
+        netProfitEl.textContent = `₹${report.net_profit_inr.toLocaleString('en-IN')}`;
+        netProfitEl.style.color = report.net_profit_inr >= 0 ? "#ffffff" : "#fca5a5";
+    }
+
+    if (grossRevEl) grossRevEl.textContent = `₹${report.gross_revenue_inr.toLocaleString('en-IN')}`;
+    if (totalCostEl) totalCostEl.textContent = `₹${report.total_cost_inr.toLocaleString('en-IN')}`;
+
+    if (yieldValEl) yieldValEl.textContent = `${report.total_expected_yield_qtl} Qtl`;
+    if (yieldSubEl) yieldSubEl.textContent = `${report.expected_yield_per_acre_qtl} Qtl / Acre`;
+    if (mandiPriceEl) mandiPriceEl.textContent = `₹${report.current_mandi_price_per_qtl.toLocaleString('en-IN')} / Q`;
+    if (priceTrendEl) priceTrendEl.textContent = report.price_trend;
+    if (mspValEl) mspValEl.textContent = `₹${report.msp_benchmark_price_per_qtl.toLocaleString('en-IN')} / Q`;
+    if (breakevenValEl) breakevenValEl.textContent = `₹${report.breakeven_price_per_qtl.toLocaleString('en-IN')} / Q`;
+
+    if (advisoryEl) advisoryEl.textContent = report.market_selling_advisory;
+
+    if (costTableBody && report.costs_breakdown) {
+        costTableBody.innerHTML = "";
+        report.costs_breakdown.forEach((c, idx) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>
+                    <strong>${c.category}</strong>
+                    <br><small style="color: var(--text-muted); font-size: 11px;">${c.description}</small>
+                </td>
+                <td>
+                    <input type="number" class="cost-input-per-acre" data-index="${idx}" value="${c.per_acre_inr}">
+                </td>
+                <td>
+                    <strong style="font-family: var(--font-mono); color: var(--text-main);">₹${c.amount_inr.toLocaleString('en-IN')}</strong>
+                </td>
+            `;
+            costTableBody.appendChild(tr);
+        });
+    }
+}
+
+async function loadFarmEconomics() {
+    let report = null;
+
+    if (hasBackend) {
+        try {
+            const res = await fetch("/api/economics/report");
+            if (res.ok) {
+                report = await res.json();
+            }
+        } catch (e) {
+            console.log("Using client offline economics engine:", e);
+        }
+    }
+
+    if (!report) {
+        // Direct offline calculation
+        const size = currentFarmProfile.farm_size || 2.0;
+        const crop = currentFarmProfile.current_crop || "Cotton";
+        const yieldPerAcre = (crop === "Tomato" ? 150 : (crop === "Wheat" ? 20 : 12));
+        const totalYield = yieldPerAcre * size;
+        const mandiP = (crop === "Wheat" ? 2450 : (crop === "Tomato" ? 1850 : 7350));
+        const mspP = (crop === "Wheat" ? 2275 : (crop === "Tomato" ? 1600 : 7121));
+        const baseCostPerAcre = (crop === "Tomato" ? 38000 : (crop === "Wheat" ? 17100 : 25200));
+        const totalCost = baseCostPerAcre * size;
+        const grossRev = totalYield * mandiP;
+        const netP = grossRev - totalCost;
+        const roi = +((netP / totalCost) * 100).toFixed(1);
+
+        report = {
+            crop_name: crop,
+            variety: currentFarmProfile.variety || "Standard Hybrid",
+            farm_size_acres: size,
+            expected_yield_per_acre_qtl: yieldPerAcre,
+            total_expected_yield_qtl: totalYield,
+            current_mandi_price_per_qtl: mandiP,
+            msp_benchmark_price_per_qtl: mspP,
+            price_trend: "Rising 📈",
+            gross_revenue_inr: grossRev,
+            total_cost_inr: totalCost,
+            net_profit_inr: netP,
+            roi_percentage: roi,
+            production_cost_per_qtl: +(totalCost / totalYield).toFixed(1),
+            breakeven_price_per_qtl: +(totalCost / totalYield).toFixed(1),
+            costs_breakdown: [
+                { category: "Quality Certified Seeds", per_acre_inr: 2400, amount_inr: 2400 * size, description: "Certified seeds & chemical seed dressing" },
+                { category: "Chemical & Organic Fertilizers", per_acre_inr: 4800, amount_inr: 4800 * size, description: "Basal DAP, Urea, MOP & Farm Yard Manure" },
+                { category: "Plant Protection & Pesticides", per_acre_inr: 3500, amount_inr: 3500 * size, description: "Preventative foliar sprays & sticky traps" },
+                { category: "Field Labor & Operations", per_acre_inr: 9500, amount_inr: 9500 * size, description: "Land preparation, manual weeding, harvesting" },
+                { category: "Irrigation & Electricity / Fuel", per_acre_inr: 2000, amount_inr: 2000 * size, description: "Drip fertigation & pump operating power" },
+                { category: "Machinery, Tractor & Rental", per_acre_inr: 3000, amount_inr: 3000 * size, description: "Tillage, rotavator and post-harvest transport" }
+            ],
+            market_selling_advisory: `Current Mandi price of ₹${mandiP.toLocaleString()}/Q is above MSP (₹${mspP.toLocaleString()}/Q). Price trend is Rising 📈. Recommendation: Stagger produce sales across 2 lots over next 15-20 days.`
+        };
+    }
+
+    renderFarmEconomicsUI(report);
+}
+
+// Recalculate Profit Button Listener
+const recalcEconBtn = document.getElementById("recalcEconBtn");
+if (recalcEconBtn) {
+    recalcEconBtn.addEventListener("click", async () => {
+        const inputs = document.querySelectorAll(".cost-input-per-acre");
+        const keys = ["seeds", "fertilizers", "pesticides", "labor", "irrigation_power", "machinery_rental"];
+        const customCosts = {};
+
+        inputs.forEach((input, idx) => {
+            if (keys[idx]) {
+                customCosts[keys[idx]] = parseFloat(input.value) || 0;
+            }
+        });
+
+        if (hasBackend) {
+            try {
+                const res = await fetch("/api/economics/calculate-custom", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        crop_name: currentFarmProfile.current_crop,
+                        variety: currentFarmProfile.variety,
+                        farm_size: currentFarmProfile.farm_size,
+                        custom_costs: customCosts
+                    })
+                });
+                if (res.ok) {
+                    const report = await res.json();
+                    renderFarmEconomicsUI(report);
+                    return;
+                }
+            } catch (err) {
+                console.error("Custom economics error:", err);
+            }
+        }
+
+        loadFarmEconomics();
+    });
+}
+
+// Initial Farm Economics Load
+loadFarmEconomics();
+
 
 
 

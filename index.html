@@ -194,6 +194,9 @@
                     <button class="nav-tab-btn" id="tabSoilBtn" data-view="soilView">
                         <i class="fa-solid fa-flask"></i> <span data-i18n="tab_soil">Soil & Fertilizer</span>
                     </button>
+                    <button class="nav-tab-btn" id="tabEconomicsBtn" data-view="economicsView">
+                        <i class="fa-solid fa-coins"></i> <span data-i18n="tab_economics">Farm Economics</span>
+                    </button>
                     <button class="nav-tab-btn" id="tabChatBtn" data-view="chatView">
                         <i class="fa-solid fa-comments"></i> <span data-i18n="tab_advisory">AI Field Voice Assistant</span>
                     </button>
@@ -774,8 +777,94 @@
                     </div>
                 </div>
 
-                <!-- 6. Main Conversation & Audio Interface (Tab 6) -->
+                <!-- 6. Farm Economics & Profit Calculator View (Tab 6) -->
+                <div class="view-panel hidden" id="economicsView">
+                    <!-- Profit Hero Card -->
+                    <div class="economics-hero-card">
+                        <div class="profit-hero-left">
+                            <span class="profit-badge" id="econRoiBadge">+118.4% ROI</span>
+                            <h2 class="profit-amount" id="econNetProfit">₹1,24,600</h2>
+                            <p class="profit-sub" data-i18n="lbl_projected_net_profit">Estimated Net Profit for Your Harvest</p>
+                        </div>
+                        <div class="profit-hero-right">
+                            <div class="hero-stat-pill">
+                                <span data-i18n="lbl_gross_revenue">Gross Revenue:</span>
+                                <strong id="econGrossRevenue">₹2,10,000</strong>
+                            </div>
+                            <div class="hero-stat-pill">
+                                <span data-i18n="lbl_total_input_cost">Total Cost of Cultivation:</span>
+                                <strong id="econTotalCost">₹85,400</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Financial Key Metrics Strip -->
+                    <div class="econ-metrics-grid">
+                        <div class="econ-metric-box">
+                            <span class="econ-m-label" data-i18n="lbl_expected_yield">Expected Yield</span>
+                            <strong class="econ-m-val" id="econYieldVal">24.0 Qtl</strong>
+                            <small id="econYieldSub">12.0 Qtl / Acre</small>
+                        </div>
+                        <div class="econ-metric-box">
+                            <span class="econ-m-label" data-i18n="lbl_mandi_price">Mandi Live Price</span>
+                            <strong class="econ-m-val" id="econMandiPriceVal">₹7,350 / Q</strong>
+                            <small id="econPriceTrend" class="trend-tag">Rising 📈</small>
+                        </div>
+                        <div class="econ-metric-box">
+                            <span class="econ-m-label" data-i18n="lbl_msp_benchmark">Govt. MSP Benchmark</span>
+                            <strong class="econ-m-val" id="econMspVal">₹7,121 / Q</strong>
+                            <small>Guaranteed Base</small>
+                        </div>
+                        <div class="econ-metric-box">
+                            <span class="econ-m-label" data-i18n="lbl_breakeven_price">Break-Even Price</span>
+                            <strong class="econ-m-val" id="econBreakevenVal">₹3,558 / Q</strong>
+                            <small>Min Cost to Recover</small>
+                        </div>
+                    </div>
+
+                    <!-- Market Selling Advisory Box -->
+                    <div class="market-advisory-card">
+                        <div class="market-advisory-header">
+                            <div class="market-icon"><i class="fa-solid fa-bullhorn"></i></div>
+                            <div>
+                                <h4 data-i18n="lbl_market_strategy_title">Smart Mandi Selling Strategy</h4>
+                                <p id="econMarketAdvisory">Current Mandi price of ₹7,350/Q is above government MSP (₹7,121/Q). Price trend is Rising 📈. Recommendation: Strong local market demand. Stagger produce sales in 2 lots over the next 15-20 days.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Cost Breakdown & Budget Editor -->
+                    <div class="cost-breakdown-card">
+                        <div class="cost-card-header">
+                            <div>
+                                <h4 data-i18n="lbl_cost_breakdown_title">Cost of Cultivation Breakdown</h4>
+                                <p data-i18n="lbl_cost_breakdown_sub">Benchmark estimates based on your crop and acreage (Edit numbers to customize your farm budget)</p>
+                            </div>
+                            <button type="button" class="btn-recalc-econ" id="recalcEconBtn">
+                                <i class="fa-solid fa-rotate"></i> <span data-i18n="btn_recalc_profit">Recalculate Profit</span>
+                            </button>
+                        </div>
+
+                        <div class="cost-table-wrap">
+                            <table class="cost-table">
+                                <thead>
+                                    <tr>
+                                        <th>Expense Category</th>
+                                        <th>Per Acre (₹)</th>
+                                        <th>Total Farm Cost (₹)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="costTableBody">
+                                    <!-- Dynamic cost rows populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. Main Conversation & Audio Interface (Tab 7) -->
                 <div class="view-panel hidden" id="chatView">
+
 
 
 

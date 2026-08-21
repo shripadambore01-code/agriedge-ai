@@ -39,6 +39,16 @@
                     <span data-i18n="rag_index">RAG Index: <strong>8 Records</strong></span>
                 </div>
 
+                <!-- Farm Profile Quick Badge -->
+                <button class="farm-profile-badge-btn" id="openProfileBtn" title="View & Edit My Farm Profile">
+                    <div class="farm-badge-icon">🌾</div>
+                    <div class="farm-badge-info">
+                        <span class="farm-badge-name" id="navFarmName">Green Acres</span>
+                        <span class="farm-badge-crop" id="navFarmCropStage">Cotton (Day 40)</span>
+                    </div>
+                    <i class="fa-solid fa-pen-to-square badge-edit-icon"></i>
+                </button>
+
                 <!-- Language Selector -->
                 <div class="lang-selector-wrapper">
                     <label for="languageSelect" class="selector-label" data-i18n="lang_label">Language:</label>
@@ -73,10 +83,43 @@
             </div>
         </header>
 
+
         <!-- Main Body Grid -->
         <div class="main-grid">
-            <!-- Left Sidebar: Quick Agricultural Workflows -->
+            <!-- Left Sidebar: Quick Agricultural Workflows & Farm Journey -->
             <aside class="sidebar">
+                <!-- Farm Journey & Crop Stage Widget -->
+                <div class="farm-journey-card" id="farmJourneyWidget">
+                    <div class="journey-header">
+                        <div class="journey-title-group">
+                            <span class="journey-tag" data-i18n="journey_tag">🌾 Active Crop Journey</span>
+                            <h4 id="sidebarFarmName">Green Acres Farm</h4>
+                        </div>
+                        <button class="edit-profile-icon-btn" id="sidebarEditProfileBtn" title="Edit Profile">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="crop-meta-row">
+                        <div class="crop-pill" id="sidebarCropPill">Cotton (BT Hybrid)</div>
+                        <div class="days-badge" id="sidebarAgeBadge">Day 40</div>
+                    </div>
+
+                    <div class="stage-progress-box">
+                        <div class="stage-labels">
+                            <span class="stage-name" id="sidebarStageName">Squaring & Branching</span>
+                            <span class="stage-pct" id="sidebarStagePct">25%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="sidebarProgressFill" style="width: 25%;"></div>
+                        </div>
+                        <div class="stage-footer">
+                            <span id="sidebarDaysRemaining"><i class="fa-regular fa-clock"></i> 120 days left</span>
+                            <span id="sidebarLocation"><i class="fa-solid fa-location-dot"></i> Nashik, MH</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="sidebar-section">
                     <h3 class="section-title"><i class="fa-solid fa-compass"></i> <span data-i18n="quick_actions">Field Quick Actions</span></h3>
                     <div class="quick-chips">
@@ -130,6 +173,7 @@
                     </ul>
                 </div>
             </aside>
+
 
             <!-- Main Conversation & Audio Interface -->
             <section class="conversation-panel">
@@ -197,7 +241,107 @@
     <!-- Hidden audio element for speech playback -->
     <audio id="audioPlayer" class="hidden"></audio>
 
+    <!-- Phase 1: My Farm Profile Modal -->
+    <div class="modal-backdrop hidden" id="farmProfileModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-title-group">
+                    <div class="modal-header-icon"><i class="fa-solid fa-tractor"></i></div>
+                    <div>
+                        <h3 data-i18n="modal_profile_title">My Farm Profile</h3>
+                        <p data-i18n="modal_profile_sub">Personalizes all AI advice, growth stages & pest alerts</p>
+                    </div>
+                </div>
+                <button class="close-modal-btn" id="closeProfileModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <form id="farmProfileForm" class="modal-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="inputFarmName" data-i18n="lbl_farm_name">Farm / Field Name</label>
+                        <input type="text" id="inputFarmName" required placeholder="e.g. Green Acres Farm">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputFarmerName" data-i18n="lbl_farmer_name">Farmer Name</label>
+                        <input type="text" id="inputFarmerName" required placeholder="e.g. Ramesh Patil">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="inputLocation" data-i18n="lbl_location">Location (District, State)</label>
+                        <input type="text" id="inputLocation" required placeholder="e.g. Nashik, Maharashtra">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputFarmSize" data-i18n="lbl_farm_size">Farm Size (Acres)</label>
+                        <input type="number" id="inputFarmSize" step="0.1" min="0.1" required placeholder="e.g. 3.0">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="inputSoilType" data-i18n="lbl_soil_type">Soil Type</label>
+                        <select id="inputSoilType">
+                            <option value="Black Soil / Regur">Black Soil / Regur (काली मिट्टी)</option>
+                            <option value="Red Soil">Red Soil (लाल मिट्टी)</option>
+                            <option value="Alluvial Soil">Alluvial Soil (जलोढ़ मिट्टी)</option>
+                            <option value="Clay Soil">Clay Soil (चिकनी मिट्टी)</option>
+                            <option value="Sandy Loam">Sandy Loam (बलुई दोमट)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputIrrigation" data-i18n="lbl_irrigation">Irrigation Method</label>
+                        <select id="inputIrrigation">
+                            <option value="Drip Irrigation">Drip Irrigation (ड्रिप / टपक)</option>
+                            <option value="Sprinkler">Sprinkler (फव्वारा)</option>
+                            <option value="Flood / Furrow">Flood / Furrow (खुला पानी)</option>
+                            <option value="Rainfed / Dryland">Rainfed / Dryland (वर्षा आधारित)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="inputCrop" data-i18n="lbl_crop">Current Crop</label>
+                        <select id="inputCrop">
+                            <option value="Cotton">Cotton (कपास)</option>
+                            <option value="Wheat">Wheat (गेहूं)</option>
+                            <option value="Rice / Paddy">Rice / Paddy (धान / चावल)</option>
+                            <option value="Tomato">Tomato (टमाटर)</option>
+                            <option value="Sugarcane">Sugarcane (गन्ना)</option>
+                            <option value="Soybean">Soybean (सोयाबीन)</option>
+                            <option value="Maize">Maize (मक्का)</option>
+                            <option value="Onion">Onion (प्याज)</option>
+                            <option value="General / Other Crop">General / Other Crop (अन्य)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputVariety" data-i18n="lbl_variety">Variety / Seed Brand</label>
+                        <input type="text" id="inputVariety" placeholder="e.g. BT Cotton / RCH-659">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="inputSowingDate" data-i18n="lbl_sowing_date">Sowing / Planting Date</label>
+                        <input type="date" id="inputSowingDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputExpectedHarvest" data-i18n="lbl_harvest_date">Expected Harvest Date (Optional)</label>
+                        <input type="date" id="inputExpectedHarvest">
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" id="cancelProfileBtn" data-i18n="btn_cancel">Cancel</button>
+                    <button type="submit" class="btn-save" id="saveProfileBtn"><i class="fa-solid fa-check"></i> <span data-i18n="btn_save_profile">Save Farm Profile</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>
+
 

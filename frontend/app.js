@@ -85,6 +85,21 @@ const languageSelect = document.getElementById("languageSelect");
 // 9-Language Localization Dictionary for Field Agriculture
 const TRANSLATIONS = {
     en: {
+        journey_tag: '🌾 Active Crop Journey',
+        modal_profile_title: 'My Farm Profile',
+        modal_profile_sub: 'Personalizes all AI advice, growth stages & pest alerts',
+        lbl_farm_name: 'Farm / Field Name',
+        lbl_farmer_name: 'Farmer Name',
+        lbl_location: 'Location (District, State)',
+        lbl_farm_size: 'Farm Size (Acres)',
+        lbl_soil_type: 'Soil Type',
+        lbl_irrigation: 'Irrigation Method',
+        lbl_crop: 'Current Crop',
+        lbl_variety: 'Variety / Seed Brand',
+        lbl_sowing_date: 'Sowing / Planting Date',
+        lbl_harvest_date: 'Expected Harvest Date (Optional)',
+        btn_cancel: 'Cancel',
+        btn_save_profile: 'Save Farm Profile',
         title: "AgriVoice - Farmer Field Voice Assistant",
         version_tag: "v1.0 Offline-First",
         brand_desc: "Voice Advisory System for Field Agriculture",
@@ -132,6 +147,21 @@ const TRANSLATIONS = {
         signal_web_offline: "Signal: <strong>Offline (Field Mode)</strong>"
     },
     hi: {
+        journey_tag: '🌾 सक्रिय फसल यात्रा',
+        modal_profile_title: 'मेरा खेत और फसल प्रोफ़ाइल',
+        modal_profile_sub: 'सभी AI सलाह, विकास चरण और कीट चेतावनियों को व्यक्तिगत बनाता है',
+        lbl_farm_name: 'खेत / प्लॉट का नाम',
+        lbl_farmer_name: 'किसान का नाम',
+        lbl_location: 'स्थान (जिला, राज्य)',
+        lbl_farm_size: 'खेत का आकार (एकड़)',
+        lbl_soil_type: 'मिट्टी का प्रकार',
+        lbl_irrigation: 'सिंचाई का साधन',
+        lbl_crop: 'वर्तमान फसल',
+        lbl_variety: 'किस्म / बीज ब्रांड',
+        lbl_sowing_date: 'बुवाई / रोपाई की तिथि',
+        lbl_harvest_date: 'अनुमानित कटाई तिथि (वैकल्पिक)',
+        btn_cancel: 'रद्द करें',
+        btn_save_profile: 'खेत प्रोफ़ाइल सहेजें',
         title: "AgriVoice - किसान फील्ड वॉइस सहायक",
         version_tag: "v1.0 ऑफलाइन-सक्षम",
         brand_desc: "किसानों के लिए AI संचालित कृषि वाणी सलाहकार प्रणाली",
@@ -179,6 +209,21 @@ const TRANSLATIONS = {
         signal_web_offline: "सिग्नल: <strong>ऑफ़लाइन (फील्ड मोड)</strong>"
     },
     mr: {
+        journey_tag: '🌾 चालू पीक प्रवास',
+        modal_profile_title: 'माझे शेत आणि पीक प्रोफाइल',
+        modal_profile_sub: 'सर्व AI सल्ला, वाढीच्या अवस्था आणि कीड अलर्ट वैयक्तिकृत करतो',
+        lbl_farm_name: 'शेत / क्षेत्राचे नाव',
+        lbl_farmer_name: 'शेतकऱ्याचे नाव',
+        lbl_location: 'स्थान (जिल्हा, राज्य)',
+        lbl_farm_size: 'शेताचा आकार (एकर)',
+        lbl_soil_type: 'मातीचा प्रकार',
+        lbl_irrigation: 'सिंचन पद्धत',
+        lbl_crop: 'सध्याचे पीक',
+        lbl_variety: 'वाण / बियाणे जात',
+        lbl_sowing_date: 'पेरणी / लागवड तारीख',
+        lbl_harvest_date: 'अपेक्षित कापणी तारीख (ऐच्छिक)',
+        btn_cancel: 'रद्द करा',
+        btn_save_profile: 'शेत प्रोफाइल जतन करा',
         title: "AgriVoice - शेतकरी व्हॉइस सल्लागार",
         version_tag: "v1.0 ऑफलाइन-सक्षम",
         brand_desc: "शेतकऱ्यांसाठी AI व्हॉइस शेती सल्लागार प्रणाली",
@@ -226,6 +271,21 @@ const TRANSLATIONS = {
         signal_web_offline: "सिग्नल: <strong>ऑफलाइन (शेत मोड)</strong>"
     },
     te: {
+        journey_tag: '🌾 క్రియాశీల పంట ప్రయాణం',
+        modal_profile_title: 'నా వ్యవసాయ ప్రొఫైల్',
+        modal_profile_sub: 'అన్ని AI సలహాలు, ఎదుగుదల దశలు మరియు తెగుళ్ల హెచ్చరికలను వ్యక్తిగతీకరిస్తుంది',
+        lbl_farm_name: 'పొలం / క్షేత్రం పేరు',
+        lbl_farmer_name: 'రైతు పేరు',
+        lbl_location: 'ప్రాంతం (జిల్లా, రాష్ట్రం)',
+        lbl_farm_size: 'పొలం పరిమాణం (ఎకరాలు)',
+        lbl_soil_type: 'నేల రకం',
+        lbl_irrigation: 'నీటిపారుదల పద్ధతి',
+        lbl_crop: 'ప్రస్తుత పంట',
+        lbl_variety: 'రకం / విత్తన బ్రాండ్',
+        lbl_sowing_date: 'విత్తిన / నాటిన తేదీ',
+        lbl_harvest_date: 'అంచనా కోత తేదీ (ఐచ్ఛికం)',
+        btn_cancel: 'రద్దు చేయి',
+        btn_save_profile: 'ప్రొఫైల్ సేవ్ చేయండి',
         title: "AgriVoice - రైతు ఫీల్డ్ వాయిస్ అసిస్టెంట్",
         version_tag: "v1.0 ఆఫ్‌లైన్-సిద్ధం",
         brand_desc: "రైతుల కోసం కృత్రిమ మేధస్సు ఆధారిత వ్యవసాయ వాయిస్ సలహా వ్యవస్థ",
@@ -273,6 +333,21 @@ const TRANSLATIONS = {
         signal_web_offline: "సిగ్నల్: <strong>ఆఫ్‌లైన్ (ఫీల్డ్ మోడ్)</strong>"
     },
     ta: {
+        journey_tag: '🌾 செயலில் உள்ள பயிர் பயணம்',
+        modal_profile_title: 'எனது பண்ணை சுயவிவரம்',
+        modal_profile_sub: 'அனைத்து AI ஆலோசனைகள் மற்றும் பூச்சி எச்சரிக்கைகளை தனிப்பயனாக்குகிறது',
+        lbl_farm_name: 'பண்ணை / நிலத்தின் பெயர்',
+        lbl_farmer_name: 'விவசாயி பெயர்',
+        lbl_location: 'இடம் (மாவட்டம், மாநிலம்)',
+        lbl_farm_size: 'பண்ணை அளவு (ஏக்கர்)',
+        lbl_soil_type: 'மண் வகை',
+        lbl_irrigation: 'பாசன முறை',
+        lbl_crop: 'தற்போதைய பயிர்',
+        lbl_variety: 'பயிர் ரகம் / விதை பிராண்ட்',
+        lbl_sowing_date: 'விதைத்த / நட்ட தேதி',
+        lbl_harvest_date: 'எதிர்பார்க்கப்படும் அறுவடை தேதி',
+        btn_cancel: 'ரத்து செய்',
+        btn_save_profile: 'சுயவிவரத்தை சேமி',
         title: "AgriVoice - விவசாய கள குரல் உதவியாளர்",
         version_tag: "v1.0 ஆஃப்லைன்-தயார்",
         brand_desc: "விவசாயிகளுக்கான AI குரல் வேளாண் ஆலோசனை அமைப்பு",
@@ -320,6 +395,21 @@ const TRANSLATIONS = {
         signal_web_offline: "சிக்னல்: <strong>ஆஃப்லைன் (Field Mode)</strong>"
     },
     kn: {
+        journey_tag: '🌾 ಸಕ್ರಿಯ ಬೆಳೆ ಪ್ರಯಾಣ',
+        modal_profile_title: 'ನನ್ನ ಕೃಷಿ ಪ್ರೊಫೈಲ್',
+        modal_profile_sub: 'ಎಲ್ಲಾ AI ಸಲಹೆಗಳು ಮತ್ತು ಕೀಟ ಎಚ್ಚರಿಕೆಗಳನ್ನು ವೈಯಕ್ತೀಕರಿಸುತ್ತದೆ',
+        lbl_farm_name: 'ಜಮೀನು / ತೋಟದ ಹೆಸರು',
+        lbl_farmer_name: 'ರೈತರ ಹೆಸರು',
+        lbl_location: 'ಸ್ಥಳ (ಜಿಲ್ಲೆ, ರಾಜ್ಯ)',
+        lbl_farm_size: 'ಜಮೀನಿನ ವಿಸ್ತೀರ್ಣ (ಎಕರೆ)',
+        lbl_soil_type: 'ಮಣ್ಣಿನ ವಿಧ',
+        lbl_irrigation: 'ನೀರಾವರಿ ವಿಧಾನ',
+        lbl_crop: 'ಪ್ರಸ್ತುತ ಬೆಳೆ',
+        lbl_variety: 'ತಳಿ / ಬೀಜದ ಬ್ರಾಂಡ್',
+        lbl_sowing_date: 'ಬಿತ್ತನೆ / ನಾಟಿ ದಿನಾಂಕ',
+        lbl_harvest_date: 'ನಿರೀಕ್ಷಿತ ಕೊಯ್ಲು ದಿನಾಂಕ',
+        btn_cancel: 'ರದ್ದುಮಾಡಿ',
+        btn_save_profile: 'ಪ್ರೊಫೈಲ್ ಉಳಿಸಿ',
         title: "AgriVoice - ರೈತ ಫೀಲ್ಡ್ ಧ್ವನಿ ಸಹಾಯಕ",
         version_tag: "v1.0 ಆಫ್‌ಲೈನ್-ಸಿದ್ಧ",
         brand_desc: "ರೈತರಿಗಾಗಿ ಕೃತಕ ಬುದ್ಧಿಮತ್ತೆ ಆಧಾರಿತ ಕೃಷಿ ಧ್ವನಿ ಸಲಹಾ ವ್ಯವಸ್ಥೆ",
@@ -367,6 +457,21 @@ const TRANSLATIONS = {
         signal_web_offline: "ಸಿಗ್ನಲ್: <strong>ಆಫ್‌ಲೈನ್ (ಕ್ಷೇತ್ರ ಮೋಡ್)</strong>"
     },
     pa: {
+        journey_tag: '🌾 ਸਰਗਰਮ ਫਸਲ ਯਾਤਰਾ',
+        modal_profile_title: 'ਮੇਰਾ ਖੇਤ ਪ੍ਰੋਫਾਈਲ',
+        modal_profile_sub: 'ਸਾਰੀਆਂ AI ਸਲਾਹਾਂ ਅਤੇ ਕੀੜਿਆਂ ਦੇ ਅਲਰਟ ਨੂੰ ਨਿੱਜੀ ਬਣਾਉਂਦਾ ਹੈ',
+        lbl_farm_name: 'ਖੇਤ / ਜ਼ਮੀਨ ਦਾ ਨਾਮ',
+        lbl_farmer_name: 'ਕਿਸਾਨ ਦਾ ਨਾਮ',
+        lbl_location: 'ਸਥਾਨ (ਜ਼ਿਲ੍ਹਾ, ਰਾਜ)',
+        lbl_farm_size: 'ਖੇਤ ਦਾ ਆਕਾਰ (ਏਕੜ)',
+        lbl_soil_type: 'ਮਿੱਟੀ ਦੀ ਕਿਸਮ',
+        lbl_irrigation: 'ਸਿੰਚਾਈ ਦਾ ਤਰੀਕਾ',
+        lbl_crop: 'ਮੌਜੂਦਾ ਫਸਲ',
+        lbl_variety: 'ਕਿਸਮ / ਬੀਜ ਬ੍ਰਾਂਡ',
+        lbl_sowing_date: 'ਬਿਜਾਈ ਦੀ ਮਿਤੀ',
+        lbl_harvest_date: 'ਕਟਾਈ ਦੀ ਸੰਭਾਵਿਤ ਮਿਤੀ',
+        btn_cancel: 'ਰੱਦ ਕਰੋ',
+        btn_save_profile: 'ਪ੍ਰੋਫਾਈਲ ਸੰਭਾਲੋ',
         title: "AgriVoice - ਕਿਸਾਨ ਖੇਤਰੀ ਵਾਇਸ ਸਹਾਇਕ",
         version_tag: "v1.0 ਆਫਲਾਈਨ-ਸਮਰੱਥ",
         brand_desc: "ਕਿਸਾਨਾਂ ਲਈ AI ਸੰਚਾਲਿਤ ਖੇਤੀਬਾੜੀ ਵਾਇਸ ਸਲਾਹਕਾਰ ਪ੍ਰਣਾਲੀ",
@@ -414,6 +519,21 @@ const TRANSLATIONS = {
         signal_web_offline: "ਸਿਗਨਲ: <strong>ਆਫਲਾਈਨ (ਖੇਤਰੀ ਮੋਡ)</strong>"
     },
     gu: {
+        journey_tag: '🌾 સક્રિય પાક યાત્રા',
+        modal_profile_title: 'મારી ફાર્મ પ્રોફાઇલ',
+        modal_profile_sub: 'તમામ AI સલાહ અને જીવાત ચેતવણીઓને વ્યક્તિગત બનાવે છે',
+        lbl_farm_name: 'ખેતર / પ્લોટનું નામ',
+        lbl_farmer_name: 'ખેડૂતનું નામ',
+        lbl_location: 'સ્થળ (જિલ્લો, રાજ્ય)',
+        lbl_farm_size: 'ખેતરનું કદ (એકર)',
+        lbl_soil_type: 'જમીનનો પ્રકાર',
+        lbl_irrigation: 'પિયત પદ્ધતિ',
+        lbl_crop: 'હાલનો પાક',
+        lbl_variety: 'જાત / બિયારણ બ્રાન્ડ',
+        lbl_sowing_date: 'વાવણી / રોપણી તારીખ',
+        lbl_harvest_date: 'અંદાજિત લણણી તારીખ',
+        btn_cancel: 'રદ કરો',
+        btn_save_profile: 'પ્રોફાઇલ સાચવો',
         title: "AgriVoice - ખેડૂત ફીલ્ડ વૉઇસ સહાયક",
         version_tag: "v1.0 ઑફલાઇન-સક્ષમ",
         brand_desc: "ખેડૂતો માટે AI સંચાલિત કૃષિ વૉઇસ સલાહકાર પ્રણાલી",
@@ -461,6 +581,21 @@ const TRANSLATIONS = {
         signal_web_offline: "સિગ્નલ: <strong>ઑફલાઇન (ફીલ્ડ મોડ)</strong>"
     },
     bn: {
+        journey_tag: '🌾 সক্রিয় ফসলের যাত্রা',
+        modal_profile_title: 'আমার খামারের প্রোফাইল',
+        modal_profile_sub: 'সমস্ত AI পরামর্শ এবং কীটপতঙ্গের সতর্কতা ব্যক্তিগতকৃত করে',
+        lbl_farm_name: 'খামার / জমির নাম',
+        lbl_farmer_name: 'কৃষকের নাম',
+        lbl_location: 'স্থান (জেলা, রাজ্য)',
+        lbl_farm_size: 'জমির পরিমাণ (একর)',
+        lbl_soil_type: 'মাটির ধরন',
+        lbl_irrigation: 'সেচ পদ্ধতি',
+        lbl_crop: 'বর্তমান ফসল',
+        lbl_variety: 'জাত / বীজ ব্র্যান্ড',
+        lbl_sowing_date: 'বপন / রোপণের তারিখ',
+        lbl_harvest_date: 'আনুমানিক ফসল তোলার তারিখ',
+        btn_cancel: 'বাতিল করুন',
+        btn_save_profile: 'প্রোফাইল সংরক্ষণ করুন
         title: "AgriVoice - কৃষক ফিল্ড ভয়েস সহকারী",
         version_tag: "v1.0 অফলাইন-সক্ষম",
         brand_desc: "কৃষকদের জন্য AI ভিত্তিক কৃষি ভয়েস পরামর্শদাতা ব্যবস্থা",
@@ -1014,4 +1149,295 @@ micButton.addEventListener("click", () => {
         stopVoiceRecording();
     }
 });
+
+// ==========================================================================
+// Phase 1: Farm Profile & Growth Stage Manager (100% Offline Capable)
+// ==========================================================================
+
+const CROP_LIFECYCLE_CLIENT = {
+    "Cotton": {
+        duration_days: 160,
+        stages: [
+            { name: "Germination & Emergence", start: 0, end: 12, desc: "Seed sprouting & root establishment." },
+            { name: "Early Vegetative", start: 13, end: 35, desc: "Main stem growth & first true leaves." },
+            { name: "Squaring & Branching", start: 36, end: 65, desc: "Floral buds (squares) & canopy growth." },
+            { name: "Flowering & Boll Setting", start: 66, end: 105, desc: "Peak flowering & boll formation." },
+            { name: "Boll Maturation & Opening", start: 106, end: 140, desc: "Boll filling & early bursting." },
+            { name: "Harvest Readiness", start: 141, end: 180, desc: "Open bolls ready for picking." }
+        ]
+    },
+    "Wheat": {
+        duration_days: 125,
+        stages: [
+            { name: "Crown Root Initiation (CRI)", start: 0, end: 22, desc: "First critical irrigation stage." },
+            { name: "Tillering Stage", start: 23, end: 45, desc: "Secondary shoot production." },
+            { name: "Jointing & Stem Elongation", start: 46, end: 70, desc: "Rapid canopy & stem expansion." },
+            { name: "Booting & Heading", start: 71, end: 90, desc: "Spikes & ears emergence." },
+            { name: "Grain Milking & Dough Stage", start: 91, end: 110, desc: "Kernel starch accumulation." },
+            { name: "Maturity & Harvest", start: 111, end: 135, desc: "Golden straw, harvest ready." }
+        ]
+    },
+    "Rice / Paddy": {
+        duration_days: 130,
+        stages: [
+            { name: "Nursery & Transplanting", start: 0, end: 25, desc: "Seedling growth & transplanting." },
+            { name: "Tillering & Rooting", start: 26, end: 50, desc: "Active tillers & root expansion." },
+            { name: "Stem Elongation & Panicle", start: 51, end: 75, desc: "Panicle initiation & flag leaf." },
+            { name: "Heading & Flowering", start: 76, end: 95, desc: "Flowering & pollination." },
+            { name: "Milk & Dough Grain Filling", start: 96, end: 115, desc: "Starch filling in grain." },
+            { name: "Ripening & Harvesting", start: 116, end: 140, desc: "Golden yellow panicles." }
+        ]
+    },
+    "Tomato": {
+        duration_days: 110,
+        stages: [
+            { name: "Nursery & Establishment", start: 0, end: 20, desc: "Transplant shock recovery." },
+            { name: "Active Vegetative & Branching", start: 21, end: 40, desc: "Foliage expansion & side shoots." },
+            { name: "First Flowering & Fruit Set", start: 41, end: 60, desc: "Yellow blossoms & fruit set." },
+            { name: "Fruit Development & Sizing", start: 61, end: 85, desc: "Rapid fruit expansion." },
+            { name: "Color Break & Harvesting", start: 86, end: 120, desc: "Breaker to red ripe harvest." }
+        ]
+    },
+    "Sugarcane": {
+        duration_days: 360,
+        stages: [
+            { name: "Germination Phase", start: 0, end: 45, desc: "Sett sprouting & root emergence." },
+            { name: "Tillering Phase", start: 46, end: 120, desc: "Profuse tillering & canopy cover." },
+            { name: "Grand Growth Phase", start: 121, end: 270, desc: "Rapid cane elongation." },
+            { name: "Ripening & Maturation", start: 271, end: 365, desc: "Sucrose accumulation." }
+        ]
+    },
+    "Soybean": {
+        duration_days: 95,
+        stages: [
+            { name: "Emergence & Cotyledon", start: 0, end: 12, desc: "Seedling emergence." },
+            { name: "Vegetative & Nodulation", start: 13, end: 35, desc: "Trifoliate leaves & nitrogen nodes." },
+            { name: "Flowering (R1-R2)", start: 36, end: 55, desc: "Purple/white blooms on nodes." },
+            { name: "Pod Formation & Seed Filling", start: 56, end: 80, desc: "Pod elongation & seed growth." },
+            { name: "Full Maturity & Defoliation", start: 81, end: 105, desc: "Brown pods ready to thresh." }
+        ]
+    },
+    "Maize": {
+        duration_days: 105,
+        stages: [
+            { name: "Seedling & Emergence", start: 0, end: 18, desc: "Coleoptile emergence." },
+            { name: "Knee-High Vegetative", start: 19, end: 42, desc: "Rapid vertical stalk growth." },
+            { name: "Tasseling & Silking", start: 43, end: 65, desc: "Tassel pollen shed & silking." },
+            { name: "Blister & Milk Kernel Filling", start: 66, end: 85, desc: "Starch fluid in kernels." },
+            { name: "Black Layer & Harvest", start: 86, end: 115, desc: "Physiological maturity & drying." }
+        ]
+    },
+    "Onion": {
+        duration_days: 120,
+        stages: [
+            { name: "Transplanting & Rooting", start: 0, end: 20, desc: "Seedling rooting." },
+            { name: "Foliage Development", start: 21, end: 50, desc: "Leaf blade expansion." },
+            { name: "Bulb Initiation", start: 51, end: 80, desc: "Bulb base swelling." },
+            { name: "Bulb Enlargement", start: 81, end: 105, desc: "Rapid bulb sizing." },
+            { name: "Neck Fall & Curing", start: 106, end: 130, desc: "50% top fall & curing." }
+        ]
+    },
+    "General / Other Crop": {
+        duration_days: 120,
+        stages: [
+            { name: "Germination & Seedling", start: 0, end: 20, desc: "Sprouting & establishment." },
+            { name: "Vegetative Growth", start: 21, end: 50, desc: "Canopy & foliage growth." },
+            { name: "Flowering & Reproductive", start: 51, end: 80, desc: "Bloom & fruit setting." },
+            { name: "Maturation & Ripening", start: 81, end: 110, desc: "Yield filling & color change." },
+            { name: "Harvest Readiness", start: 111, end: 130, desc: "Crop ready for harvesting." }
+        ]
+    }
+};
+
+let currentFarmProfile = {
+    farm_name: "Green Acres Farm",
+    farmer_name: "Farmer",
+    location: "Nashik, Maharashtra",
+    farm_size: 3.0,
+    soil_type: "Black Soil / Regur",
+    irrigation_method: "Drip Irrigation",
+    current_crop: "Cotton",
+    variety: "BT Cotton Hybrid",
+    sowing_date: new Date(Date.now() - 40 * 86400000).toISOString().split("T")[0],
+    expected_harvest_date: ""
+};
+
+function calculateClientCropMetrics(profile) {
+    const sowingDate = new Date(profile.sowing_date || Date.now());
+    const today = new Date();
+    const ageDays = Math.max(0, Math.floor((today - sowingDate) / (1000 * 60 * 60 * 24)));
+    
+    const cropConfig = CROP_LIFECYCLE_CLIENT[profile.current_crop] || CROP_LIFECYCLE_CLIENT["General / Other Crop"];
+    const totalDuration = cropConfig.duration_days;
+    const stages = cropConfig.stages;
+
+    let currentStage = stages[stages.length - 1];
+    let stageIdx = stages.length - 1;
+
+    for (let i = 0; i < stages.length; i++) {
+        if (ageDays >= stages[i].start && ageDays <= stages[i].end) {
+            currentStage = stages[i];
+            stageIdx = i;
+            break;
+        } else if (ageDays < stages[i].start) {
+            currentStage = stages[Math.max(0, i - 1)];
+            stageIdx = Math.max(0, i - 1);
+            break;
+        }
+    }
+
+    const progressPct = Math.min(100, Math.round((ageDays / totalDuration) * 100));
+    const daysRemaining = Math.max(0, totalDuration - ageDays);
+
+    const summary = `Farm: '${profile.farm_name}' in ${profile.location}. Farm Size: ${profile.farm_size} acres, Soil: ${profile.soil_type}, Irrigation: ${profile.irrigation_method}. Crop: ${profile.current_crop} (Variety: ${profile.variety}), Sown on ${profile.sowing_date} (Day ${ageDays} of ~${totalDuration} days, ${progressPct}% completed). Current Growth Stage: '${currentStage.name}' (${currentStage.desc}). Estimated ${daysRemaining} days remaining until harvest.`;
+
+    return {
+        crop_age_days: ageDays,
+        total_duration_days: totalDuration,
+        progress_percentage: progressPct,
+        current_stage_name: currentStage.name,
+        current_stage_description: currentStage.desc,
+        days_to_harvest: daysRemaining,
+        personalized_summary: summary
+    };
+}
+
+function updateFarmProfileUI(profile, metrics) {
+    // 1. Top Nav Badge
+    const navFarmName = document.getElementById("navFarmName");
+    const navFarmCropStage = document.getElementById("navFarmCropStage");
+    if (navFarmName) navFarmName.textContent = profile.farm_name || "My Farm";
+    if (navFarmCropStage) navFarmCropStage.textContent = `${profile.current_crop} (Day ${metrics.crop_age_days})`;
+
+    // 2. Sidebar Journey Card
+    const sidebarFarmName = document.getElementById("sidebarFarmName");
+    const sidebarCropPill = document.getElementById("sidebarCropPill");
+    const sidebarAgeBadge = document.getElementById("sidebarAgeBadge");
+    const sidebarStageName = document.getElementById("sidebarStageName");
+    const sidebarStagePct = document.getElementById("sidebarStagePct");
+    const sidebarProgressFill = document.getElementById("sidebarProgressFill");
+    const sidebarDaysRemaining = document.getElementById("sidebarDaysRemaining");
+    const sidebarLocation = document.getElementById("sidebarLocation");
+
+    if (sidebarFarmName) sidebarFarmName.textContent = profile.farm_name;
+    if (sidebarCropPill) sidebarCropPill.textContent = `${profile.current_crop} (${profile.variety || 'Hybrid'})`;
+    if (sidebarAgeBadge) sidebarAgeBadge.textContent = `Day ${metrics.crop_age_days}`;
+    if (sidebarStageName) sidebarStageName.textContent = metrics.current_stage_name;
+    if (sidebarStagePct) sidebarStagePct.textContent = `${metrics.progress_percentage}%`;
+    if (sidebarProgressFill) sidebarProgressFill.style.width = `${metrics.progress_percentage}%`;
+    if (sidebarDaysRemaining) sidebarDaysRemaining.innerHTML = `<i class="fa-regular fa-clock"></i> ${metrics.days_to_harvest} days left`;
+    if (sidebarLocation) sidebarLocation.innerHTML = `<i class="fa-solid fa-location-dot"></i> ${profile.location.split(',')[0]}`;
+}
+
+async function loadFarmProfile() {
+    const saved = localStorage.getItem("agriedge_farm_profile");
+    if (saved) {
+        try {
+            currentFarmProfile = JSON.parse(saved);
+        } catch (e) {}
+    }
+
+    if (hasBackend) {
+        try {
+            const res = await fetch("/api/farm/profile");
+            if (res.ok) {
+                const data = await res.json();
+                if (data.profile) {
+                    currentFarmProfile = data.profile;
+                    localStorage.setItem("agriedge_farm_profile", JSON.stringify(currentFarmProfile));
+                    updateFarmProfileUI(currentFarmProfile, data.metrics);
+                    return;
+                }
+            }
+        } catch (e) {
+            console.log("Using local offline farm profile state:", e);
+        }
+    }
+
+    const clientMetrics = calculateClientCropMetrics(currentFarmProfile);
+    updateFarmProfileUI(currentFarmProfile, clientMetrics);
+}
+
+async function saveFarmProfileData(profileData) {
+    currentFarmProfile = profileData;
+    localStorage.setItem("agriedge_farm_profile", JSON.stringify(currentFarmProfile));
+    
+    let metrics = calculateClientCropMetrics(currentFarmProfile);
+    
+    if (hasBackend) {
+        try {
+            const res = await fetch("/api/farm/profile", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(currentFarmProfile)
+            });
+            if (res.ok) {
+                const data = await res.json();
+                metrics = data.metrics;
+            }
+        } catch (e) {
+            console.warn("Saved profile locally (offline):", e);
+        }
+    }
+
+    updateFarmProfileUI(currentFarmProfile, metrics);
+}
+
+// Farm Profile Modal Controller
+const farmProfileModal = document.getElementById("farmProfileModal");
+const openProfileBtn = document.getElementById("openProfileBtn");
+const sidebarEditProfileBtn = document.getElementById("sidebarEditProfileBtn");
+const closeProfileModalBtn = document.getElementById("closeProfileModalBtn");
+const cancelProfileBtn = document.getElementById("cancelProfileBtn");
+const farmProfileForm = document.getElementById("farmProfileForm");
+
+function openProfileModal() {
+    if (!farmProfileModal) return;
+    document.getElementById("inputFarmName").value = currentFarmProfile.farm_name || "";
+    document.getElementById("inputFarmerName").value = currentFarmProfile.farmer_name || "";
+    document.getElementById("inputLocation").value = currentFarmProfile.location || "";
+    document.getElementById("inputFarmSize").value = currentFarmProfile.farm_size || 3.0;
+    document.getElementById("inputSoilType").value = currentFarmProfile.soil_type || "Black Soil / Regur";
+    document.getElementById("inputIrrigation").value = currentFarmProfile.irrigation_method || "Drip Irrigation";
+    document.getElementById("inputCrop").value = currentFarmProfile.current_crop || "Cotton";
+    document.getElementById("inputVariety").value = currentFarmProfile.variety || "";
+    document.getElementById("inputSowingDate").value = currentFarmProfile.sowing_date || "";
+    document.getElementById("inputExpectedHarvest").value = currentFarmProfile.expected_harvest_date || "";
+
+    farmProfileModal.classList.remove("hidden");
+}
+
+function closeProfileModal() {
+    if (farmProfileModal) farmProfileModal.classList.add("hidden");
+}
+
+if (openProfileBtn) openProfileBtn.addEventListener("click", openProfileModal);
+if (sidebarEditProfileBtn) sidebarEditProfileBtn.addEventListener("click", openProfileModal);
+if (closeProfileModalBtn) closeProfileModalBtn.addEventListener("click", closeProfileModal);
+if (cancelProfileBtn) cancelProfileBtn.addEventListener("click", closeProfileModal);
+
+if (farmProfileForm) {
+    farmProfileForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const updated = {
+            farm_name: document.getElementById("inputFarmName").value.trim() || "My Farm",
+            farmer_name: document.getElementById("inputFarmerName").value.trim() || "Farmer",
+            location: document.getElementById("inputLocation").value.trim() || "India",
+            farm_size: parseFloat(document.getElementById("inputFarmSize").value) || 1.0,
+            soil_type: document.getElementById("inputSoilType").value,
+            irrigation_method: document.getElementById("inputIrrigation").value,
+            current_crop: document.getElementById("inputCrop").value,
+            variety: document.getElementById("inputVariety").value.trim() || "Standard",
+            sowing_date: document.getElementById("inputSowingDate").value || new Date().toISOString().split("T")[0],
+            expected_harvest_date: document.getElementById("inputExpectedHarvest").value || null
+        };
+
+        await saveFarmProfileData(updated);
+        closeProfileModal();
+    });
+}
+
+// Load Farm Profile on application start
+loadFarmProfile();
+
 

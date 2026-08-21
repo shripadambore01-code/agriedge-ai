@@ -35,6 +35,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from backend.farm import FarmProfile, calculate_crop_stage, CropStageMetrics
+
 # Initialize singletons
 print("🚀 Initializing AgriVoice Components...")
 rag = AgriRAG()
@@ -43,6 +45,7 @@ gemini_client = GeminiAgriClient(api_key=GEMINI_API_KEY)
 router = AgriBrainRouter(local_llm=local_llm, gemini_client=gemini_client, default_mode=SMART_MODE)
 stt = AgriSTT(model_size=WHISPER_MODEL_SIZE, api_key=VOICE_API_KEY)
 tts = AgriTTS(model_path=PIPER_VOICE_MODEL, config_path=PIPER_VOICE_CONFIG)
+active_farm_profile = FarmProfile()
 
 
 class TextQueryRequest(BaseModel):
@@ -93,6 +96,66 @@ def get_system_status():
         "tts_loaded": tts.is_loaded,
     }
 
+# ==========================================
+# Phase 1: Farm Profile & Lifecycle Engine
+# ==========================================
+@app.get("/api/farm/profile")
+@app.get("/farm/profile")
+def get_farm_profile():
+    """Retrieves current active farm profile and computed growth stage metrics."""
+    metrics = calculate_crop_stage(
+        crop_name=active_farm_profile.current_crop,
+        sowing_date_str=active_farm_profile.sowing_date,
+        variety=active_farm_profile.variety,
+        farm_name=active_farm_profile.farm_name,
+        location=active_farm_profile.location,
+        soil_type=active_farm_profile.soil_type,
+        irrigation_method=active_farm_profile.irrigation_method,
+        farm_size=active_farm_profile.farm_size
+    )
+    return {
+        "profile": active_farm_profile.model_dump(),
+        "metrics": metrics.model_dump()
+    }
+
+@app.post("/api/farm/profile")
+@app.post("/farm/profile")
+def update_farm_profile(profile: FarmProfile):
+    """Updates the active farm profile and recomputes all crop metrics."""
+    global active_farm_profile
+    active_farm_profile = profile
+    metrics = calculate_crop_stage(
+        crop_name=active_farm_profile.current_crop,
+        sowing_date_str=active_farm_profile.sowing_date,
+        variety=active_farm_profile.variety,
+        farm_name=active_farm_profile.farm_name,
+        location=active_farm_profile.location,
+        soil_type=active_farm_profile.soil_type,
+        irrigation_method=active_farm_profile.irrigation_method,
+        farm_size=active_farm_profile.farm_size
+    )
+    return {
+        "status": "success",
+        "message": "Farm profile updated successfully",
+        "profile": active_farm_profile.model_dump(),
+        "metrics": metrics.model_dump()
+    }
+
+@app.post("/api/farm/calculate-stage")
+def compute_stage_endpoint(req: FarmProfile):
+    """Calculates crop stage metrics for any arbitrary crop and sowing date."""
+    metrics = calculate_crop_stage(
+        crop_name=req.current_crop,
+        sowing_date_str=req.sowing_date,
+        variety=req.variety,
+        farm_name=req.farm_name,
+        location=req.location,
+        soil_type=req.soil_type,
+        irrigation_method=req.irrigation_method,
+        farm_size=req.farm_size
+    )
+    return metrics.model_dump()
+
 @app.post("/api/set-mode")
 @app.post("/set-mode")
 def set_smart_mode(mode: str = Form(...)):
@@ -105,21 +168,39 @@ def set_smart_mode(mode: str = Form(...)):
 @app.post("/api/chat")
 @app.post("/chat")
 def process_text_query(req: TextQueryRequest):
-    """Processes a text query through RAG, Dual-Brain Router, and TTS."""
+    """Processes a text query through RAG, Farm Personalization, Dual-Brain Router, and TTS."""
     if not req.query.strip():
         raise HTTPException(status_code=400, detail="Query cannot be empty.")
 
     # 1. RAG Retrieval
     rag_result = rag.retrieve(req.query)
 
-    # 2. Dual-Brain Routing (Local LLM vs Gemini)
+    # 2. Inject Farm Profile Context for personalized advice
+    metrics = calculate_crop_stage(
+        crop_name=active_farm_profile.current_crop,
+        sowing_date_str=active_farm_profile.sowing_date,
+        variety=active_farm_profile.variety,
+        farm_name=active_farm_profile.farm_name,
+        location=active_farm_profile.location,
+        soil_type=active_farm_profile.soil_type,
+        irrigation_method=active_farm_profile.irrigation_method,
+        farm_size=active_farm_profile.farm_size
+    )
+    farm_context = f"[Farmer & Field Context: {metrics.personalized_summary}]"
+    enriched_rag_context = f"{farm_context}\n\n{rag_result['context']}"
+    personalized_rag_result = {
+        "context": enriched_rag_context,
+        "confidence": rag_result["confidence"]
+    }
+
+    # 3. Dual-Brain Routing (Local LLM vs Gemini)
     brain_response = router.process_query(
         user_query=req.query,
-        rag_result=rag_result,
+        rag_result=personalized_rag_result,
         override_mode=req.mode
     )
 
-    # 3. Offline TTS Generation (Always local)
+    # 4. Offline TTS Generation (Always local)
     audio_id = f"speech_{uuid.uuid4().hex[:8]}.wav"
     audio_path = TEMP_AUDIO_DIR / audio_id
     tts.synthesize(brain_response["answer"], str(audio_path))
@@ -131,14 +212,14 @@ def process_text_query(req: TextQueryRequest):
         "offline": brain_response["offline"],
         "mode_used": brain_response.get("mode", router.mode),
         "rag_confidence": rag_result["confidence"],
-        "rag_context": rag_result["context"],
+        "rag_context": enriched_rag_context,
         "audio_url": f"/api/audio/{audio_id}"
     }
 
 @app.post("/api/voice")
 @app.post("/voice")
 async def process_voice_query(audio_file: UploadFile = File(...), mode: str = Form("auto"), language: str = Form("en")):
-    """Processes recorded audio input via Offline STT, RAG, Dual-Brain Router, and TTS."""
+    """Processes recorded audio input via Offline STT, Farm Personalization, RAG, Dual-Brain Router, and TTS."""
     # Save uploaded audio file
     input_audio_id = f"input_{uuid.uuid4().hex[:8]}.wav"
     input_audio_path = TEMP_AUDIO_DIR / input_audio_id
@@ -152,14 +233,29 @@ async def process_voice_query(audio_file: UploadFile = File(...), mode: str = Fo
     if not transcription.strip():
         transcription = "No audible question detected."
 
-
-    # 2. RAG Retrieval
+    # 2. RAG Retrieval + Farm Context
     rag_result = rag.retrieve(transcription)
+    metrics = calculate_crop_stage(
+        crop_name=active_farm_profile.current_crop,
+        sowing_date_str=active_farm_profile.sowing_date,
+        variety=active_farm_profile.variety,
+        farm_name=active_farm_profile.farm_name,
+        location=active_farm_profile.location,
+        soil_type=active_farm_profile.soil_type,
+        irrigation_method=active_farm_profile.irrigation_method,
+        farm_size=active_farm_profile.farm_size
+    )
+    farm_context = f"[Farmer & Field Context: {metrics.personalized_summary}]"
+    enriched_rag_context = f"{farm_context}\n\n{rag_result['context']}"
+    personalized_rag_result = {
+        "context": enriched_rag_context,
+        "confidence": rag_result["confidence"]
+    }
 
     # 3. Dual-Brain Routing
     brain_response = router.process_query(
         user_query=transcription,
-        rag_result=rag_result,
+        rag_result=personalized_rag_result,
         override_mode=mode
     )
 
@@ -175,11 +271,12 @@ async def process_voice_query(audio_file: UploadFile = File(...), mode: str = Fo
         "offline": brain_response["offline"],
         "mode_used": brain_response.get("mode", router.mode),
         "rag_confidence": rag_result["confidence"],
-        "rag_context": rag_result["context"],
+        "rag_context": enriched_rag_context,
         "audio_url": f"/api/audio/{output_audio_id}"
     }
 
 @app.get("/api/audio/{filename}")
+
 @app.get("/audio/{filename}")
 def serve_audio_file(filename: str):
     """Serves synthesized speech audio files."""

@@ -250,7 +250,80 @@ def diagnose_symptoms_endpoint(req: SymptomDiagnosisRequest):
     )
     return report.model_dump()
 
+# ==========================================
+# Phase 6: Precision Irrigation Advisor
+# ==========================================
+from backend.irrigation import (
+    calculate_precision_irrigation_plan,
+    IrrigationPlan
+)
+
+class CustomIrrigationRequest(BaseModel):
+    crop_name: Optional[str] = None
+    sowing_date: Optional[str] = None
+    variety: Optional[str] = None
+    farm_size: Optional[float] = None
+    soil_type: Optional[str] = None
+    irrigation_method: Optional[str] = None
+    soil_feel: Optional[str] = "slightly_moist"
+    reference_et0_mm: Optional[float] = 4.8
+    forecast_rain_24h_mm: Optional[float] = 0.0
+    forecast_rain_48h_mm: Optional[float] = 0.0
+
+@app.get("/api/irrigation/advisor")
+@app.get("/irrigation/advisor")
+def get_irrigation_advisor_endpoint(soil_feel: str = "slightly_moist"):
+    """Returns real-time precision irrigation schedule based on farm profile and weather."""
+    # Fetch live weather rain forecasts
+    weather = get_live_agricultural_weather(
+        location_str=active_farm_profile.location or "Nashik, Maharashtra",
+        crop_name=active_farm_profile.current_crop,
+        current_stage=active_farm_profile.variety
+    )
+    rain_24h = weather.forecast_7days[0].precipitation_prob > 50 and 8.0 or 0.0
+    rain_48h = weather.forecast_7days[1].precipitation_prob > 60 and 12.0 or 0.0
+
+    plan = calculate_precision_irrigation_plan(
+        crop_name=active_farm_profile.current_crop,
+        sowing_date_str=active_farm_profile.sowing_date,
+        variety=active_farm_profile.variety,
+        farm_size_acres=active_farm_profile.farm_size,
+        soil_type=active_farm_profile.soil_type,
+        irrigation_method=active_farm_profile.irrigation_method,
+        soil_feel=soil_feel,
+        reference_et0_mm=4.8,
+        forecast_rain_24h_mm=rain_24h,
+        forecast_rain_48h_mm=rain_48h
+    )
+    return plan.model_dump()
+
+@app.post("/api/irrigation/calculate-custom")
+@app.post("/irrigation/calculate-custom")
+def calculate_custom_irrigation_endpoint(req: CustomIrrigationRequest):
+    """Calculates custom precision irrigation schedule with user-specified inputs."""
+    crop = req.crop_name or active_farm_profile.current_crop
+    sow = req.sowing_date or active_farm_profile.sowing_date
+    var = req.variety or active_farm_profile.variety
+    size = req.farm_size or active_farm_profile.farm_size
+    soil = req.soil_type or active_farm_profile.soil_type
+    method = req.irrigation_method or active_farm_profile.irrigation_method
+
+    plan = calculate_precision_irrigation_plan(
+        crop_name=crop,
+        sowing_date_str=sow,
+        variety=var,
+        farm_size_acres=size,
+        soil_type=soil,
+        irrigation_method=method,
+        soil_feel=req.soil_feel or "slightly_moist",
+        reference_et0_mm=req.reference_et0_mm or 4.8,
+        forecast_rain_24h_mm=req.forecast_rain_24h_mm or 0.0,
+        forecast_rain_48h_mm=req.forecast_rain_48h_mm or 0.0
+    )
+    return plan.model_dump()
+
 @app.post("/api/set-mode")
+
 
 
 

@@ -2531,6 +2531,242 @@ body {
     left: 0;
 }
 
+/* ==========================================================================
+   Phase 6: Precision Irrigation Advisor Styles
+   ========================================================================== */
+
+.irrigation-hero-card {
+    background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    margin: 18px 18px 14px 18px;
+    padding: 20px;
+    box-shadow: 0 4px 16px rgba(2, 132, 199, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.irrigation-hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.irrigation-directive-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+}
+
+.irrigation-badge {
+    background: #0284c7;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 12px;
+    width: fit-content;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.irrigation-directive-group h3 {
+    font-size: 17.5px;
+    font-weight: 800;
+    color: #0c4a6e;
+    line-height: 1.3;
+}
+
+.irrigation-directive-group p {
+    font-size: 12.5px;
+    color: #334155;
+    line-height: 1.4;
+}
+
+.irrigation-runtime-display {
+    background: #ffffff;
+    border: 2px solid #38bdf8;
+    border-radius: var(--radius-md);
+    padding: 12px 18px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    min-width: 170px;
+    box-shadow: var(--shadow-sm);
+}
+
+.runtime-lbl {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.runtime-val {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0284c7;
+    font-family: var(--font-mono);
+    margin: 2px 0;
+}
+
+.irrigation-runtime-display small {
+    font-size: 10.5px;
+    color: #0f766e;
+    font-weight: 600;
+}
+
+.irrigation-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.irr-metric-box {
+    background: #ffffff;
+    border: 1px solid rgba(2, 132, 199, 0.15);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.irr-lbl {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.irr-lbl i {
+    color: #0284c7;
+}
+
+.irr-metric-box strong {
+    font-size: 15px;
+    font-weight: 800;
+    color: #0f172a;
+    font-family: var(--font-mono);
+}
+
+.irr-metric-box small {
+    font-size: 10.5px;
+    color: var(--text-muted);
+}
+
+/* Soil Feel & Tactile Selector */
+.soil-feel-card {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    margin: 0 18px 18px 18px;
+    padding: 20px;
+    box-shadow: 0 4px 16px rgba(45, 106, 79, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.soil-feel-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.soil-feel-icon {
+    width: 40px;
+    height: 40px;
+    background: #fef3c7;
+    color: #d97706;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.soil-feel-header h4 {
+    font-size: 15.5px;
+    font-weight: 800;
+    color: var(--primary-950);
+}
+
+.soil-feel-header p {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.soil-feel-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+.soil-card {
+    background: #fafbfc;
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.soil-card:hover {
+    border-color: #0284c7;
+    transform: translateY(-2px);
+    background: #f0f9ff;
+}
+
+.soil-card.active {
+    border-color: #0284c7;
+    background: #f0f9ff;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+}
+
+.feel-emoji {
+    font-size: 26px;
+}
+
+.soil-card h5 {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.soil-card p {
+    font-size: 10px;
+    color: var(--text-muted);
+    line-height: 1.25;
+    flex-grow: 1;
+}
+
+.depletion-tag {
+    font-size: 9.5px;
+    font-weight: 700;
+    background: #e2e8f0;
+    color: #334155;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-family: var(--font-mono);
+}
+
+.soil-card.active .depletion-tag {
+    background: #0284c7;
+    color: #ffffff;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
     .app-layout {
@@ -2572,7 +2808,18 @@ body {
     .treatment-grid {
         grid-template-columns: 1fr;
     }
+    .irrigation-hero-top {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .irrigation-metrics-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .soil-feel-grid {
+        grid-template-columns: 1fr 1fr;
+    }
 }
+
 
 
 

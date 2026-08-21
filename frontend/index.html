@@ -188,6 +188,9 @@
                     <button class="nav-tab-btn" id="tabDoctorBtn" data-view="doctorView">
                         <i class="fa-solid fa-stethoscope"></i> <span data-i18n="tab_doctor">AI Crop Doctor</span>
                     </button>
+                    <button class="nav-tab-btn" id="tabIrrigationBtn" data-view="irrigationView">
+                        <i class="fa-solid fa-faucet-drip"></i> <span data-i18n="tab_irrigation">Precision Irrigation</span>
+                    </button>
                     <button class="nav-tab-btn" id="tabChatBtn" data-view="chatView">
                         <i class="fa-solid fa-comments"></i> <span data-i18n="tab_advisory">AI Field Voice Assistant</span>
                     </button>
@@ -557,8 +560,96 @@
                     </div>
                 </div>
 
-                <!-- 4. Main Conversation & Audio Interface (Tab 4) -->
+                <!-- 4. Precision Irrigation Advisor View (Tab 4) -->
+                <div class="view-panel hidden" id="irrigationView">
+                    <!-- Hero Irrigation Directive Card -->
+                    <div class="irrigation-hero-card" id="irrigationHeroCard">
+                        <div class="irrigation-hero-top">
+                            <div class="irrigation-directive-group">
+                                <span class="irrigation-badge" id="irrigationBadge">Recommended Cycle</span>
+                                <h3 id="irrigationHeadline">💧 IRRIGATE TOMORROW MORNING: Run Drip for 2 hrs 15 mins</h3>
+                                <p id="irrigationReasoning">Your Cotton is in Squaring & Branching with crop water consumption factor Kc of 0.95. Daily ETc loss is 4.56mm.</p>
+                            </div>
+                            <div class="irrigation-runtime-display">
+                                <span class="runtime-lbl" data-i18n="lbl_pump_runtime">Pump Run-Time</span>
+                                <span class="runtime-val" id="irrigationRuntimeVal">2 hrs 15 mins</span>
+                                <small id="irrigationTimeWindow">06:00 AM - 09:30 AM</small>
+                            </div>
+                        </div>
+
+                        <!-- Metric Gauges Row -->
+                        <div class="irrigation-metrics-grid">
+                            <div class="irr-metric-box">
+                                <span class="irr-lbl"><i class="fa-solid fa-water"></i> <span data-i18n="lbl_total_water">Total Water Volume</span></span>
+                                <strong id="irrigationTotalWater">18,210 Litres</strong>
+                                <small id="irrigationWaterPerAcre">9,105 L / Acre</small>
+                            </div>
+                            <div class="irr-metric-box">
+                                <span class="irr-lbl"><i class="fa-solid fa-sun-plant-wilt"></i> <span data-i18n="lbl_daily_etc">Daily Crop ETc</span></span>
+                                <strong id="irrigationDailyEtc">4.56 mm / day</strong>
+                                <small id="irrigationKcDisplay">Kc Factor: 0.95</small>
+                            </div>
+                            <div class="irr-metric-box">
+                                <span class="irr-lbl"><i class="fa-solid fa-cloud-rain"></i> <span data-i18n="lbl_expected_rain">Expected Rain</span></span>
+                                <strong id="irrigationExpectedRain">0.0 mm (48h)</strong>
+                                <small id="irrigationRainStatus">No Rain Scheduled</small>
+                            </div>
+                            <div class="irr-metric-box">
+                                <span class="irr-lbl"><i class="fa-solid fa-bolt"></i> <span data-i18n="lbl_power_saving">Power & Pump Efficiency</span></span>
+                                <strong id="irrigationPowerSaving">Save 25% Power</strong>
+                                <small>Morning low-evaporation</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Soil Feel & Moisture Selector -->
+                    <div class="soil-feel-card">
+                        <div class="soil-feel-header">
+                            <div class="soil-feel-icon"><i class="fa-solid fa-hand-holding-droplet"></i></div>
+                            <div>
+                                <h4 data-i18n="soil_feel_title">Tactile Soil Moisture Estimator (Touch & Feel)</h4>
+                                <p data-i18n="soil_feel_sub">Select how the top 10cm of soil feels in your hands to calibrate exact water delivery</p>
+                            </div>
+                        </div>
+
+                        <div class="soil-feel-grid">
+                            <div class="soil-card" data-feel="dry_cracked">
+                                <span class="feel-emoji">🏜️</span>
+                                <h5>Dry & Cracked</h5>
+                                <p>Hard crust, deep cracks, soil powders between fingers</p>
+                                <span class="depletion-tag">75% Depletion</span>
+                            </div>
+                            <div class="soil-card" data-feel="dry_powdery">
+                                <span class="feel-emoji">🌾</span>
+                                <h5>Dry & Crumbly</h5>
+                                <p>Does not form a ball, feels dusty and dry</p>
+                                <span class="depletion-tag">60% Depletion</span>
+                            </div>
+                            <div class="soil-card active" data-feel="slightly_moist">
+                                <span class="feel-emoji">🌱</span>
+                                <h5>Slightly Moist</h5>
+                                <p>Forms a weak ball, breaks easily when pressed</p>
+                                <span class="depletion-tag">45% Depletion</span>
+                            </div>
+                            <div class="soil-card" data-feel="optimum_moist">
+                                <span class="feel-emoji">💧</span>
+                                <h5>Optimal Moisture</h5>
+                                <p>Forms pliable ball, leaves slight wet sheen on skin</p>
+                                <span class="depletion-tag">20% Depletion</span>
+                            </div>
+                            <div class="soil-card" data-feel="wet_waterlogged">
+                                <span class="feel-emoji">🌊</span>
+                                <h5>Waterlogged</h5>
+                                <p>Muddy, free water appears when squeezed</p>
+                                <span class="depletion-tag">0% (Saturated)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Main Conversation & Audio Interface (Tab 5) -->
                 <div class="view-panel hidden" id="chatView">
+
 
 
                     <!-- Dialogue History Stream -->

@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from backend.config import (
-    GEMINI_API_KEY, SMART_MODE, LOCAL_MODEL_PATH,
+    GEMINI_API_KEY, VOICE_API_KEY, SMART_MODE, LOCAL_MODEL_PATH,
     WHISPER_MODEL_SIZE, PIPER_VOICE_MODEL, PIPER_VOICE_CONFIG,
     TEMP_AUDIO_DIR, HOST, PORT
 )
@@ -41,8 +41,9 @@ rag = AgriRAG()
 local_llm = LocalAgriLLM(model_path=LOCAL_MODEL_PATH)
 gemini_client = GeminiAgriClient(api_key=GEMINI_API_KEY)
 router = AgriBrainRouter(local_llm=local_llm, gemini_client=gemini_client, default_mode=SMART_MODE)
-stt = AgriSTT(model_size=WHISPER_MODEL_SIZE)
+stt = AgriSTT(model_size=WHISPER_MODEL_SIZE, api_key=VOICE_API_KEY)
 tts = AgriTTS(model_path=PIPER_VOICE_MODEL, config_path=PIPER_VOICE_CONFIG)
+
 
 class TextQueryRequest(BaseModel):
     query: str

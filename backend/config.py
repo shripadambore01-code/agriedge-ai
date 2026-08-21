@@ -8,7 +8,9 @@ load_dotenv(dotenv_path=BASE_DIR / ".env")
 
 # Settings
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+VOICE_API_KEY = os.getenv("VOICE_API_KEY", "")
 SMART_MODE = os.getenv("SMART_MODE", "auto").lower()  # off, auto, on
+
 
 LOCAL_MODEL_PATH = os.getenv("LOCAL_MODEL_PATH", str(BASE_DIR / "models" / "llama-3.2-3b-instruct-q4_k_m.gguf"))
 LLM_CONTEXT_SIZE = int(os.getenv("LLM_CONTEXT_SIZE", "2048"))

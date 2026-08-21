@@ -9,14 +9,5 @@ if str(BASE_DIR) not in sys.path:
 
 from backend.main import app
 
-# Export for Vercel Serverless Function
-try:
-    from mangum import Mangum
-    handler = Mangum(app, lifespan="off")
-except Exception:
-    handler = app
-
-# Also export app directly for standard ASGI loaders
-app = app
 
 

@@ -2110,6 +2110,427 @@ body {
     font-weight: 600;
 }
 
+/* ==========================================================================
+   Phase 5: AI Crop Doctor & Plant Pathology Styles
+   ========================================================================== */
+
+.doctor-console-card {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    margin: 18px 18px 14px 18px;
+    padding: 18px;
+    box-shadow: 0 4px 16px rgba(45, 106, 79, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.doctor-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.doctor-title-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.doctor-icon-bubble {
+    width: 42px;
+    height: 42px;
+    background: #eff6ff;
+    color: #2563eb;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.doctor-title-box h3 {
+    font-size: 16.5px;
+    font-weight: 800;
+    color: var(--primary-950);
+}
+
+.doctor-title-box p {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.badge-vision {
+    background: #f0fdf4;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11.5px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.doctor-input-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.photo-upload-zone {
+    background: #fafbfc;
+    border: 2px dashed #cbd5e1;
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    min-height: 190px;
+    transition: all 0.2s ease;
+}
+
+.photo-upload-zone:hover {
+    border-color: var(--primary-500);
+    background: #f0fdf4;
+}
+
+.hidden-file-input {
+    display: none;
+}
+
+.upload-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.upload-icon {
+    font-size: 32px;
+    color: var(--primary-600);
+    margin-bottom: 4px;
+}
+
+.upload-inner h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--primary-900);
+}
+
+.upload-inner p {
+    font-size: 11.5px;
+    color: var(--text-muted);
+}
+
+.btn-browse-photo {
+    margin-top: 8px;
+    background: var(--primary-700);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 7px 16px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s;
+}
+
+.btn-browse-photo:hover {
+    background: var(--primary-800);
+}
+
+.photo-preview-box {
+    position: relative;
+    max-width: 100%;
+    max-height: 180px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.photo-preview-box img {
+    max-height: 170px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.btn-remove-photo {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 26px;
+    height: 26px;
+    background: rgba(220, 38, 38, 0.9);
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.symptom-selector-box {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    justify-content: center;
+}
+
+.btn-run-diagnosis {
+    background: linear-gradient(135deg, var(--primary-700), var(--primary-800));
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 11px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+    margin-top: 4px;
+}
+
+.btn-run-diagnosis:hover {
+    background: linear-gradient(135deg, var(--primary-800), var(--primary-900));
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Diagnosis Result Card */
+.diagnosis-result-card {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    margin: 0 18px 18px 18px;
+    padding: 20px;
+    box-shadow: 0 4px 16px rgba(45, 106, 79, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 14px;
+}
+
+.result-title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.cause-type-pill {
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    width: fit-content;
+}
+
+.result-title-group h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--primary-950);
+}
+
+.scientific-name {
+    font-size: 12.5px;
+    font-style: italic;
+    color: var(--text-muted);
+}
+
+.result-badges {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.severity-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11.5px;
+    font-weight: 700;
+}
+
+.severity-severe { background: #fee2e2; color: #991b1b; }
+.severity-moderate { background: #fef3c7; color: #92400e; }
+.severity-mild { background: #dcfce7; color: #166534; }
+
+.confidence-badge {
+    background: var(--primary-100);
+    color: var(--primary-800);
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-family: var(--font-mono);
+}
+
+/* 24-Hour Urgent Action Box */
+.urgent-action-box {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border: 1.5px solid #fde68a;
+    border-left: 5px solid #d97706;
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.urgent-action-icon {
+    font-size: 22px;
+    color: #d97706;
+}
+
+.urgent-action-box strong {
+    font-size: 13px;
+    color: #92400e;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.urgent-action-box p {
+    font-size: 13px;
+    color: #78350f;
+    line-height: 1.35;
+}
+
+/* Treatment Grid */
+.treatment-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.treatment-card {
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chem-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-top: 3px solid #0284c7;
+}
+
+.bio-card {
+    background: #f0fdf4;
+    border: 1px solid #dcfce7;
+    border-top: 3px solid #16a34a;
+}
+
+.treatment-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.treatment-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.treatment-body strong {
+    font-size: 13.5px;
+    color: var(--text-main);
+}
+
+.dosage-pills {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dose-tag {
+    font-size: 11.5px;
+    font-family: var(--font-mono);
+    color: #0369a1;
+    background: #e0f2fe;
+    padding: 3px 8px;
+    border-radius: 4px;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dose-bio {
+    color: #15803d;
+    background: #dcfce7;
+}
+
+/* Preventive Box */
+.preventive-box {
+    background: var(--bg-surface-alt);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.preventive-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary-900);
+}
+
+.preventive-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-left: 4px;
+}
+
+.preventive-list li {
+    font-size: 12.5px;
+    color: var(--text-main);
+    line-height: 1.35;
+    position: relative;
+    padding-left: 14px;
+}
+
+.preventive-list li::before {
+    content: "✓";
+    color: var(--primary-600);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
     .app-layout {
@@ -2145,7 +2566,14 @@ body {
     .dossier-footer-grid {
         grid-template-columns: 1fr;
     }
+    .doctor-input-grid {
+        grid-template-columns: 1fr;
+    }
+    .treatment-grid {
+        grid-template-columns: 1fr;
+    }
 }
+
 
 
 

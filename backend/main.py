@@ -203,7 +203,55 @@ def get_crop_journey_endpoint():
     )
     return timeline.model_dump()
 
+# ==========================================
+# Phase 5: AI Crop Doctor Diagnostic Engine
+# ==========================================
+from backend.crop_doctor import (
+    diagnose_crop_image_with_vision,
+    diagnose_crop_symptoms,
+    DiagnosisReport
+)
+
+class SymptomDiagnosisRequest(BaseModel):
+    crop_name: Optional[str] = None
+    symptom_key: str
+    additional_notes: Optional[str] = ""
+    language: Optional[str] = "en"
+
+@app.post("/api/doctor/diagnose-image")
+@app.post("/doctor/diagnose-image")
+async def diagnose_image_endpoint(
+    image: UploadFile = File(...),
+    crop_name: Optional[str] = Form(None),
+    symptoms: Optional[str] = Form(""),
+    language: Optional[str] = Form("en")
+):
+    """Diagnoses leaf/plant disease using Gemini Vision AI with offline fallback."""
+    crop = crop_name or active_farm_profile.current_crop or "Cotton"
+    img_bytes = await image.read()
+    report = diagnose_crop_image_with_vision(
+        image_bytes=img_bytes,
+        crop_name=crop,
+        symptoms_desc=symptoms,
+        language=language
+    )
+    return report.model_dump()
+
+@app.post("/api/doctor/diagnose-symptoms")
+@app.post("/doctor/diagnose-symptoms")
+def diagnose_symptoms_endpoint(req: SymptomDiagnosisRequest):
+    """Diagnoses crop disease via offline rule-based symptom decision tree."""
+    crop = req.crop_name or active_farm_profile.current_crop or "Cotton"
+    report = diagnose_crop_symptoms(
+        crop_name=crop,
+        symptom_key=req.symptom_key,
+        additional_notes=req.additional_notes or "",
+        language=req.language or "en"
+    )
+    return report.model_dump()
+
 @app.post("/api/set-mode")
+
 
 
 

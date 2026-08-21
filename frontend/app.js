@@ -85,6 +85,19 @@ const languageSelect = document.getElementById("languageSelect");
 // 9-Language Localization Dictionary for Field Agriculture
 const TRANSLATIONS = {
     en: {
+        tab_doctor: "AI Crop Doctor",
+        doctor_title: "AI Crop Doctor & Plant Pathologist",
+        doctor_sub: "Upload a sick leaf photo (Gemini Vision AI) or select symptoms for offline diagnosis",
+        upload_prompt: "Take or Upload Leaf Photo",
+        upload_sub: "Supports JPG, PNG, WebP • Auto-analyzed by Vision AI",
+        btn_choose_photo: "Choose Photo",
+        lbl_select_symptom: "Select Observed Symptoms (Offline Decision Tree):",
+        lbl_symptom_notes: "Additional Symptoms / Notes (Optional):",
+        btn_diagnose_now: "Diagnose Plant Disease",
+        lbl_action_24h: "Immediate Action (Next 24 Hours):",
+        lbl_chem_treatment: "Approved Chemical Treatment",
+        lbl_bio_treatment: "Organic & Biological Alternative",
+        lbl_prevention: "Long-Term Preventive Measures",
         tab_journey: "Crop Journey Timeline",
         lbl_dos: "Critical Dos (What to Do)",
         lbl_donts: "Critical Don'ts (Avoid Mistakes)",
@@ -167,6 +180,19 @@ const TRANSLATIONS = {
         signal_web_offline: "Signal: <strong>Offline (Field Mode)</strong>"
     },
     hi: {
+        tab_doctor: "AI फसल डॉक्टर",
+        doctor_title: "AI फसल डॉक्टर और पादप रोग विशेषज्ञ",
+        doctor_sub: "पत्ती की फोटो अपलोड करें (Vision AI) या ऑफलाइन लक्षणों से रोग पहचानें",
+        upload_prompt: "पत्ती की फोटो लें या अपलोड करें",
+        upload_sub: "JPG, PNG, WebP सपोर्ट • AI द्वारा स्वचालित विश्लेषण",
+        btn_choose_photo: "फोटो चुनें",
+        lbl_select_symptom: "लक्षण चुनें (ऑफलाइन निर्णय वृक्ष):",
+        lbl_symptom_notes: "अतिरिक्त लक्षण / विवरण (वैकल्पिक):",
+        btn_diagnose_now: "रोग की पहचान करें",
+        lbl_action_24h: "तत्काल कार्रवाई (अगले 24 घंटे):",
+        lbl_chem_treatment: "अनुशंसित रासायनिक उपचार",
+        lbl_bio_treatment: "जैविक और प्राकृतिक विकल्प",
+        lbl_prevention: "दीर्घकालिक रोकथाम उपाय",
         tab_journey: "फसल जीवन चक्र और अवस्थाएं",
         lbl_dos: "महत्वपूर्ण कार्य (क्या करें)",
         lbl_donts: "सावधानियां (गलतियों से बचें)",
@@ -249,6 +275,19 @@ const TRANSLATIONS = {
         signal_web_offline: "सिग्नल: <strong>ऑफ़लाइन (फील्ड मोड)</strong>"
     },
     mr: {
+        tab_doctor: "AI पीक डॉक्टर",
+        doctor_title: "AI पीक डॉक्टर व वनस्पती रोगतज्ज्ञ",
+        doctor_sub: "पानाचा फोटो अपलोड करा (Vision AI) किंवा ऑफलाइन लक्षणांवरून रोग ओळखा",
+        upload_prompt: "पानाचा फोटो काढा किंवा अपलोड करा",
+        upload_sub: "JPG, PNG, WebP सपोर्ट • AI द्वारे स्वयंचलित विश्लेषण",
+        btn_choose_photo: "फोटो निवडा",
+        lbl_select_symptom: "लक्षणे निवडा (ऑफलाइन निर्णय वृक्ष):",
+        lbl_symptom_notes: "अतिरिक्त लक्षणे / माहिती (पर्यायी):",
+        btn_diagnose_now: "रोगाचे निदान करा",
+        lbl_action_24h: "तातडीची कृती (पुढील २४ तास):",
+        lbl_chem_treatment: "शिफारस केलेले रासायनिक औषध",
+        lbl_bio_treatment: "सेंद्रिय व जैविक पर्याय",
+        lbl_prevention: "दीर्घकालीन प्रतिबंधात्मक उपाय",
         tab_journey: "पीक जीवन चक्र आणि टप्पे",
         lbl_dos: "महत्त्वाची कामे (काय करावे)",
         lbl_donts: "सावधानता (चूका टाळा)",
@@ -1506,14 +1545,16 @@ loadFarmProfile();
 
 const tabDashboardBtn = document.getElementById("tabDashboardBtn");
 const tabJourneyBtn = document.getElementById("tabJourneyBtn");
+const tabDoctorBtn = document.getElementById("tabDoctorBtn");
 const tabChatBtn = document.getElementById("tabChatBtn");
 const dashboardView = document.getElementById("dashboardView");
 const journeyView = document.getElementById("journeyView");
+const doctorView = document.getElementById("doctorView");
 const chatView = document.getElementById("chatView");
 
 function switchMainView(viewName) {
-    [tabDashboardBtn, tabJourneyBtn, tabChatBtn].forEach(btn => { if (btn) btn.classList.remove("active"); });
-    [dashboardView, journeyView, chatView].forEach(view => { if (view) view.classList.add("hidden"); });
+    [tabDashboardBtn, tabJourneyBtn, tabDoctorBtn, tabChatBtn].forEach(btn => { if (btn) btn.classList.remove("active"); });
+    [dashboardView, journeyView, doctorView, chatView].forEach(view => { if (view) view.classList.add("hidden"); });
 
     if (viewName === "dashboardView") {
         if (tabDashboardBtn) tabDashboardBtn.classList.add("active");
@@ -1521,6 +1562,9 @@ function switchMainView(viewName) {
     } else if (viewName === "journeyView") {
         if (tabJourneyBtn) tabJourneyBtn.classList.add("active");
         if (journeyView) journeyView.classList.remove("hidden");
+    } else if (viewName === "doctorView") {
+        if (tabDoctorBtn) tabDoctorBtn.classList.add("active");
+        if (doctorView) doctorView.classList.remove("hidden");
     } else {
         if (tabChatBtn) tabChatBtn.classList.add("active");
         if (chatView) chatView.classList.remove("hidden");
@@ -1529,6 +1573,7 @@ function switchMainView(viewName) {
 
 if (tabDashboardBtn) tabDashboardBtn.addEventListener("click", () => switchMainView("dashboardView"));
 if (tabJourneyBtn) tabJourneyBtn.addEventListener("click", () => switchMainView("journeyView"));
+if (tabDoctorBtn) tabDoctorBtn.addEventListener("click", () => switchMainView("doctorView"));
 if (tabChatBtn) tabChatBtn.addEventListener("click", () => switchMainView("chatView"));
 
 let completedTasksState = JSON.parse(localStorage.getItem("agriedge_completed_tasks") || "{}");
@@ -2281,6 +2326,210 @@ async function loadCropJourney() {
 
 // Initial Crop Journey Load
 loadCropJourney();
+
+// ==========================================================================
+// Phase 5: AI Crop Doctor Client Engine (Vision AI + Offline Fallback)
+// ==========================================================================
+
+const leafPhotoInput = document.getElementById("leafPhotoInput");
+const browsePhotoBtn = document.getElementById("browsePhotoBtn");
+const photoDropZone = document.getElementById("photoDropZone");
+const uploadPlaceholder = document.getElementById("uploadPlaceholder");
+const photoPreviewBox = document.getElementById("photoPreviewBox");
+const photoPreviewImg = document.getElementById("photoPreviewImg");
+const removePhotoBtn = document.getElementById("removePhotoBtn");
+const runDiagnosisBtn = document.getElementById("runDiagnosisBtn");
+const selectSymptomKey = document.getElementById("selectSymptomKey");
+const inputSymptomNotes = document.getElementById("inputSymptomNotes");
+const diagnosisResultCard = document.getElementById("diagnosisResultCard");
+
+let selectedLeafFile = null;
+
+if (browsePhotoBtn && leafPhotoInput) {
+    browsePhotoBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        leafPhotoInput.click();
+    });
+}
+
+if (photoDropZone && leafPhotoInput) {
+    photoDropZone.addEventListener("click", () => {
+        if (!selectedLeafFile) leafPhotoInput.click();
+    });
+
+    photoDropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        photoDropZone.classList.add("dragover");
+    });
+
+    photoDropZone.addEventListener("dragleave", () => {
+        photoDropZone.classList.remove("dragover");
+    });
+
+    photoDropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        photoDropZone.classList.remove("dragover");
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            handlePhotoSelected(e.dataTransfer.files[0]);
+        }
+    });
+}
+
+if (leafPhotoInput) {
+    leafPhotoInput.addEventListener("change", (e) => {
+        if (e.target.files && e.target.files[0]) {
+            handlePhotoSelected(e.target.files[0]);
+        }
+    });
+}
+
+function handlePhotoSelected(file) {
+    selectedLeafFile = file;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        if (photoPreviewImg) photoPreviewImg.src = e.target.result;
+        if (uploadPlaceholder) uploadPlaceholder.classList.add("hidden");
+        if (photoPreviewBox) photoPreviewBox.classList.remove("hidden");
+    };
+    reader.readAsDataURL(file);
+}
+
+if (removePhotoBtn) {
+    removePhotoBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        selectedLeafFile = null;
+        if (leafPhotoInput) leafPhotoInput.value = "";
+        if (photoPreviewBox) photoPreviewBox.classList.add("hidden");
+        if (uploadPlaceholder) uploadPlaceholder.classList.remove("hidden");
+    });
+}
+
+function renderDiagnosisResult(res) {
+    if (!diagnosisResultCard) return;
+
+    const causeEl = document.getElementById("resCauseType");
+    const nameEl = document.getElementById("resDiseaseName");
+    const sciEl = document.getElementById("resScientificName");
+    const sevEl = document.getElementById("resSeverity");
+    const confEl = document.getElementById("resConfidence");
+    const actEl = document.getElementById("resImmediateAction");
+    const chemEl = document.getElementById("resChemName");
+    const chemLitEl = document.getElementById("resChemPerLiter");
+    const chemAcreEl = document.getElementById("resChemPerAcre");
+    const orgEl = document.getElementById("resOrganicName");
+    const orgDoseEl = document.getElementById("resOrganicDosage");
+    const prevList = document.getElementById("resPreventiveList");
+
+    if (causeEl) causeEl.textContent = res.cause_type || "Pathological Issue";
+    if (nameEl) nameEl.textContent = res.disease_name;
+    if (sciEl) sciEl.textContent = res.scientific_name || "";
+
+    if (sevEl) {
+        sevEl.className = `severity-badge severity-${(res.severity || "moderate").toLowerCase()}`;
+        sevEl.textContent = res.severity === "Severe" ? "🔴 Severe Threat" : (res.severity === "Moderate" ? "🟡 Moderate Risk" : "🟢 Mild");
+    }
+
+    if (confEl) confEl.textContent = `${res.confidence_pct}% Match (${res.mode_used || "AI"})`;
+    if (actEl) actEl.textContent = res.immediate_action_24h;
+    if (chemEl) chemEl.textContent = res.chemical_treatment;
+    if (chemLitEl) chemLitEl.textContent = res.chemical_dosage_per_liter || "As per label";
+    if (chemAcreEl) chemAcreEl.textContent = res.chemical_dosage_per_acre || "In 200 L water";
+    if (orgEl) orgEl.textContent = res.organic_treatment;
+    if (orgDoseEl) orgDoseEl.textContent = res.organic_dosage;
+
+    if (prevList && res.preventive_measures) {
+        prevList.innerHTML = "";
+        res.preventive_measures.forEach(pm => {
+            const li = document.createElement("li");
+            li.textContent = pm;
+            prevList.appendChild(li);
+        });
+    }
+
+    diagnosisResultCard.classList.remove("hidden");
+    diagnosisResultCard.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+if (runDiagnosisBtn) {
+    runDiagnosisBtn.addEventListener("click", async () => {
+        const origBtnText = runDiagnosisBtn.innerHTML;
+        runDiagnosisBtn.disabled = true;
+        runDiagnosisBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Analyzing Pathology...`;
+
+        try {
+            let result = null;
+
+            if (selectedLeafFile && hasBackend) {
+                // Multi-modal Vision API upload
+                const formData = new FormData();
+                formData.append("image", selectedLeafFile);
+                formData.append("crop_name", currentFarmProfile.current_crop);
+                formData.append("symptoms", inputSymptomNotes ? inputSymptomNotes.value : "");
+                formData.append("language", currentLang);
+
+                const res = await fetch("/api/doctor/diagnose-image", {
+                    method: "POST",
+                    body: formData
+                });
+                if (res.ok) {
+                    result = await res.json();
+                }
+            } else if (hasBackend) {
+                // Symptom decision tree backend
+                const sympKey = selectSymptomKey ? selectSymptomKey.value : "pink_bollworm";
+                const notes = inputSymptomNotes ? inputSymptomNotes.value : "";
+                const res = await fetch("/api/doctor/diagnose-symptoms", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        crop_name: currentFarmProfile.current_crop,
+                        symptom_key: sympKey,
+                        additional_notes: notes,
+                        language: currentLang
+                    })
+                });
+                if (res.ok) {
+                    result = await res.json();
+                }
+            }
+
+            if (!result) {
+                // Fallback offline client symptom match
+                const sympKey = selectSymptomKey ? selectSymptomKey.value : "pink_bollworm";
+                result = {
+                    crop_name: currentFarmProfile.current_crop,
+                    disease_name: sympKey === "yellow_rust" ? "Yellow / Stripe Rust" : (sympKey === "early_blight" ? "Early Blight" : "Pink Bollworm Infestation"),
+                    scientific_name: sympKey === "yellow_rust" ? "Puccinia striiformis" : "Pectinophora gossypiella",
+                    confidence_pct: 93,
+                    severity: "Severe",
+                    cause_type: sympKey === "yellow_rust" ? "Fungal Pathogen" : "Insect Pest",
+                    symptoms_observed: "Diagnosed via offline decision rules.",
+                    immediate_action_24h: "Spray recommended crop protective dosage in calm evening conditions.",
+                    chemical_treatment: sympKey === "yellow_rust" ? "Propiconazole 25% EC @ 1 ml/L" : "Profenofos 50% EC @ 2 ml/L",
+                    chemical_dosage_per_liter: "1.0 - 2.0 ml/L of water",
+                    chemical_dosage_per_acre: "200 - 400 ml/acre in 200 L water",
+                    organic_treatment: "Neem Oil 10,000 ppm (Azadirachtin 1%)",
+                    organic_dosage: "3 ml/L (600 ml/acre)",
+                    preventive_measures: [
+                        "Install pheromone/sticky traps for early vector scouting",
+                        "Avoid high nitrogen doses during disease outbreaks",
+                        "Sanitize field borders and rotate crops"
+                    ],
+                    mode_used: "Offline Decision Tree"
+                };
+            }
+
+            renderDiagnosisResult(result);
+        } catch (err) {
+            console.error("Diagnosis error:", err);
+            alert("Diagnosis error: Please check symptoms or try again.");
+        } finally {
+            runDiagnosisBtn.disabled = false;
+            runDiagnosisBtn.innerHTML = origBtnText;
+        }
+    });
+}
+
 
 
 

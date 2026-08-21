@@ -185,6 +185,9 @@
                     <button class="nav-tab-btn" id="tabJourneyBtn" data-view="journeyView">
                         <i class="fa-solid fa-seedling"></i> <span data-i18n="tab_journey">Crop Journey Timeline</span>
                     </button>
+                    <button class="nav-tab-btn" id="tabDoctorBtn" data-view="doctorView">
+                        <i class="fa-solid fa-stethoscope"></i> <span data-i18n="tab_doctor">AI Crop Doctor</span>
+                    </button>
                     <button class="nav-tab-btn" id="tabChatBtn" data-view="chatView">
                         <i class="fa-solid fa-comments"></i> <span data-i18n="tab_advisory">AI Field Voice Assistant</span>
                     </button>
@@ -421,8 +424,142 @@
                     </div>
                 </div>
 
-                <!-- 3. Main Conversation & Audio Interface (Tab 3) -->
+                <!-- 3. AI Crop Doctor View (Tab 3) -->
+                <div class="view-panel hidden" id="doctorView">
+                    <!-- Doctor Input Box -->
+                    <div class="doctor-console-card">
+                        <div class="doctor-header-row">
+                            <div class="doctor-title-box">
+                                <div class="doctor-icon-bubble"><i class="fa-solid fa-user-doctor"></i></div>
+                                <div>
+                                    <h3 data-i18n="doctor_title">AI Crop Doctor & Plant Pathologist</h3>
+                                    <p data-i18n="doctor_sub">Upload a sick leaf photo (Gemini Vision AI) or select symptoms for offline diagnosis</p>
+                                </div>
+                            </div>
+                            <div class="doctor-mode-indicator">
+                                <span class="badge-vision" id="doctorModeBadge"><i class="fa-solid fa-camera"></i> Vision + Offline DB</span>
+                            </div>
+                        </div>
+
+                        <div class="doctor-input-grid">
+                            <!-- Left: Photo Upload -->
+                            <div class="photo-upload-zone" id="photoDropZone">
+                                <input type="file" id="leafPhotoInput" accept="image/*" class="hidden-file-input">
+                                <div class="upload-inner" id="uploadPlaceholder">
+                                    <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                                    <h4 data-i18n="upload_prompt">Take or Upload Leaf Photo</h4>
+                                    <p data-i18n="upload_sub">Supports JPG, PNG, WebP • Auto-analyzed by Vision AI</p>
+                                    <button type="button" class="btn-browse-photo" id="browsePhotoBtn">
+                                        <i class="fa-solid fa-camera"></i> <span data-i18n="btn_choose_photo">Choose Photo</span>
+                                    </button>
+                                </div>
+                                <div class="photo-preview-box hidden" id="photoPreviewBox">
+                                    <img id="photoPreviewImg" src="" alt="Leaf Preview">
+                                    <button type="button" class="btn-remove-photo" id="removePhotoBtn"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
+                            </div>
+
+                            <!-- Right: Offline Symptom Selector & Notes -->
+                            <div class="symptom-selector-box">
+                                <div class="form-group">
+                                    <label data-i18n="lbl_select_symptom">Select Observed Symptoms (Offline Decision Tree):</label>
+                                    <select id="selectSymptomKey" class="form-select">
+                                        <option value="pink_bollworm">Cotton: Rosetted flowers, holes in bolls with frass</option>
+                                        <option value="sucking_pests">Cotton: Leaf curling, yellowing margins (hopper burn)</option>
+                                        <option value="leaf_curl_virus">Cotton: Upward leaf curling, vein thickening</option>
+                                        <option value="yellow_rust">Wheat: Yellow/orange powdery linear stripes</option>
+                                        <option value="loose_smut">Wheat: Black powdery smutted head / ear</option>
+                                        <option value="early_blight">Tomato: Target-board brown concentric spots</option>
+                                        <option value="late_blight">Tomato: Dark water-soaked lesions + white fungal fuzz</option>
+                                        <option value="rice_blast">Rice: Spindle-shaped gray lesions on leaves / rotten neck</option>
+                                        <option value="nutrient_nitrogen">General: Pale yellowing of lower older leaves (N Deficiency)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label data-i18n="lbl_symptom_notes">Additional Symptoms / Notes (Optional):</label>
+                                    <input type="text" id="inputSymptomNotes" class="form-input" placeholder="e.g. Yellow dots started 3 days ago after rain...">
+                                </div>
+
+                                <button type="button" class="btn-run-diagnosis" id="runDiagnosisBtn">
+                                    <i class="fa-solid fa-microscope"></i> <span data-i18n="btn_diagnose_now">Diagnose Plant Disease</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Diagnostic Results Card -->
+                    <div class="diagnosis-result-card hidden" id="diagnosisResultCard">
+                        <!-- Result Header -->
+                        <div class="result-header">
+                            <div class="result-title-group">
+                                <span class="cause-type-pill" id="resCauseType">Fungal Pathogen</span>
+                                <h3 id="resDiseaseName">Early Blight of Tomato</h3>
+                                <span class="scientific-name" id="resScientificName">Alternaria solani</span>
+                            </div>
+                            <div class="result-badges">
+                                <span class="severity-badge severity-severe" id="resSeverity">🔴 Severe</span>
+                                <span class="confidence-badge" id="resConfidence">95% Match</span>
+                            </div>
+                        </div>
+
+                        <!-- 24-Hour Immediate Urgent Action -->
+                        <div class="urgent-action-box">
+                            <div class="urgent-action-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+                            <div>
+                                <strong data-i18n="lbl_action_24h">Immediate Action (Next 24 Hours):</strong>
+                                <p id="resImmediateAction">Remove diseased lower leaves touching soil and apply protective contact-cum-systemic fungicide.</p>
+                            </div>
+                        </div>
+
+                        <!-- Treatment Recommendations Grid -->
+                        <div class="treatment-grid">
+                            <!-- Chemical Prescription -->
+                            <div class="treatment-card chem-card">
+                                <div class="treatment-card-header text-blue">
+                                    <i class="fa-solid fa-flask-vial"></i>
+                                    <h4 data-i18n="lbl_chem_treatment">Approved Chemical Treatment</h4>
+                                </div>
+                                <div class="treatment-body">
+                                    <strong id="resChemName">Mancozeb 75% WP or Azoxystrobin 18.2% SC</strong>
+                                    <div class="dosage-pills">
+                                        <span class="dose-tag"><i class="fa-solid fa-droplet"></i> <span id="resChemPerLiter">2.5 g/L of water</span></span>
+                                        <span class="dose-tag"><i class="fa-solid fa-ruler-combined"></i> <span id="resChemPerAcre">500 g/acre in 200 L water</span></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Organic / Biological Alternative -->
+                            <div class="treatment-card bio-card">
+                                <div class="treatment-card-header text-green">
+                                    <i class="fa-solid fa-leaf"></i>
+                                    <h4 data-i18n="lbl_bio_treatment">Organic & Biological Alternative</h4>
+                                </div>
+                                <div class="treatment-body">
+                                    <strong id="resOrganicName">Pseudomonas fluorescens 1.0% WP + Copper Hydroxide</strong>
+                                    <div class="dosage-pills">
+                                        <span class="dose-tag dose-bio"><i class="fa-solid fa-seedling"></i> <span id="resOrganicDosage">5 g/L (1 kg/acre)</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Preventive Measures -->
+                        <div class="preventive-box">
+                            <div class="preventive-header">
+                                <i class="fa-solid fa-shield-halved"></i>
+                                <h4 data-i18n="lbl_prevention">Long-Term Preventive Measures</h4>
+                            </div>
+                            <ul class="preventive-list" id="resPreventiveList">
+                                <!-- Dynamic prevention points -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Main Conversation & Audio Interface (Tab 4) -->
                 <div class="view-panel hidden" id="chatView">
+
 
                     <!-- Dialogue History Stream -->
                     <div class="dialogue-stream" id="messagesContainer">

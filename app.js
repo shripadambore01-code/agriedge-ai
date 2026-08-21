@@ -85,6 +85,16 @@ const languageSelect = document.getElementById("languageSelect");
 // 9-Language Localization Dictionary for Field Agriculture
 const TRANSLATIONS = {
     en: {
+        tab_dashboard: "Farm Dashboard & Plan",
+        tab_advisory: "AI Field Voice Assistant",
+        health_hero_title: "Overall Farm Health Score",
+        health_hero_sub: "Calculated from soil structure, irrigation efficiency, pest pressure & crop stage",
+        score_soil: "Soil Health",
+        score_water: "Water Efficiency",
+        score_pest: "Pest Defense",
+        score_weather: "Weather Index",
+        plan_title: "Today's Prioritized Farming Plan",
+        plan_sub: "Tailored tasks for your crop growth stage, soil type & irrigation schedule",
         journey_tag: '🌾 Active Crop Journey',
         modal_profile_title: 'My Farm Profile',
         modal_profile_sub: 'Personalizes all AI advice, growth stages & pest alerts',
@@ -147,6 +157,16 @@ const TRANSLATIONS = {
         signal_web_offline: "Signal: <strong>Offline (Field Mode)</strong>"
     },
     hi: {
+        tab_dashboard: "खेत डैशबोर्ड और दैनिक योजना",
+        tab_advisory: "AI फील्ड वॉइस सलाहकार",
+        health_hero_title: "खेत का समग्र स्वास्थ्य स्कोर",
+        health_hero_sub: "मिट्टी की उर्वरता, सिंचाई दक्षता, कीट दबाव और फसल अवस्था के आधार पर",
+        score_soil: "मिट्टी स्वास्थ्य",
+        score_water: "सिंचाई दक्षता",
+        score_pest: "कीट सुरक्षा",
+        score_weather: "मौसम सूचकांक",
+        plan_title: "आज की प्राथमिकता प्राप्त कृषि योजना",
+        plan_sub: "आपकी फसल अवस्था, मिट्टी और सिंचाई के अनुसार आज के कार्य",
         journey_tag: '🌾 सक्रिय फसल यात्रा',
         modal_profile_title: 'मेरा खेत और फसल प्रोफ़ाइल',
         modal_profile_sub: 'सभी AI सलाह, विकास चरण और कीट चेतावनियों को व्यक्तिगत बनाता है',
@@ -209,6 +229,16 @@ const TRANSLATIONS = {
         signal_web_offline: "सिग्नल: <strong>ऑफ़लाइन (फील्ड मोड)</strong>"
     },
     mr: {
+        tab_dashboard: "शेत डॅशबोर्ड आणि नियोजन",
+        tab_advisory: "AI फील्ड व्हॉइस सल्लागार",
+        health_hero_title: "शेताचा एकूण आरोग्य स्कोर",
+        health_hero_sub: "मातीची सुपीकता, पाणी व्यवस्थापन, कीड जोखीम व पीक वाढीच्या अवस्थेवर आधारित",
+        score_soil: "माती आरोग्य",
+        score_water: "पाणी कार्यक्षमता",
+        score_pest: "कीड संरक्षण",
+        score_weather: "हवामान निर्देशांक",
+        plan_title: "आजचे प्राधान्य शेती कामे",
+        plan_sub: "पीक अवस्था, माती प्रकार आणि ठिबक वेळापत्रकानुसार तयार केलेली कामे",
         journey_tag: '🌾 चालू पीक प्रवास',
         modal_profile_title: 'माझे शेत आणि पीक प्रोफाइल',
         modal_profile_sub: 'सर्व AI सल्ला, वाढीच्या अवस्था आणि कीड अलर्ट वैयक्तिकृत करतो',
@@ -1439,5 +1469,388 @@ if (farmProfileForm) {
 
 // Load Farm Profile on application start
 loadFarmProfile();
+
+// ==========================================================================
+// Phase 2: Farm Dashboard & Today's Plan Client Engine
+// ==========================================================================
+
+const tabDashboardBtn = document.getElementById("tabDashboardBtn");
+const tabChatBtn = document.getElementById("tabChatBtn");
+const dashboardView = document.getElementById("dashboardView");
+const chatView = document.getElementById("chatView");
+
+function switchMainView(viewName) {
+    if (viewName === "dashboardView") {
+        if (tabDashboardBtn) tabDashboardBtn.classList.add("active");
+        if (tabChatBtn) tabChatBtn.classList.remove("active");
+        if (dashboardView) dashboardView.classList.remove("hidden");
+        if (chatView) chatView.classList.add("hidden");
+    } else {
+        if (tabChatBtn) tabChatBtn.classList.add("active");
+        if (tabDashboardBtn) tabDashboardBtn.classList.remove("active");
+        if (chatView) chatView.classList.remove("hidden");
+        if (dashboardView) dashboardView.classList.add("hidden");
+    }
+}
+
+if (tabDashboardBtn) tabDashboardBtn.addEventListener("click", () => switchMainView("dashboardView"));
+if (tabChatBtn) tabChatBtn.addEventListener("click", () => switchMainView("chatView"));
+
+let completedTasksState = JSON.parse(localStorage.getItem("agriedge_completed_tasks") || "{}");
+
+function generateClientDashboardTasks(profile, metrics) {
+    const crop = profile.current_crop;
+    const age = metrics.crop_age_days;
+    const irr = profile.irrigation_method;
+    const soil = profile.soil_type;
+    const size = profile.farm_size;
+    const tasks = [];
+
+    if (crop === "Cotton") {
+        if (age <= 20) {
+            tasks.push({
+                id: "task_cot_1",
+                category: "Field Activity",
+                categoryIcon: "fa-tractor",
+                priority: "high",
+                title: "Thinning & Gap Filling",
+                action: "Remove weak seedlings leaving 1 healthy plant per hill. Fill empty gaps with soaked seeds.",
+                why: "Ensures optimum plant population of 7,000-10,000 plants per acre.",
+                dosage: "Maintain 90 cm x 60 cm spacing"
+            });
+            tasks.push({
+                id: "task_cot_2",
+                category: "Pest Scouting",
+                categoryIcon: "fa-bug",
+                priority: "normal",
+                title: "Scout for Sucking Pests (Aphids & Thrips)",
+                action: "Inspect lower surfaces of 20 random leaves across the field.",
+                why: "Early vegetative stages are prone to jassids and thrips which cause leaf curling.",
+                dosage: "ETL: 5-10 thrips/leaf"
+            });
+        } else if (age <= 65) {
+            tasks.push({
+                id: "task_cot_3",
+                category: "Fertilizer",
+                categoryIcon: "fa-seedling",
+                priority: "urgent",
+                title: "Top Dressing: Nitrogen & Potassium",
+                action: `Apply Urea and MOP near root zone followed by light ${irr.toLowerCase()}.`,
+                why: "Squaring and vegetative growth require rapid nitrogen assimilation for node development.",
+                dosage: `Urea @ 25 kg/acre (${size * 25} kg total) + MOP @ 15 kg/acre`
+            });
+            tasks.push({
+                id: "task_cot_4",
+                category: "Pest Scouting",
+                categoryIcon: "fa-bug",
+                priority: "urgent",
+                title: "Install Pheromone Traps for Pink Bollworm",
+                action: "Erect sleeve traps at crop canopy height to monitor adult moth activity.",
+                why: "Early detection prevents square and flower damage before boll penetration.",
+                dosage: "5 traps per acre (Install 50 m apart)"
+            });
+            tasks.push({
+                id: "task_cot_5",
+                category: "Field Activity",
+                categoryIcon: "fa-broom",
+                priority: "normal",
+                title: "Interculture & De-weeding",
+                action: "Run shallow blade harrow or manual hand weeding between rows.",
+                why: "Weed competition at this stage reduces lint yield by up to 30%.",
+                dosage: "Clear 15 cm strip along drip lateral lines"
+            });
+        } else if (age <= 110) {
+            tasks.push({
+                id: "task_cot_6",
+                category: "Irrigation",
+                categoryIcon: "fa-droplet",
+                priority: "urgent",
+                title: "Critical Flowering & Boll Formation Watering",
+                action: `Maintain steady moisture using ${irr.toLowerCase()}. Avoid water stress or over-flooding.`,
+                why: "Moisture stress during flowering causes massive flower and young boll shedding.",
+                dosage: "Run drip for 2.5 - 3 hours every alternate day"
+            });
+            tasks.push({
+                id: "task_cot_7",
+                category: "Fertilizer",
+                categoryIcon: "fa-spray-can-sparkles",
+                priority: "high",
+                title: "Foliar 13:0:45 (Potassium Nitrate) Spray",
+                action: "Foliar spray of Potassium Nitrate + 0.1% Boron during morning hours.",
+                why: "Enhances boll size, prevents parawilt, and increases fiber tensile strength.",
+                dosage: "10 g/liter of water (1.5 kg per acre)"
+            });
+        } else {
+            tasks.push({
+                id: "task_cot_8",
+                category: "Field Activity",
+                categoryIcon: "fa-hands-holding-circle",
+                priority: "high",
+                title: "First Picking of Open Bolls",
+                action: "Pick fully opened dry bolls into clean cotton bags. Avoid morning dew wet picking.",
+                why: "Prevents yellow staining of lint and trash contamination.",
+                dosage: "Sort clean bolls from stained bolls immediately"
+            });
+        }
+    } else if (crop === "Wheat") {
+        if (age <= 25) {
+            tasks.push({
+                id: "task_wht_1",
+                category: "Irrigation",
+                categoryIcon: "fa-droplet",
+                priority: "urgent",
+                title: "First CRI Stage Irrigation",
+                action: "Provide first and most critical irrigation at Crown Root Initiation (Day 20-22).",
+                why: "Roots establish now; missing this irrigation cuts yield by 25-30%.",
+                dosage: "Light uniform irrigation of 5-6 cm depth"
+            });
+            tasks.push({
+                id: "task_wht_2",
+                category: "Fertilizer",
+                categoryIcon: "fa-seedling",
+                priority: "high",
+                title: "First Urea Top Dressing",
+                action: "Broadcast Urea just after first irrigation when soil is in workable moisture.",
+                why: "Boosts tiller initiation and leaf chlorophyll.",
+                dosage: `Urea @ 30 kg/acre (${size * 30} kg total)`
+            });
+        } else if (age <= 70) {
+            tasks.push({
+                id: "task_wht_3",
+                category: "Pest Scouting",
+                categoryIcon: "fa-magnifying-glass",
+                priority: "urgent",
+                title: "Inspect for Yellow Rust Pustules",
+                action: "Inspect upper leaves for yellowish-orange powdery linear stripes.",
+                why: "Cool moist morning weather favors rapid fungal spore germination.",
+                dosage: "If observed: Spray Propiconazole 25% EC @ 1 ml/L"
+            });
+        } else {
+            tasks.push({
+                id: "task_wht_4",
+                category: "Irrigation",
+                categoryIcon: "fa-droplet",
+                priority: "high",
+                title: "Milk & Dough Stage Irrigation",
+                action: "Provide light irrigation during calm wind hours to prevent lodging.",
+                why: "Grain filling determines 1000-grain weight and test weight.",
+                dosage: "Avoid irrigation during high wind forecast"
+            });
+        }
+    } else if (crop === "Tomato") {
+        tasks.push({
+            id: "task_tom_1",
+            category: "Pest Scouting",
+            categoryIcon: "fa-bug",
+            priority: "urgent",
+            title: "Check for Early Blight & Whitefly",
+            action: "Scout lower leaves for target-board brown concentric rings and whitefly underside leaves.",
+            why: "High humidity triggers fungal blights and viral leaf curl transmission.",
+            dosage: "Mancozeb 75% WP @ 2.5 g/L or Neem Oil @ 2 ml/L"
+        });
+        tasks.push({
+            id: "task_tom_2",
+            category: "Fertilizer",
+            categoryIcon: "fa-flask",
+            priority: "high",
+            title: "Calcium Nitrate & Boron Fertigation",
+            action: `Inject water soluble Calcium Nitrate through ${irr.toLowerCase()}.`,
+            why: "Prevents Blossom End Rot (black base on fruit) and enhances fruit shine.",
+            dosage: `Calcium Nitrate @ 3 kg/acre (${size * 3} kg total)`
+        });
+        tasks.push({
+            id: "task_tom_3",
+            category: "Field Activity",
+            categoryIcon: "fa-arrows-up-to-line",
+            priority: "normal",
+            title: "Staking & Trellising Support",
+            action: "Tie growing tomato vines to bamboo stakes or trellising twine.",
+            why: "Keeps fruit off soil, improves aeration, and avoids soil-borne rotting.",
+            dosage: "Tie loosely with jute twine"
+        });
+    } else {
+        tasks.push({
+            id: "task_gen_1",
+            category: "Field Activity",
+            categoryIcon: "fa-tractor",
+            priority: "high",
+            title: `${crop} Growth Monitoring & Weed Management`,
+            action: `Inspect field for crop vigor, tiller/branch density and remove competing weed flora.`,
+            why: `Crop is at day ${age} (${metrics.current_stage_name}); weed suppression maximizes fertilizer uptake.`,
+            dosage: "Hand weeding or shallow hoeing"
+        });
+        tasks.push({
+            id: "task_gen_2",
+            category: "Irrigation",
+            categoryIcon: "fa-droplet",
+            priority: "normal",
+            title: `Check Soil Moisture for ${irr}`,
+            action: `Test soil moisture at 10-15 cm root depth before running ${irr.toLowerCase()}.`,
+            why: `Prevents over-saturation and root asphyxiation in ${soil}.`,
+            dosage: "Maintain 65-70% field capacity"
+        });
+        tasks.push({
+            id: "task_gen_3",
+            category: "Fertilizer",
+            categoryIcon: "fa-seedling",
+            priority: "normal",
+            title: "Balanced Macronutrient Top-Dressing",
+            action: "Apply nitrogen top dressing based on soil test recommendations.",
+            why: "Supports ongoing vegetative and canopy expansion.",
+            dosage: "Urea @ 20 kg/acre with irrigation"
+        });
+    }
+
+    const soilScore = (soil.includes("Black") || soil.includes("Alluvial")) ? 88 : 82;
+    const waterScore = irr.includes("Drip") ? 92 : (irr.includes("Sprinkler") ? 84 : 78);
+    const pestScore = age < 70 ? 82 : 76;
+    const weatherScore = 88;
+    const overallScore = Math.round((soilScore * 0.25) + (waterScore * 0.3) + (pestScore * 0.25) + (weatherScore * 0.2));
+
+    return {
+        overall_health_score: overallScore,
+        health_status: overallScore >= 85 ? "🟢 Optimal Condition" : (overallScore >= 70 ? "🟡 Good Condition" : "🔴 Attention Needed"),
+        health_breakdown: {
+            soil_score: soilScore,
+            soil_status: soilScore >= 85 ? "Rich Organic Matter" : "Good Structure",
+            water_score: waterScore,
+            water_status: irr.includes("Drip") ? "High Efficiency (Drip)" : "Adequate Moisture",
+            pest_risk_score: pestScore,
+            pest_risk_status: "Low to Moderate Risk",
+            weather_score: weatherScore,
+            weather_status: "Favorable Season"
+        },
+        today_tasks: tasks
+    };
+}
+
+function renderDashboardUI(dashboardData) {
+    // 1. Health Score Gauge
+    const dashOverallScore = document.getElementById("dashOverallScore");
+    const dashHealthStatus = document.getElementById("dashHealthStatus");
+    const dashSoilScore = document.getElementById("dashSoilScore");
+    const dashSoilFill = document.getElementById("dashSoilFill");
+    const dashSoilStatus = document.getElementById("dashSoilStatus");
+
+    const dashWaterScore = document.getElementById("dashWaterScore");
+    const dashWaterFill = document.getElementById("dashWaterFill");
+    const dashWaterStatus = document.getElementById("dashWaterStatus");
+
+    const dashPestScore = document.getElementById("dashPestScore");
+    const dashPestFill = document.getElementById("dashPestFill");
+    const dashPestStatus = document.getElementById("dashPestStatus");
+
+    const dashWeatherScore = document.getElementById("dashWeatherScore");
+    const dashWeatherFill = document.getElementById("dashWeatherFill");
+    const dashWeatherStatus = document.getElementById("dashWeatherStatus");
+
+    if (dashOverallScore) dashOverallScore.textContent = dashboardData.overall_health_score;
+    if (dashHealthStatus) dashHealthStatus.textContent = dashboardData.health_status;
+
+    const b = dashboardData.health_breakdown;
+    if (dashSoilScore) dashSoilScore.textContent = `${b.soil_score}%`;
+    if (dashSoilFill) dashSoilFill.style.width = `${b.soil_score}%`;
+    if (dashSoilStatus) dashSoilStatus.textContent = b.soil_status;
+
+    if (dashWaterScore) dashWaterScore.textContent = `${b.water_score}%`;
+    if (dashWaterFill) dashWaterFill.style.width = `${b.water_score}%`;
+    if (dashWaterStatus) dashWaterStatus.textContent = b.water_status;
+
+    if (dashPestScore) dashPestScore.textContent = `${b.pest_risk_score}%`;
+    if (dashPestFill) dashPestFill.style.width = `${b.pest_risk_score}%`;
+    if (dashPestStatus) dashPestStatus.textContent = b.pest_risk_status;
+
+    if (dashWeatherScore) dashWeatherScore.textContent = `${b.weather_score}%`;
+    if (dashWeatherFill) dashWeatherFill.style.width = `${b.weather_score}%`;
+    if (dashWeatherStatus) dashWeatherStatus.textContent = b.weather_status;
+
+    // 2. Today's Farming Tasks
+    const container = document.getElementById("todayTasksContainer");
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    dashboardData.today_tasks.forEach(task => {
+        const isDone = !!completedTasksState[task.id];
+
+        const card = document.createElement("div");
+        card.className = `task-card priority-${task.priority} ${isDone ? 'completed' : ''}`;
+        card.id = `card_${task.id}`;
+
+        const iconClass = task.category === 'Irrigation' ? 'fa-droplet' : (task.category === 'Fertilizer' ? 'fa-seedling' : (task.category === 'Pest Scouting' ? 'fa-bug' : 'fa-tractor'));
+
+        card.innerHTML = `
+            <div class="task-checkbox-wrapper">
+                <input type="checkbox" class="task-checkbox" id="chk_${task.id}" ${isDone ? 'checked' : ''}>
+            </div>
+            <div class="task-content">
+                <div class="task-top-meta">
+                    <span class="task-category-pill"><i class="fa-solid ${iconClass}"></i> ${task.category}</span>
+                    <span class="task-priority-badge">${task.priority}</span>
+                    ${task.dosage ? `<span class="task-dosage-badge"><i class="fa-solid fa-calculator"></i> ${task.dosage}</span>` : ''}
+                </div>
+                <h4 class="task-title">${task.title}</h4>
+                <p class="task-action">${task.action}</p>
+                <div class="task-why"><i class="fa-solid fa-circle-info"></i> <strong>Why:</strong> ${task.why}</div>
+            </div>
+        `;
+
+        const chk = card.querySelector(`#chk_${task.id}`);
+        chk.addEventListener("change", (e) => {
+            completedTasksState[task.id] = e.target.checked;
+            localStorage.setItem("agriedge_completed_tasks", JSON.stringify(completedTasksState));
+            if (e.target.checked) {
+                card.classList.add("completed");
+            } else {
+                card.classList.remove("completed");
+            }
+            updateTasksProgressCount(dashboardData.today_tasks.length);
+        });
+
+        container.appendChild(card);
+    });
+
+    updateTasksProgressCount(dashboardData.today_tasks.length);
+}
+
+function updateTasksProgressCount(total) {
+    const tasksProgressText = document.getElementById("tasksProgressText");
+    if (!tasksProgressText) return;
+    const completedCount = Object.values(completedTasksState).filter(Boolean).length;
+    tasksProgressText.innerHTML = `Tasks: <strong>${completedCount}/${total} Done</strong>`;
+}
+
+async function loadDashboardPlan() {
+    let dashboardData = null;
+
+    if (hasBackend) {
+        try {
+            const res = await fetch("/api/dashboard/plan");
+            if (res.ok) {
+                dashboardData = await res.json();
+            }
+        } catch (e) {
+            console.log("Using local offline dashboard calculation:", e);
+        }
+    }
+
+    if (!dashboardData) {
+        const metrics = calculateClientCropMetrics(currentFarmProfile);
+        dashboardData = generateClientDashboardTasks(currentFarmProfile, metrics);
+    }
+
+    renderDashboardUI(dashboardData);
+}
+
+// Hook into save profile to reload dashboard instantly
+const origSaveFarmProfileData = saveFarmProfileData;
+saveFarmProfileData = async function(profileData) {
+    await origSaveFarmProfileData(profileData);
+    await loadDashboardPlan();
+};
+
+// Initial Dashboard Load
+loadDashboardPlan();
+
 
 

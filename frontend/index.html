@@ -175,66 +175,156 @@
             </aside>
 
 
-            <!-- Main Conversation & Audio Interface -->
+            <!-- Main View Container: Dashboard & AI Advisory -->
             <section class="conversation-panel">
-                <!-- Dialogue History Stream -->
-                <div class="dialogue-stream" id="messagesContainer">
-                    <!-- Default Field Advisory Welcome Banner -->
-                    <div class="dialogue-card assistant-entry welcome-banner">
-                        <div class="entry-header">
-                            <div class="agent-avatar">
-                                <i class="fa-solid fa-tractor"></i>
+                <!-- Tab Switcher -->
+                <div class="panel-nav-tabs">
+                    <button class="nav-tab-btn active" id="tabDashboardBtn" data-view="dashboardView">
+                        <i class="fa-solid fa-chart-pie"></i> <span data-i18n="tab_dashboard">Farm Dashboard & Plan</span>
+                    </button>
+                    <button class="nav-tab-btn" id="tabChatBtn" data-view="chatView">
+                        <i class="fa-solid fa-comments"></i> <span data-i18n="tab_advisory">AI Field Voice Assistant</span>
+                    </button>
+                </div>
+
+                <!-- 1. Farm Dashboard View -->
+                <div class="view-panel" id="dashboardView">
+                    <!-- Health Score Hero Card -->
+                    <div class="health-hero-card">
+                        <div class="health-gauge-box">
+                            <div class="health-circle-ring">
+                                <span class="health-number" id="dashOverallScore">88</span>
+                                <span class="health-unit">/100</span>
                             </div>
-                            <div class="agent-meta">
-                                <h3 data-i18n="welcome_title">Farmer Field Assistant Ready</h3>
-                                <span class="meta-status" data-i18n="welcome_status">100% Offline Capable • Local RAG Active</span>
+                            <div class="health-title-group">
+                                <span class="health-badge-status" id="dashHealthStatus">🟢 Optimal Condition</span>
+                                <h3 data-i18n="health_hero_title">Overall Farm Health Score</h3>
+                                <p data-i18n="health_hero_sub">Calculated from soil structure, irrigation efficiency, pest pressure & crop stage</p>
                             </div>
                         </div>
-                        <div class="entry-body">
-                            <p data-i18n="welcome_desc">Press the <strong>Microphone button</strong> below or select a quick topic from the left panel to ask about crop diseases, pest outbreaks, fertilizer dosages, or government welfare schemes.</p>
-                            <div class="feature-pills">
-                                <span class="feature-tag" data-i18n="tag_voice_in"><i class="fa-solid fa-microphone-lines"></i> Voice Command</span>
-                                <span class="feature-tag" data-i18n="tag_reasoning"><i class="fa-solid fa-brain"></i> Multi-Dialect AI</span>
-                                <span class="feature-tag" data-i18n="tag_voice_out"><i class="fa-solid fa-volume-high"></i> Spoken Audio Out</span>
+
+                        <div class="health-breakdown-grid">
+                            <div class="health-metric-card">
+                                <div class="metric-top">
+                                    <span><i class="fa-solid fa-seedling"></i> <span data-i18n="score_soil">Soil Health</span></span>
+                                    <strong id="dashSoilScore">88%</strong>
+                                </div>
+                                <div class="metric-bar"><div class="metric-bar-fill bg-green" id="dashSoilFill" style="width: 88%;"></div></div>
+                                <small id="dashSoilStatus">Rich Organic Matter</small>
                             </div>
+
+                            <div class="health-metric-card">
+                                <div class="metric-top">
+                                    <span><i class="fa-solid fa-droplet"></i> <span data-i18n="score_water">Water Efficiency</span></span>
+                                    <strong id="dashWaterScore">92%</strong>
+                                </div>
+                                <div class="metric-bar"><div class="metric-bar-fill bg-blue" id="dashWaterFill" style="width: 92%;"></div></div>
+                                <small id="dashWaterStatus">High Efficiency (Drip)</small>
+                            </div>
+
+                            <div class="health-metric-card">
+                                <div class="metric-top">
+                                    <span><i class="fa-solid fa-shield-virus"></i> <span data-i18n="score_pest">Pest Defense</span></span>
+                                    <strong id="dashPestScore">82%</strong>
+                                </div>
+                                <div class="metric-bar"><div class="metric-bar-fill bg-amber" id="dashPestFill" style="width: 82%;"></div></div>
+                                <small id="dashPestStatus">Low to Moderate Risk</small>
+                            </div>
+
+                            <div class="health-metric-card">
+                                <div class="metric-top">
+                                    <span><i class="fa-solid fa-cloud-sun"></i> <span data-i18n="score_weather">Weather Index</span></span>
+                                    <strong id="dashWeatherScore">88%</strong>
+                                </div>
+                                <div class="metric-bar"><div class="metric-bar-fill bg-green" id="dashWeatherFill" style="width: 88%;"></div></div>
+                                <small id="dashWeatherStatus">Favorable Season</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Today's Farming Plan Section -->
+                    <div class="daily-plan-section">
+                        <div class="plan-header">
+                            <div class="plan-title-box">
+                                <div class="plan-header-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                                <div>
+                                    <h3 data-i18n="plan_title">Today's Prioritized Farming Plan</h3>
+                                    <p data-i18n="plan_sub">Tailored tasks for your crop growth stage, soil type & irrigation schedule</p>
+                                </div>
+                            </div>
+                            <div class="plan-progress-pill">
+                                <span id="tasksProgressText">Tasks: <strong>0/3 Done</strong></span>
+                            </div>
+                        </div>
+
+                        <div class="tasks-list" id="todayTasksContainer">
+                            <!-- Dynamic task cards inserted here -->
                         </div>
                     </div>
                 </div>
 
-                <!-- Processing / Loading Indicator -->
-                <div class="stream-loader hidden" id="processingBar">
-                    <div class="wave-spinner">
-                        <span></span><span></span><span></span><span></span>
-                    </div>
-                    <span id="processingText" class="loader-text" data-i18n="processing_text">Analyzing query with Agricultural RAG...</span>
-                </div>
-
-                <!-- Bottom Input Console -->
-                <div class="input-console">
-                    <div class="voice-hero-bar">
-                        <button class="voice-trigger-btn" id="micButton" title="Click to Record Farmer Question">
-                            <div class="mic-ripple"></div>
-                            <i class="fa-solid fa-microphone mic-icon"></i>
-                        </button>
-                        <div class="voice-state-text">
-                            <h4 id="micStatusTitle" data-i18n="mic_title">Press Microphone to Speak</h4>
-                            <p id="micStatusSubtitle" data-i18n="mic_sub">Works with Cloud Voice API & Offline Engine</p>
+                <!-- 2. Main Conversation & Audio Interface (Tab 2) -->
+                <div class="view-panel hidden" id="chatView">
+                    <!-- Dialogue History Stream -->
+                    <div class="dialogue-stream" id="messagesContainer">
+                        <!-- Default Field Advisory Welcome Banner -->
+                        <div class="dialogue-card assistant-entry welcome-banner">
+                            <div class="entry-header">
+                                <div class="agent-avatar">
+                                    <i class="fa-solid fa-tractor"></i>
+                                </div>
+                                <div class="agent-meta">
+                                    <h3 data-i18n="welcome_title">Farmer Field Assistant Ready</h3>
+                                    <span class="meta-status" data-i18n="welcome_status">100% Offline Capable • Local RAG Active</span>
+                                </div>
+                            </div>
+                            <div class="entry-body">
+                                <p data-i18n="welcome_desc">Press the <strong>Microphone button</strong> below or select a quick topic from the left panel to ask about crop diseases, pest outbreaks, fertilizer dosages, or government welfare schemes.</p>
+                                <div class="feature-pills">
+                                    <span class="feature-tag" data-i18n="tag_voice_in"><i class="fa-solid fa-microphone-lines"></i> Voice Command</span>
+                                    <span class="feature-tag" data-i18n="tag_reasoning"><i class="fa-solid fa-brain"></i> Multi-Dialect AI</span>
+                                    <span class="feature-tag" data-i18n="tag_voice_out"><i class="fa-solid fa-volume-high"></i> Spoken Audio Out</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Manual Text Submission Bar -->
-                    <form class="text-query-bar" id="chatForm">
-                        <div class="input-wrapper">
-                            <i class="fa-solid fa-keyboard input-icon"></i>
-                            <input type="text" id="textQueryInput" data-i18n-placeholder="input_placeholder" placeholder="Type crop question or pest symptom..." autocomplete="off">
+                    <!-- Processing / Loading Indicator -->
+                    <div class="stream-loader hidden" id="processingBar">
+                        <div class="wave-spinner">
+                            <span></span><span></span><span></span><span></span>
                         </div>
-                        <button type="submit" class="submit-btn" id="sendButton" title="Send Question">
-                            <span data-i18n="send_btn">Ask Assistant</span>
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </button>
-                    </form>
+                        <span id="processingText" class="loader-text" data-i18n="processing_text">Analyzing query with Agricultural RAG...</span>
+                    </div>
+
+                    <!-- Bottom Input Console -->
+                    <div class="input-console">
+                        <div class="voice-hero-bar">
+                            <button class="voice-trigger-btn" id="micButton" title="Click to Record Farmer Question">
+                                <div class="mic-ripple"></div>
+                                <i class="fa-solid fa-microphone mic-icon"></i>
+                            </button>
+                            <div class="voice-state-text">
+                                <h4 id="micStatusTitle" data-i18n="mic_title">Press Microphone to Speak</h4>
+                                <p id="micStatusSubtitle" data-i18n="mic_sub">Works with Cloud Voice API & Offline Engine</p>
+                            </div>
+                        </div>
+
+                        <!-- Manual Text Submission Bar -->
+                        <form class="text-query-bar" id="chatForm">
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-keyboard input-icon"></i>
+                                <input type="text" id="textQueryInput" data-i18n-placeholder="input_placeholder" placeholder="Type crop question or pest symptom..." autocomplete="off">
+                            </div>
+                            <button type="submit" class="submit-btn" id="sendButton" title="Send Question">
+                                <span data-i18n="send_btn">Ask Assistant</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </section>
+
         </div>
     </div>
 

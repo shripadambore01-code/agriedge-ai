@@ -156,7 +156,20 @@ def compute_stage_endpoint(req: FarmProfile):
     )
     return metrics.model_dump()
 
+# ==========================================
+# Phase 2: Farm Dashboard & Daily Plan Engine
+# ==========================================
+from backend.dashboard import generate_dashboard_data, DashboardSummary
+
+@app.get("/api/dashboard/plan")
+@app.get("/dashboard/plan")
+def get_daily_dashboard_plan():
+    """Returns today's prioritized farming plan and farm health score."""
+    summary = generate_dashboard_data(active_farm_profile)
+    return summary.model_dump()
+
 @app.post("/api/set-mode")
+
 @app.post("/set-mode")
 def set_smart_mode(mode: str = Form(...)):
     """Updates smart routing mode ('off', 'auto', 'on')."""

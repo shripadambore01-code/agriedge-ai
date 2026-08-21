@@ -7,7 +7,7 @@ import os
 import uuid
 from pathlib import Path
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, HTMLResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -48,20 +48,33 @@ class TextQueryRequest(BaseModel):
     query: str
     mode: str = "auto"
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 def read_root():
-    """Root endpoint for status check and API metadata."""
-    return {
-        "status": "online",
-        "service": "AgriVoice AI Assistant",
-        "endpoints": {
-            "status": "/api/status",
-            "chat": "/api/chat",
-            "voice": "/api/voice",
-            "set_mode": "/api/set-mode",
-            "docs": "/docs"
-        }
-    }
+    """Serves the AgriVoice web interface directly at root."""
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    for p in [BASE_DIR / "index.html", BASE_DIR / "frontend" / "index.html"]:
+        if p.exists():
+            return HTMLResponse(content=p.read_text(encoding="utf-8"))
+    return HTMLResponse(content="<h1>AgriVoice AI Assistant</h1><p>API is active. Visit <a href='/docs'>/docs</a>.</p>")
+
+@app.get("/style.css")
+def serve_css():
+    """Serves CSS stylesheet."""
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    for p in [BASE_DIR / "style.css", BASE_DIR / "frontend" / "style.css"]:
+        if p.exists():
+            return Response(content=p.read_text(encoding="utf-8"), media_type="text/css")
+    raise HTTPException(status_code=404, detail="style.css not found")
+
+@app.get("/app.js")
+def serve_js():
+    """Serves Frontend JavaScript application."""
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    for p in [BASE_DIR / "app.js", BASE_DIR / "frontend" / "app.js"]:
+        if p.exists():
+            return Response(content=p.read_text(encoding="utf-8"), media_type="application/javascript")
+    raise HTTPException(status_code=404, detail="app.js not found")
+
 
 @app.get("/api/status")
 @app.get("/status")

@@ -242,9 +242,73 @@
                         </div>
                     </div>
 
+                    <!-- Phase 3: Smart Weather & Spray Window Advisory Card -->
+                    <div class="weather-advisory-card">
+                        <div class="weather-header-row">
+                            <div class="weather-loc-box">
+                                <div class="weather-header-icon"><i class="fa-solid fa-cloud-sun-rain"></i></div>
+                                <div>
+                                    <h3 data-i18n="weather_title">Smart Field Weather & Spray Windows</h3>
+                                    <p id="weatherLocationSubtitle">Live Agromet Intelligence for Nashik, Maharashtra</p>
+                                </div>
+                            </div>
+                            <div class="spray-window-pill" id="sprayWindowPill">
+                                <i class="fa-solid fa-spray-can"></i> <span id="sprayWindowText">Optimal Spray Window Open</span>
+                            </div>
+                        </div>
+
+                        <!-- Current Conditions Strip -->
+                        <div class="current-weather-grid">
+                            <div class="current-weather-hero">
+                                <div class="temp-big">
+                                    <span id="weatherCurrentTemp">29.5</span><span class="temp-deg">°C</span>
+                                </div>
+                                <div class="cond-box">
+                                    <span class="cond-text" id="weatherCurrentDesc">Partly Cloudy</span>
+                                    <small id="weatherSprayReason">Calm winds, safe for foliar spray</small>
+                                </div>
+                            </div>
+
+                            <div class="weather-stat-pills">
+                                <div class="stat-pill">
+                                    <i class="fa-solid fa-droplet icon-blue"></i>
+                                    <div>
+                                        <span class="stat-lbl" data-i18n="lbl_humidity">Humidity</span>
+                                        <strong id="weatherHumidity">68%</strong>
+                                    </div>
+                                </div>
+                                <div class="stat-pill">
+                                    <i class="fa-solid fa-wind icon-teal"></i>
+                                    <div>
+                                        <span class="stat-lbl" data-i18n="lbl_wind">Wind Speed</span>
+                                        <strong id="weatherWind">11.2 km/h</strong>
+                                    </div>
+                                </div>
+                                <div class="stat-pill">
+                                    <i class="fa-solid fa-cloud-showers-heavy icon-indigo"></i>
+                                    <div>
+                                        <span class="stat-lbl" data-i18n="lbl_rain_prob">Rain Chance</span>
+                                        <strong id="weatherRainProb">15%</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actionable Agromet Advisories Carousel / Box -->
+                        <div class="agromet-advisories-list" id="agrometAdvisoriesContainer">
+                            <!-- Dynamic advisories inserted here -->
+                        </div>
+
+                        <!-- 7-Day Forecast Strip -->
+                        <div class="forecast-strip" id="weatherForecastContainer">
+                            <!-- Dynamic 7-day mini cards inserted here -->
+                        </div>
+                    </div>
+
                     <!-- Today's Farming Plan Section -->
                     <div class="daily-plan-section">
                         <div class="plan-header">
+
                             <div class="plan-title-box">
                                 <div class="plan-header-icon"><i class="fa-solid fa-calendar-check"></i></div>
                                 <div>

@@ -5,6 +5,7 @@ Orchestrates offline STT, RAG, Dual-Brain Router (Local LLM vs Gemini), and offl
 
 import os
 import uuid
+from typing import Optional, List, Dict, Any
 from pathlib import Path
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.responses import FileResponse, JSONResponse, HTMLResponse, Response
@@ -168,7 +169,25 @@ def get_daily_dashboard_plan():
     summary = generate_dashboard_data(active_farm_profile)
     return summary.model_dump()
 
+# ==========================================
+# Phase 3: Smart Agricultural Weather Engine
+# ==========================================
+from backend.weather_service import get_live_agricultural_weather, WeatherSummary
+
+@app.get("/api/weather/forecast")
+@app.get("/weather/forecast")
+def get_weather_forecast_endpoint(location: Optional[str] = None):
+    """Returns live 7-day agricultural weather and actionable Agromet advisories."""
+    loc = location or active_farm_profile.location or "Nashik, Maharashtra"
+    summary = get_live_agricultural_weather(
+        location_str=loc,
+        crop_name=active_farm_profile.current_crop,
+        current_stage=active_farm_profile.variety
+    )
+    return summary.model_dump()
+
 @app.post("/api/set-mode")
+
 
 @app.post("/set-mode")
 def set_smart_mode(mode: str = Form(...)):

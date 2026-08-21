@@ -85,6 +85,13 @@ const languageSelect = document.getElementById("languageSelect");
 // 9-Language Localization Dictionary for Field Agriculture
 const TRANSLATIONS = {
     en: {
+        tab_soil: "Soil & Fertilizer",
+        soil_title: "Soil Health Card & Fertilizer Dosage Calculator",
+        soil_sub: "Scientific N-P-K & Micronutrient calibration based on laboratory Soil Test Crop Response (STCR)",
+        lbl_quick_presets: "Quick Soil Presets:",
+        btn_recalc_fertilizer: "Recalculate Fertilizer Bag Requirements",
+        lbl_total_bags_needed: "Total Commercial Bags for Your Farm:",
+        lbl_soil_advisory_title: "Soil Health Restoration Advisory:",
         tab_irrigation: "Precision Irrigation",
         lbl_pump_runtime: "Pump Run-Time",
         lbl_total_water: "Total Water Volume",
@@ -188,6 +195,13 @@ const TRANSLATIONS = {
         signal_web_offline: "Signal: <strong>Offline (Field Mode)</strong>"
     },
     hi: {
+        tab_soil: "मिट्टी स्वास्थ्य व खाद गणना",
+        soil_title: "मृदा स्वास्थ्य कार्ड और उर्वरक खुराक कैलकुलेटर",
+        soil_sub: "प्रयोगशाला मिट्टी परीक्षण के आधार पर N-P-K और सूक्ष्म पोषक तत्वों की सटीक गणना",
+        lbl_quick_presets: "त्वरित मिट्टी प्रकार:",
+        btn_recalc_fertilizer: "उर्वरक बैग आवश्यकता की पुनर्गणना करें",
+        lbl_total_bags_needed: "आपके खेत के लिए कुल आवश्यक खाद बैग:",
+        lbl_soil_advisory_title: "मृदा स्वास्थ्य सुधार सलाह:",
         tab_irrigation: "सटीक सिंचाई सलाहकार",
         lbl_pump_runtime: "पंप चलाने का समय",
         lbl_total_water: "कुल आवश्यक पानी",
@@ -291,6 +305,13 @@ const TRANSLATIONS = {
         signal_web_offline: "सिग्नल: <strong>ऑफ़लाइन (फील्ड मोड)</strong>"
     },
     mr: {
+        tab_soil: "माती आरोग्य व खत गणना",
+        soil_title: "मृदा आरोग्य पत्रिका व खत मात्रा कॅल्क्युलेटर",
+        soil_sub: "प्रयोगशाळा माती तपासणी अहवालानुसार N-P-K आणि सूक्ष्म अन्नद्रव्यांची अचूक मात्रा",
+        lbl_quick_presets: "मातीचे प्रकार:",
+        btn_recalc_fertilizer: "खतांच्या गोण्यांची पुनर्गणना करा",
+        lbl_total_bags_needed: "आपल्या शेतासाठी एकूण आवश्यक खतांच्या गोण्या:",
+        lbl_soil_advisory_title: "माती आरोग्य सुधारणा सल्ला:",
         tab_irrigation: "अचूक सिंचन सल्लागार",
         lbl_pump_runtime: "पंप चालवण्याची वेळ",
         lbl_total_water: "एकूण आवश्यक पाणी",
@@ -1571,16 +1592,18 @@ const tabDashboardBtn = document.getElementById("tabDashboardBtn");
 const tabJourneyBtn = document.getElementById("tabJourneyBtn");
 const tabDoctorBtn = document.getElementById("tabDoctorBtn");
 const tabIrrigationBtn = document.getElementById("tabIrrigationBtn");
+const tabSoilBtn = document.getElementById("tabSoilBtn");
 const tabChatBtn = document.getElementById("tabChatBtn");
 const dashboardView = document.getElementById("dashboardView");
 const journeyView = document.getElementById("journeyView");
 const doctorView = document.getElementById("doctorView");
 const irrigationView = document.getElementById("irrigationView");
+const soilView = document.getElementById("soilView");
 const chatView = document.getElementById("chatView");
 
 function switchMainView(viewName) {
-    [tabDashboardBtn, tabJourneyBtn, tabDoctorBtn, tabIrrigationBtn, tabChatBtn].forEach(btn => { if (btn) btn.classList.remove("active"); });
-    [dashboardView, journeyView, doctorView, irrigationView, chatView].forEach(view => { if (view) view.classList.add("hidden"); });
+    [tabDashboardBtn, tabJourneyBtn, tabDoctorBtn, tabIrrigationBtn, tabSoilBtn, tabChatBtn].forEach(btn => { if (btn) btn.classList.remove("active"); });
+    [dashboardView, journeyView, doctorView, irrigationView, soilView, chatView].forEach(view => { if (view) view.classList.add("hidden"); });
 
     if (viewName === "dashboardView") {
         if (tabDashboardBtn) tabDashboardBtn.classList.add("active");
@@ -1594,6 +1617,9 @@ function switchMainView(viewName) {
     } else if (viewName === "irrigationView") {
         if (tabIrrigationBtn) tabIrrigationBtn.classList.add("active");
         if (irrigationView) irrigationView.classList.remove("hidden");
+    } else if (viewName === "soilView") {
+        if (tabSoilBtn) tabSoilBtn.classList.add("active");
+        if (soilView) soilView.classList.remove("hidden");
     } else {
         if (tabChatBtn) tabChatBtn.classList.add("active");
         if (chatView) chatView.classList.remove("hidden");
@@ -1604,6 +1630,7 @@ if (tabDashboardBtn) tabDashboardBtn.addEventListener("click", () => switchMainV
 if (tabJourneyBtn) tabJourneyBtn.addEventListener("click", () => switchMainView("journeyView"));
 if (tabDoctorBtn) tabDoctorBtn.addEventListener("click", () => switchMainView("doctorView"));
 if (tabIrrigationBtn) tabIrrigationBtn.addEventListener("click", () => switchMainView("irrigationView"));
+if (tabSoilBtn) tabSoilBtn.addEventListener("click", () => switchMainView("soilView"));
 if (tabChatBtn) tabChatBtn.addEventListener("click", () => switchMainView("chatView"));
 
 let completedTasksState = JSON.parse(localStorage.getItem("agriedge_completed_tasks") || "{}");
@@ -2162,7 +2189,7 @@ async function loadSmartWeather() {
         };
     }
 
-// Hook into save profile to reload dashboard, weather, crop journey, and irrigation instantly
+// Hook into save profile to reload dashboard, weather, crop journey, irrigation, and soil health instantly
 const origSaveFarmProfileData = saveFarmProfileData;
 saveFarmProfileData = async function(profileData) {
     await origSaveFarmProfileData(profileData);
@@ -2170,6 +2197,7 @@ saveFarmProfileData = async function(profileData) {
     await loadSmartWeather();
     await loadCropJourney();
     await loadIrrigationAdvisor();
+    await loadSoilHealthRecommendation(activeSoilPreset);
 };
 
 // Initial Smart Weather Load
@@ -2656,6 +2684,256 @@ document.querySelectorAll(".soil-card").forEach(card => {
 
 // Initial Irrigation Advisor Load
 loadIrrigationAdvisor();
+
+// ==========================================================================
+// Phase 7: Soil Health Card & Fertilizer Calculator Client Engine
+// ==========================================================================
+
+const SOIL_PRESETS_CLIENT = {
+    standard_black: { ph: 7.8, oc: 0.55, n: 240, p: 18, k: 320, zn: 0.55, b: 0.45, name: "Black Cotton Soil" },
+    degraded_sandy: { ph: 6.2, oc: 0.30, n: 140, p: 12, k: 120, zn: 0.40, b: 0.30, name: "Degraded Sandy" },
+    rich_alluvial: { ph: 7.2, oc: 0.85, n: 320, p: 26, k: 280, zn: 0.85, b: 0.70, name: "Rich Alluvial" },
+    red_loamy: { ph: 6.5, oc: 0.45, n: 190, p: 15, k: 180, zn: 0.50, b: 0.40, name: "Red Loamy" }
+};
+
+let activeSoilPreset = "standard_black";
+
+function renderSoilHealthUI(report) {
+    const ureaBagsEl = document.getElementById("resUreaBags");
+    const ureaKgEl = document.getElementById("resUreaKg");
+    const dapBagsEl = document.getElementById("resDapBags");
+    const dapKgEl = document.getElementById("resDapKg");
+    const mopBagsEl = document.getElementById("resMopBags");
+    const mopKgEl = document.getElementById("resMopKg");
+    const microBagsEl = document.getElementById("resMicroBags");
+    const fymTonnesEl = document.getElementById("resFymTonnes");
+    const timelineCont = document.getElementById("fertSplitTimeline");
+    const advisoryEl = document.getElementById("resSoilAdvisory");
+
+    if (ureaBagsEl) ureaBagsEl.textContent = `${report.total_urea_bags_45kg} Bags`;
+    if (ureaKgEl) ureaKgEl.textContent = `${Math.round(report.total_urea_bags_45kg * 45)} kg total`;
+    if (dapBagsEl) dapBagsEl.textContent = `${report.total_dap_bags_50kg} Bags`;
+    if (dapKgEl) dapKgEl.textContent = `${Math.round(report.total_dap_bags_50kg * 50)} kg total`;
+    if (mopBagsEl) mopBagsEl.textContent = `${report.total_mop_bags_50kg} Bags`;
+    if (mopKgEl) mopKgEl.textContent = `${Math.round(report.total_mop_bags_50kg * 50)} kg total`;
+    if (microBagsEl) microBagsEl.textContent = `${report.zinc_sulphate_total_kg} kg Zn + ${report.borax_total_kg} kg B`;
+    if (fymTonnesEl) fymTonnesEl.textContent = `${report.organic_manure_tonnes} Tonnes FYM`;
+
+    if (advisoryEl) advisoryEl.textContent = report.soil_conditioner_advisory;
+
+    if (timelineCont && report.splits) {
+        timelineCont.innerHTML = "";
+        report.splits.forEach(s => {
+            const card = document.createElement("div");
+            card.className = "fert-split-card";
+            
+            const microHtml = s.micronutrients && s.micronutrients.length > 0 
+                ? s.micronutrients.join(" • ")
+                : "None";
+
+            card.innerHTML = `
+                <div class="split-header">
+                    <h5 class="split-stage-name">${s.stage_name}</h5>
+                    <span class="split-timing"><i class="fa-solid fa-clock"></i> ${s.timing}</span>
+                </div>
+                <div class="split-grid">
+                    <div class="split-bag-item">
+                        <span>Urea (45kg)</span>
+                        <strong>${s.urea_bags_45kg} Bags (${s.urea_kg} kg)</strong>
+                    </div>
+                    <div class="split-bag-item">
+                        <span>DAP (50kg)</span>
+                        <strong>${s.dap_bags_50kg} Bags (${s.dap_kg} kg)</strong>
+                    </div>
+                    <div class="split-bag-item">
+                        <span>MOP (50kg)</span>
+                        <strong>${s.mop_bags_50kg} Bags (${s.mop_kg} kg)</strong>
+                    </div>
+                    <div class="split-bag-item">
+                        <span>Micro & Bio</span>
+                        <strong>${microHtml}</strong>
+                    </div>
+                </div>
+                <div class="split-app-method">
+                    <i class="fa-solid fa-hand-holding-hand"></i> <strong>Method:</strong> ${s.application_method}
+                </div>
+            `;
+            timelineCont.appendChild(card);
+        });
+    }
+}
+
+async function loadSoilHealthRecommendation(presetKey = "standard_black") {
+    activeSoilPreset = presetKey;
+    let report = null;
+
+    if (hasBackend) {
+        try {
+            const res = await fetch(`/api/soil/recommendation?preset=${presetKey}`);
+            if (res.ok) {
+                report = await res.json();
+            }
+        } catch (e) {
+            console.log("Using client offline soil health engine:", e);
+        }
+    }
+
+    if (!report) {
+        // Direct offline calculation
+        const size = currentFarmProfile.farm_size || 2.0;
+        const p = SOIL_PRESETS_CLIENT[presetKey] || SOIL_PRESETS_CLIENT.standard_black;
+        report = {
+            ph_level: p.ph,
+            ph_status: "Alkaline",
+            organic_carbon_pct: p.oc,
+            oc_status: "Medium",
+            available_n_kg_ha: p.n,
+            n_status: "Medium",
+            available_p_kg_ha: p.p,
+            p_status: "Medium",
+            available_k_kg_ha: p.k,
+            k_status: "High",
+            zinc_ppm: p.zn,
+            zinc_status: "Deficient",
+            boron_ppm: p.b,
+            boron_status: "Deficient",
+            crop_name: currentFarmProfile.current_crop,
+            farm_size_acres: size,
+            total_urea_bags_45kg: +(1.6 * size).toFixed(1),
+            total_dap_bags_50kg: +(1.0 * size).toFixed(1),
+            total_mop_bags_50kg: +(0.8 * size).toFixed(1),
+            total_ssp_bags_50kg: 0,
+            zinc_sulphate_total_kg: +(10.0 * size).toFixed(1),
+            borax_total_kg: +(2.0 * size).toFixed(1),
+            organic_manure_tonnes: +(1.5 * size).toFixed(1),
+            splits: [
+                {
+                    stage_name: "Stage 1: Basal Dose (At Sowing)",
+                    timing: "During last ploughing / furrow placement",
+                    urea_kg: +(15.0 * size).toFixed(1),
+                    urea_bags_45kg: +(0.3 * size).toFixed(1),
+                    dap_kg: +(50.0 * size).toFixed(1),
+                    dap_bags_50kg: +(1.0 * size).toFixed(1),
+                    mop_kg: +(20.0 * size).toFixed(1),
+                    mop_bags_50kg: +(0.4 * size).toFixed(1),
+                    ssp_kg: 0,
+                    ssp_bags_50kg: 0,
+                    micronutrients: [`Zinc Sulphate @ ${10*size}kg`, `Borax @ ${2*size}kg`],
+                    application_method: "Soil incorporation 5cm below seed furrow"
+                },
+                {
+                    stage_name: "Stage 2: 1st Top Dressing (Early Vegetative)",
+                    timing: "Day 25-35 after sowing",
+                    urea_kg: +(35.0 * size).toFixed(1),
+                    urea_bags_45kg: +(0.8 * size).toFixed(1),
+                    dap_kg: 0,
+                    dap_bags_50kg: 0,
+                    mop_kg: 0,
+                    mop_bags_50kg: 0,
+                    ssp_kg: 0,
+                    ssp_bags_50kg: 0,
+                    micronutrients: ["Foliar 19:19:19 @ 5g/L"],
+                    application_method: "Side band placement before light irrigation"
+                },
+                {
+                    stage_name: "Stage 3: 2nd Top Dressing (Flowering / Boll Initiation)",
+                    timing: "Day 55-70 after sowing",
+                    urea_kg: +(22.0 * size).toFixed(1),
+                    urea_bags_45kg: +(0.5 * size).toFixed(1),
+                    dap_kg: 0,
+                    dap_bags_50kg: 0,
+                    mop_kg: +(20.0 * size).toFixed(1),
+                    mop_bags_50kg: +(0.4 * size).toFixed(1),
+                    ssp_kg: 0,
+                    ssp_bags_50kg: 0,
+                    micronutrients: ["Foliar Boron 0.1% spray"],
+                    application_method: "Fertigation via drip or broadcasting in moist soil"
+                }
+            ],
+            soil_conditioner_advisory: `Soil pH is ${p.ph}. Applying ${+(1.5*size).toFixed(1)} tonnes of FYM will improve fertilizer use efficiency.`
+        };
+    }
+
+    renderSoilHealthUI(report);
+}
+
+// Preset Buttons Listener
+document.querySelectorAll(".btn-soil-preset").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.querySelectorAll(".btn-soil-preset").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const presetKey = btn.dataset.preset || "standard_black";
+        
+        // Update input fields
+        const p = SOIL_PRESETS_CLIENT[presetKey];
+        if (p) {
+            const phEl = document.getElementById("inputSoilPh");
+            const ocEl = document.getElementById("inputSoilOc");
+            const nEl = document.getElementById("inputSoilN");
+            const pEl = document.getElementById("inputSoilP");
+            const kEl = document.getElementById("inputSoilK");
+            const znEl = document.getElementById("inputSoilZn");
+            const bEl = document.getElementById("inputSoilB");
+
+            if (phEl) phEl.value = p.ph;
+            if (ocEl) ocEl.value = p.oc;
+            if (nEl) nEl.value = p.n;
+            if (pEl) pEl.value = p.p;
+            if (kEl) kEl.value = p.k;
+            if (znEl) znEl.value = p.zn;
+            if (bEl) bEl.value = p.b;
+        }
+
+        loadSoilHealthRecommendation(presetKey);
+    });
+});
+
+// Recalculate Custom Button Listener
+const recalcFertilizerBtn = document.getElementById("recalcFertilizerBtn");
+if (recalcFertilizerBtn) {
+    recalcFertilizerBtn.addEventListener("click", async () => {
+        const phVal = parseFloat(document.getElementById("inputSoilPh").value) || 7.6;
+        const ocVal = parseFloat(document.getElementById("inputSoilOc").value) || 0.55;
+        const nVal = parseFloat(document.getElementById("inputSoilN").value) || 240;
+        const pVal = parseFloat(document.getElementById("inputSoilP").value) || 18;
+        const kVal = parseFloat(document.getElementById("inputSoilK").value) || 320;
+        const znVal = parseFloat(document.getElementById("inputSoilZn").value) || 0.55;
+        const bVal = parseFloat(document.getElementById("inputSoilB").value) || 0.45;
+
+        if (hasBackend) {
+            try {
+                const res = await fetch("/api/soil/calculate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        crop_name: currentFarmProfile.current_crop,
+                        farm_size: currentFarmProfile.farm_size,
+                        ph: phVal,
+                        oc_pct: ocVal,
+                        n_kg_ha: nVal,
+                        p_kg_ha: pVal,
+                        k_kg_ha: kVal,
+                        zn_ppm: znVal,
+                        b_ppm: bVal
+                    })
+                });
+                if (res.ok) {
+                    const report = await res.json();
+                    renderSoilHealthUI(report);
+                    return;
+                }
+            } catch (err) {
+                console.error("Custom soil calculation error:", err);
+            }
+        }
+
+        loadSoilHealthRecommendation(activeSoilPreset);
+    });
+}
+
+// Initial Soil Health Load
+loadSoilHealthRecommendation();
+
 
 
 

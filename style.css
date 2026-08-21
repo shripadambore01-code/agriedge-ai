@@ -2767,6 +2767,339 @@ body {
     color: #ffffff;
 }
 
+/* ==========================================================================
+   Phase 7: Soil Health Card & Fertilizer Calculator Styles
+   ========================================================================== */
+
+.soil-console-card {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    margin: 18px 18px 14px 18px;
+    padding: 20px;
+    box-shadow: 0 4px 16px rgba(45, 106, 79, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.soil-console-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.soil-console-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.soil-icon-bubble {
+    width: 42px;
+    height: 42px;
+    background: #fef3c7;
+    color: #b45309;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.soil-console-title h3 {
+    font-size: 16.5px;
+    font-weight: 800;
+    color: var(--primary-950);
+}
+
+.soil-console-title p {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.soil-presets-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.preset-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.preset-buttons {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.btn-soil-preset {
+    background: var(--bg-surface-alt);
+    border: 1px solid var(--border-medium);
+    border-radius: 14px;
+    padding: 4px 12px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-soil-preset:hover {
+    border-color: var(--primary-600);
+    color: var(--primary-700);
+}
+
+.btn-soil-preset.active {
+    background: var(--primary-700);
+    border-color: var(--primary-800);
+    color: #ffffff;
+}
+
+.soil-test-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+}
+
+.soil-input-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.soil-input-item label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.soil-input-item .form-input {
+    padding: 6px 10px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+}
+
+.soil-rating-tag {
+    font-size: 10px;
+    font-weight: 700;
+    color: #16a34a;
+    background: #dcfce7;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.rating-warn {
+    color: #b45309;
+    background: #fef3c7;
+}
+
+.btn-calc-fertilizer {
+    background: linear-gradient(135deg, var(--primary-700), var(--primary-800));
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 10px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-calc-fertilizer:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Fertilizer Prescription Card */
+.fertilizer-prescription-card {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    margin: 0 18px 18px 18px;
+    padding: 20px;
+    box-shadow: 0 4px 16px rgba(45, 106, 79, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.fert-bags-summary h4 {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--primary-950);
+    margin-bottom: 10px;
+}
+
+.bags-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.bag-card {
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.bag-urea { background: #eff6ff; border: 1px solid #bfdbfe; }
+.bag-dap { background: #fef3c7; border: 1px solid #fde68a; }
+.bag-mop { background: #fdf2f8; border: 1px solid #fbcfe8; }
+.bag-micro { background: #f0fdf4; border: 1px solid #bbf7d0; }
+
+.bag-icon {
+    font-size: 22px;
+}
+
+.bag-urea .bag-icon { color: #2563eb; }
+.bag-dap .bag-icon { color: #d97706; }
+.bag-mop .bag-icon { color: #db2777; }
+.bag-micro .bag-icon { color: #16a34a; }
+
+.bag-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.bag-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.bag-qty {
+    font-size: 16px;
+    font-weight: 800;
+    color: #0f172a;
+    font-family: var(--font-mono);
+}
+
+.bag-info small {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+/* 3-Stage Split Schedule Timeline */
+.fert-split-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.fert-split-card {
+    background: #fafbfc;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.fert-split-card:nth-child(1) { border-left: 4px solid #d97706; }
+.fert-split-card:nth-child(2) { border-left: 4px solid #2563eb; }
+.fert-split-card:nth-child(3) { border-left: 4px solid #db2777; }
+
+.split-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.split-stage-name {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: var(--primary-900);
+}
+
+.split-timing {
+    font-size: 11.5px;
+    color: var(--text-muted);
+}
+
+.split-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    background: #ffffff;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border-light);
+}
+
+.split-bag-item {
+    display: flex;
+    flex-direction: column;
+    font-size: 11.5px;
+}
+
+.split-bag-item span {
+    color: var(--text-muted);
+    font-size: 10.5px;
+}
+
+.split-bag-item strong {
+    color: #0f172a;
+    font-family: var(--font-mono);
+}
+
+.split-app-method {
+    font-size: 11.5px;
+    color: #334155;
+    background: #f1f5f9;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Soil Restoration Box */
+.soil-restoration-box {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 1px solid #86efac;
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.restoration-icon {
+    font-size: 24px;
+    color: #15803d;
+}
+
+.soil-restoration-box strong {
+    font-size: 13px;
+    color: #14532d;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.soil-restoration-box p {
+    font-size: 12.5px;
+    color: #166534;
+    line-height: 1.35;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
     .app-layout {
@@ -2818,7 +3151,17 @@ body {
     .soil-feel-grid {
         grid-template-columns: 1fr 1fr;
     }
+    .soil-test-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .bags-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .split-grid {
+        grid-template-columns: 1fr 1fr;
+    }
 }
+
 
 
 

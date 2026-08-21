@@ -322,7 +322,85 @@ def calculate_custom_irrigation_endpoint(req: CustomIrrigationRequest):
     )
     return plan.model_dump()
 
+# ==========================================
+# Phase 7: Soil Health Card & Fertilizer Calculator
+# ==========================================
+from backend.soil_health import (
+    calculate_soil_fertilizer_prescription,
+    SOIL_PRESETS,
+    SoilHealthReport
+)
+
+class CustomSoilReportRequest(BaseModel):
+    crop_name: Optional[str] = None
+    farm_size: Optional[float] = None
+    preset: Optional[str] = None
+    ph: Optional[float] = 7.6
+    oc_pct: Optional[float] = 0.55
+    n_kg_ha: Optional[float] = 240.0
+    p_kg_ha: Optional[float] = 18.0
+    k_kg_ha: Optional[float] = 320.0
+    zn_ppm: Optional[float] = 0.55
+    b_ppm: Optional[float] = 0.45
+
+@app.get("/api/soil/recommendation")
+@app.get("/soil/recommendation")
+def get_soil_recommendation_endpoint(preset: str = "standard_black"):
+    """Returns fertilizer bag dosage and split timeline using active farm profile and preset."""
+    p_data = SOIL_PRESETS.get(preset, SOIL_PRESETS.get("standard_black"))
+    report = calculate_soil_fertilizer_prescription(
+        crop_name=active_farm_profile.current_crop,
+        farm_size_acres=active_farm_profile.farm_size,
+        ph=p_data["ph"],
+        oc_pct=p_data["oc"],
+        n_kg_ha=p_data["n"],
+        p_kg_ha=p_data["p"],
+        k_kg_ha=p_data["k"],
+        zn_ppm=p_data["zn"],
+        b_ppm=p_data["b"]
+    )
+    return report.model_dump()
+
+@app.post("/api/soil/calculate")
+@app.post("/soil/calculate")
+def calculate_custom_soil_endpoint(req: CustomSoilReportRequest):
+    """Calculates custom fertilizer bag prescriptions from laboratory soil test inputs."""
+    crop = req.crop_name or active_farm_profile.current_crop
+    size = req.farm_size or active_farm_profile.farm_size
+
+    if req.preset and req.preset in SOIL_PRESETS:
+        p_data = SOIL_PRESETS[req.preset]
+        ph_val = p_data["ph"]
+        oc_val = p_data["oc"]
+        n_val = p_data["n"]
+        p_val = p_data["p"]
+        k_val = p_data["k"]
+        zn_val = p_data["zn"]
+        b_val = p_data["b"]
+    else:
+        ph_val = req.ph if req.ph is not None else 7.6
+        oc_val = req.oc_pct if req.oc_pct is not None else 0.55
+        n_val = req.n_kg_ha if req.n_kg_ha is not None else 240.0
+        p_val = req.p_kg_ha if req.p_kg_ha is not None else 18.0
+        k_val = req.k_kg_ha if req.k_kg_ha is not None else 320.0
+        zn_val = req.zn_ppm if req.zn_ppm is not None else 0.55
+        b_val = req.b_ppm if req.b_ppm is not None else 0.45
+
+    report = calculate_soil_fertilizer_prescription(
+        crop_name=crop,
+        farm_size_acres=size,
+        ph=ph_val,
+        oc_pct=oc_val,
+        n_kg_ha=n_val,
+        p_kg_ha=p_val,
+        k_kg_ha=k_val,
+        zn_ppm=zn_val,
+        b_ppm=b_val
+    )
+    return report.model_dump()
+
 @app.post("/api/set-mode")
+
 
 
 

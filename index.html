@@ -191,6 +191,9 @@
                     <button class="nav-tab-btn" id="tabIrrigationBtn" data-view="irrigationView">
                         <i class="fa-solid fa-faucet-drip"></i> <span data-i18n="tab_irrigation">Precision Irrigation</span>
                     </button>
+                    <button class="nav-tab-btn" id="tabSoilBtn" data-view="soilView">
+                        <i class="fa-solid fa-flask"></i> <span data-i18n="tab_soil">Soil & Fertilizer</span>
+                    </button>
                     <button class="nav-tab-btn" id="tabChatBtn" data-view="chatView">
                         <i class="fa-solid fa-comments"></i> <span data-i18n="tab_advisory">AI Field Voice Assistant</span>
                     </button>
@@ -647,8 +650,133 @@
                     </div>
                 </div>
 
-                <!-- 5. Main Conversation & Audio Interface (Tab 5) -->
+                <!-- 5. Soil Health Card & Fertilizer Calculator View (Tab 5) -->
+                <div class="view-panel hidden" id="soilView">
+                    <!-- Soil Input & Presets Console -->
+                    <div class="soil-console-card">
+                        <div class="soil-console-header">
+                            <div class="soil-console-title">
+                                <div class="soil-icon-bubble"><i class="fa-solid fa-flask-vial"></i></div>
+                                <div>
+                                    <h3 data-i18n="soil_title">Soil Health Card & Fertilizer Dosage Calculator</h3>
+                                    <p data-i18n="soil_sub">Scientific N-P-K & Micronutrient calibration based on laboratory Soil Test Crop Response (STCR)</p>
+                                </div>
+                            </div>
+                            <div class="soil-presets-wrap">
+                                <span class="preset-label" data-i18n="lbl_quick_presets">Quick Soil Presets:</span>
+                                <div class="preset-buttons">
+                                    <button type="button" class="btn-soil-preset active" data-preset="standard_black">Black Cotton Soil</button>
+                                    <button type="button" class="btn-soil-preset" data-preset="degraded_sandy">Degraded Sandy</button>
+                                    <button type="button" class="btn-soil-preset" data-preset="rich_alluvial">Rich Alluvial</button>
+                                    <button type="button" class="btn-soil-preset" data-preset="red_loamy">Red Loamy</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Soil Test Values Grid -->
+                        <div class="soil-test-grid">
+                            <div class="soil-input-item">
+                                <label>Soil pH (1:2.5)</label>
+                                <input type="number" step="0.1" id="inputSoilPh" class="form-input" value="7.8">
+                                <span class="soil-rating-tag" id="tagPhStatus">Alkaline</span>
+                            </div>
+                            <div class="soil-input-item">
+                                <label>Organic Carbon (%)</label>
+                                <input type="number" step="0.05" id="inputSoilOc" class="form-input" value="0.55">
+                                <span class="soil-rating-tag" id="tagOcStatus">Medium (0.55%)</span>
+                            </div>
+                            <div class="soil-input-item">
+                                <label>Available N (kg/ha)</label>
+                                <input type="number" id="inputSoilN" class="form-input" value="240">
+                                <span class="soil-rating-tag" id="tagNStatus">Medium (240)</span>
+                            </div>
+                            <div class="soil-input-item">
+                                <label>Available P (kg/ha)</label>
+                                <input type="number" id="inputSoilP" class="form-input" value="18">
+                                <span class="soil-rating-tag" id="tagPStatus">Medium (18)</span>
+                            </div>
+                            <div class="soil-input-item">
+                                <label>Available K (kg/ha)</label>
+                                <input type="number" id="inputSoilK" class="form-input" value="320">
+                                <span class="soil-rating-tag" id="tagKStatus">High (320)</span>
+                            </div>
+                            <div class="soil-input-item">
+                                <label>Zinc (Zn ppm)</label>
+                                <input type="number" step="0.05" id="inputSoilZn" class="form-input" value="0.55">
+                                <span class="soil-rating-tag rating-warn" id="tagZnStatus">Deficient (<0.6)</span>
+                            </div>
+                            <div class="soil-input-item">
+                                <label>Boron (B ppm)</label>
+                                <input type="number" step="0.05" id="inputSoilB" class="form-input" value="0.45">
+                                <span class="soil-rating-tag rating-warn" id="tagBStatus">Deficient (<0.5)</span>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn-calc-fertilizer" id="recalcFertilizerBtn">
+                            <i class="fa-solid fa-calculator"></i> <span data-i18n="btn_recalc_fertilizer">Recalculate Fertilizer Bag Requirements</span>
+                        </button>
+                    </div>
+
+                    <!-- Commercial Fertilizer Bags Prescription Output -->
+                    <div class="fertilizer-prescription-card" id="fertPrescriptionCard">
+                        <!-- Bags Summary Header -->
+                        <div class="fert-bags-summary">
+                            <h4 data-i18n="lbl_total_bags_needed">Total Commercial Bags for Your Farm:</h4>
+                            <div class="bags-grid">
+                                <div class="bag-card bag-urea">
+                                    <div class="bag-icon"><i class="fa-solid fa-box"></i></div>
+                                    <div class="bag-info">
+                                        <span class="bag-name">Neem Coated Urea (45kg)</span>
+                                        <strong class="bag-qty" id="resUreaBags">3.2 Bags</strong>
+                                        <small id="resUreaKg">144 kg total</small>
+                                    </div>
+                                </div>
+                                <div class="bag-card bag-dap">
+                                    <div class="bag-icon"><i class="fa-solid fa-box-open"></i></div>
+                                    <div class="bag-info">
+                                        <span class="bag-name">DAP 18:46:0 (50kg)</span>
+                                        <strong class="bag-qty" id="resDapBags">2.1 Bags</strong>
+                                        <small id="resDapKg">105 kg total</small>
+                                    </div>
+                                </div>
+                                <div class="bag-card bag-mop">
+                                    <div class="bag-icon"><i class="fa-solid fa-cubes-stacked"></i></div>
+                                    <div class="bag-info">
+                                        <span class="bag-name">MOP Potash (50kg)</span>
+                                        <strong class="bag-qty" id="resMopBags">1.6 Bags</strong>
+                                        <small id="resMopKg">80 kg total</small>
+                                    </div>
+                                </div>
+                                <div class="bag-card bag-micro">
+                                    <div class="bag-icon"><i class="fa-solid fa-seedling"></i></div>
+                                    <div class="bag-info">
+                                        <span class="bag-name">Micronutrients & FYM</span>
+                                        <strong class="bag-qty" id="resMicroBags">20 kg Zn + 4 kg B</strong>
+                                        <small id="resFymTonnes">3.0 Tonnes FYM</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3-Stage Split Schedule Timeline -->
+                        <div class="fert-split-timeline" id="fertSplitTimeline">
+                            <!-- Dynamic split stages inserted here -->
+                        </div>
+
+                        <!-- Organic Carbon & Soil Health Restoration Advisory -->
+                        <div class="soil-restoration-box">
+                            <div class="restoration-icon"><i class="fa-solid fa-earth-americas"></i></div>
+                            <div>
+                                <strong data-i18n="lbl_soil_advisory_title">Soil Health Restoration Advisory:</strong>
+                                <p id="resSoilAdvisory">Soil pH is 7.8 (Alkaline). Organic carbon is 0.55% (Medium). Applying 3.0 tonnes of well-rotted FYM will enhance microbial activity and nutrient uptake efficiency by 25%.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Main Conversation & Audio Interface (Tab 6) -->
                 <div class="view-panel hidden" id="chatView">
+
 
 
 

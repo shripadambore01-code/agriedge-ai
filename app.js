@@ -787,7 +787,7 @@ const TRANSLATIONS = {
         lbl_sowing_date: 'বপন / রোপণের তারিখ',
         lbl_harvest_date: 'আনুমানিক ফসল তোলার তারিখ',
         btn_cancel: 'বাতিল করুন',
-        btn_save_profile: 'প্রোফাইল সংরক্ষণ করুন
+        btn_save_profile: 'প্রোফাইল সংরক্ষণ করুন',
         title: "AgriVoice - কৃষক ফিল্ড ভয়েস সহকারী",
         version_tag: "v1.0 অফলাইন-সক্ষম",
         brand_desc: "কৃষকদের জন্য AI ভিত্তিক কৃষি ভয়েস পরামর্শদাতা ব্যবস্থা",
@@ -1177,6 +1177,9 @@ function localClientRAG(query) {
 
 // 5. Text Query Submission
 async function executeTextQuery(query) {
+    if (typeof switchMainView === "function") {
+        switchMainView("chatView");
+    }
     appendUserDialogue(query);
     const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
     processingBar.classList.remove("hidden");
@@ -1247,6 +1250,9 @@ if (SpeechRecognition) {
 }
 
 async function startVoiceRecording() {
+    if (typeof switchMainView === "function") {
+        switchMainView("chatView");
+    }
     const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
     isRecording = true;
     recognizedText = "";
@@ -2039,14 +2045,6 @@ async function loadDashboardPlan() {
     renderDashboardUI(dashboardData);
 }
 
-// Hook into save profile to reload dashboard & weather instantly
-const origSaveFarmProfileData = saveFarmProfileData;
-saveFarmProfileData = async function(profileData) {
-    await origSaveFarmProfileData(profileData);
-    await loadDashboardPlan();
-    await loadSmartWeather();
-};
-
 // Initial Dashboard Load
 loadDashboardPlan();
 
@@ -2248,6 +2246,9 @@ async function loadSmartWeather() {
             ]
         };
     }
+
+    renderSmartWeatherUI(weatherData);
+}
 
 // Hook into save profile to reload dashboard, weather, crop journey, irrigation, soil health, economics, and schemes instantly
 const origSaveFarmProfileData = saveFarmProfileData;

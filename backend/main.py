@@ -186,7 +186,25 @@ def get_weather_forecast_endpoint(location: Optional[str] = None):
     )
     return summary.model_dump()
 
+# ==========================================
+# Phase 4: Crop Lifecycle Tracker ("Crop Journey")
+# ==========================================
+from backend.lifecycle import get_crop_journey_timeline, CropJourneyTimeline
+
+@app.get("/api/crop/journey")
+@app.get("/crop/journey")
+def get_crop_journey_endpoint():
+    """Returns the complete visual crop lifecycle journey and agronomic details."""
+    timeline = get_crop_journey_timeline(
+        crop_name=active_farm_profile.current_crop,
+        sowing_date_str=active_farm_profile.sowing_date,
+        variety=active_farm_profile.variety,
+        farm_size=active_farm_profile.farm_size
+    )
+    return timeline.model_dump()
+
 @app.post("/api/set-mode")
+
 
 
 @app.post("/set-mode")

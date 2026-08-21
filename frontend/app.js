@@ -85,6 +85,12 @@ const languageSelect = document.getElementById("languageSelect");
 // 9-Language Localization Dictionary for Field Agriculture
 const TRANSLATIONS = {
     en: {
+        tab_journey: "Crop Journey Timeline",
+        lbl_dos: "Critical Dos (What to Do)",
+        lbl_donts: "Critical Don'ts (Avoid Mistakes)",
+        lbl_nutrient_focus: "Nutrient Focus",
+        lbl_irrigation_need: "Irrigation Need",
+        lbl_pest_threats: "Major Pest Threats",
         weather_title: "Smart Field Weather & Spray Windows",
         lbl_humidity: "Humidity",
         lbl_wind: "Wind Speed",
@@ -161,6 +167,12 @@ const TRANSLATIONS = {
         signal_web_offline: "Signal: <strong>Offline (Field Mode)</strong>"
     },
     hi: {
+        tab_journey: "फसल जीवन चक्र और अवस्थाएं",
+        lbl_dos: "महत्वपूर्ण कार्य (क्या करें)",
+        lbl_donts: "सावधानियां (गलतियों से बचें)",
+        lbl_nutrient_focus: "पोषक तत्व प्राथमिकता",
+        lbl_irrigation_need: "सिंचाई आवश्यकता",
+        lbl_pest_threats: "प्रमुख कीट और रोग जोखिम",
         weather_title: "खेत का मौसम और छिड़काव समय",
         lbl_humidity: "हवा में नमी",
         lbl_wind: "हवा की गति",
@@ -237,6 +249,12 @@ const TRANSLATIONS = {
         signal_web_offline: "सिग्नल: <strong>ऑफ़लाइन (फील्ड मोड)</strong>"
     },
     mr: {
+        tab_journey: "पीक जीवन चक्र आणि टप्पे",
+        lbl_dos: "महत्त्वाची कामे (काय करावे)",
+        lbl_donts: "सावधानता (चूका टाळा)",
+        lbl_nutrient_focus: "पोषक द्रव्ये प्राधान्य",
+        lbl_irrigation_need: "सिंचन गरज",
+        lbl_pest_threats: "प्रमुख कीड व रोग धोके",
         weather_title: "शेताचे हवामान आणि फवारणी वेळ",
         lbl_humidity: "हवेतील आर्द्रता",
         lbl_wind: "वाऱ्याचा वेग",
@@ -1487,25 +1505,30 @@ loadFarmProfile();
 // ==========================================================================
 
 const tabDashboardBtn = document.getElementById("tabDashboardBtn");
+const tabJourneyBtn = document.getElementById("tabJourneyBtn");
 const tabChatBtn = document.getElementById("tabChatBtn");
 const dashboardView = document.getElementById("dashboardView");
+const journeyView = document.getElementById("journeyView");
 const chatView = document.getElementById("chatView");
 
 function switchMainView(viewName) {
+    [tabDashboardBtn, tabJourneyBtn, tabChatBtn].forEach(btn => { if (btn) btn.classList.remove("active"); });
+    [dashboardView, journeyView, chatView].forEach(view => { if (view) view.classList.add("hidden"); });
+
     if (viewName === "dashboardView") {
         if (tabDashboardBtn) tabDashboardBtn.classList.add("active");
-        if (tabChatBtn) tabChatBtn.classList.remove("active");
         if (dashboardView) dashboardView.classList.remove("hidden");
-        if (chatView) chatView.classList.add("hidden");
+    } else if (viewName === "journeyView") {
+        if (tabJourneyBtn) tabJourneyBtn.classList.add("active");
+        if (journeyView) journeyView.classList.remove("hidden");
     } else {
         if (tabChatBtn) tabChatBtn.classList.add("active");
-        if (tabDashboardBtn) tabDashboardBtn.classList.remove("active");
         if (chatView) chatView.classList.remove("hidden");
-        if (dashboardView) dashboardView.classList.add("hidden");
     }
 }
 
 if (tabDashboardBtn) tabDashboardBtn.addEventListener("click", () => switchMainView("dashboardView"));
+if (tabJourneyBtn) tabJourneyBtn.addEventListener("click", () => switchMainView("journeyView"));
 if (tabChatBtn) tabChatBtn.addEventListener("click", () => switchMainView("chatView"));
 
 let completedTasksState = JSON.parse(localStorage.getItem("agriedge_completed_tasks") || "{}");
@@ -2064,11 +2087,201 @@ async function loadSmartWeather() {
         };
     }
 
-    renderSmartWeatherUI(weatherData);
-}
+// Hook into save profile to reload dashboard, weather, and crop journey instantly
+const origSaveFarmProfileData = saveFarmProfileData;
+saveFarmProfileData = async function(profileData) {
+    await origSaveFarmProfileData(profileData);
+    await loadDashboardPlan();
+    await loadSmartWeather();
+    await loadCropJourney();
+};
 
 // Initial Smart Weather Load
 loadSmartWeather();
+
+// ==========================================================================
+// Phase 4: Crop Lifecycle Tracker ("Crop Journey") Client Engine
+// ==========================================================================
+
+let activeCropJourneyData = null;
+let selectedStageIndex = 0;
+
+function renderStageDossier(stage) {
+    const numPill = document.getElementById("dossierStageNumber");
+    const nameEl = document.getElementById("dossierStageName");
+    const dayRangeEl = document.getElementById("dossierDayRange");
+    const statusBadge = document.getElementById("dossierStatusBadge");
+    const summaryEl = document.getElementById("dossierSummary");
+    const dosList = document.getElementById("dossierDosList");
+    const dontsList = document.getElementById("dossierDontsList");
+    const nutrientEl = document.getElementById("dossierNutrient");
+    const irrigationEl = document.getElementById("dossierIrrigation");
+    const threatsEl = document.getElementById("dossierThreats");
+
+    if (numPill) numPill.textContent = `Stage ${stage.stage_number}`;
+    if (nameEl) nameEl.textContent = stage.name;
+    if (dayRangeEl) dayRangeEl.textContent = `Day ${stage.day_start} - ${stage.day_end} • ${stage.status_label}`;
+
+    if (statusBadge) {
+        if (stage.is_current) {
+            statusBadge.className = "dossier-status-badge";
+            statusBadge.textContent = "🟢 Current Active Stage";
+        } else if (stage.is_past) {
+            statusBadge.className = "dossier-status-badge";
+            statusBadge.textContent = "✅ Completed Milestone";
+        } else {
+            statusBadge.className = "dossier-status-badge";
+            statusBadge.textContent = "⏳ Upcoming Stage";
+        }
+    }
+
+    if (summaryEl) summaryEl.textContent = stage.scientific_summary;
+
+    if (dosList && stage.key_dos) {
+        dosList.innerHTML = "";
+        stage.key_dos.forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = item;
+            dosList.appendChild(li);
+        });
+    }
+
+    if (dontsList && stage.key_donts) {
+        dontsList.innerHTML = "";
+        stage.key_donts.forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = item;
+            dontsList.appendChild(li);
+        });
+    }
+
+    if (nutrientEl) nutrientEl.textContent = stage.nutrient_focus || "Standard balanced NPK";
+    if (irrigationEl) irrigationEl.textContent = stage.irrigation_need || "Scheduled irrigation";
+
+    if (threatsEl && stage.pest_threats) {
+        threatsEl.innerHTML = "";
+        stage.pest_threats.forEach(t => {
+            const span = document.createElement("span");
+            span.className = "threat-pill";
+            span.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${t}`;
+            threatsEl.appendChild(span);
+        });
+    }
+}
+
+function renderCropJourneyUI(timelineData) {
+    activeCropJourneyData = timelineData;
+
+    const cropTitle = document.getElementById("journeyCropTitle");
+    const sowingSubtitle = document.getElementById("journeySowingSubtitle");
+    const activeStageName = document.getElementById("journeyActiveStageName");
+    const daysToNext = document.getElementById("journeyDaysToNext");
+    const harvestDays = document.getElementById("journeyTotalHarvestDays");
+    const trackCont = document.getElementById("journeyTimelineTrack");
+
+    if (cropTitle) cropTitle.textContent = `${timelineData.crop_name} (${timelineData.variety})`;
+    if (sowingSubtitle) sowingSubtitle.textContent = `Sown on ${timelineData.sowing_date} • Day ${timelineData.crop_age_days} of ${timelineData.total_duration_days} (${timelineData.progress_percentage}% completed)`;
+    if (activeStageName) activeStageName.textContent = timelineData.current_stage_name;
+    if (daysToNext) daysToNext.textContent = `${timelineData.days_to_next_stage} Days`;
+    if (harvestDays) harvestDays.textContent = `${timelineData.days_to_harvest} days to harvest`;
+
+    if (trackCont && timelineData.stages) {
+        trackCont.innerHTML = "";
+        timelineData.stages.forEach((stage, idx) => {
+            const node = document.createElement("div");
+            const stateClass = stage.is_current ? "active" : (stage.is_past ? "completed" : "upcoming");
+            node.className = `journey-step-node ${stateClass}`;
+            node.dataset.index = idx;
+
+            const iconContent = stage.is_past ? '<i class="fa-solid fa-check"></i>' : (stage.is_current ? `<i class="fa-solid fa-leaf"></i>` : stage.stage_number);
+
+            node.innerHTML = `
+                <div class="step-circle">${iconContent}</div>
+                <div class="step-label-group">
+                    <span class="step-name">${stage.name}</span>
+                    <span class="step-day-pill">Day ${stage.day_start}-${stage.day_end}</span>
+                </div>
+            `;
+
+            node.addEventListener("click", () => {
+                document.querySelectorAll(".journey-step-node").forEach(n => n.classList.remove("selected-preview"));
+                node.classList.add("selected-preview");
+                renderStageDossier(stage);
+            });
+
+            trackCont.appendChild(node);
+
+            // Default to current active stage
+            if (stage.is_current) {
+                selectedStageIndex = idx;
+                renderStageDossier(stage);
+            }
+        });
+    }
+}
+
+async function loadCropJourney() {
+    let journeyData = null;
+
+    if (hasBackend) {
+        try {
+            const res = await fetch("/api/crop/journey");
+            if (res.ok) {
+                journeyData = await res.json();
+            }
+        } catch (e) {
+            console.log("Using client offline crop journey engine:", e);
+        }
+    }
+
+    if (!journeyData) {
+        // Direct client-side calculation
+        const metrics = calculateClientCropMetrics(currentFarmProfile);
+        const cropCfg = CROP_LIFECYCLE_CLIENT[currentFarmProfile.current_crop] || CROP_LIFECYCLE_CLIENT["Cotton"];
+        const stagesList = (cropCfg.stages || []).map((s, idx) => {
+            const age = metrics.crop_age_days;
+            const isCur = (age >= s.start && age <= s.end);
+            const isPast = age > s.end && !isCur;
+            return {
+                stage_id: `stage_${idx+1}`,
+                stage_number: idx + 1,
+                name: s.name,
+                day_start: s.start,
+                day_end: s.end,
+                is_current: isCur,
+                is_past: isPast,
+                is_future: age < s.start,
+                days_remaining_in_stage: isCur ? Math.max(0, s.end - age) : 0,
+                status_label: isCur ? "Active Stage" : (isPast ? "Completed" : "Upcoming"),
+                scientific_summary: s.desc,
+                key_dos: ["Maintain regular scheduled irrigation", "Scout field for pests and nutrient deficiency symptoms"],
+                key_donts: ["Avoid water stress or excessive stagnation", "Avoid delayed fertilizer application"],
+                pest_threats: ["Sucking Pests", "Leaf Spot / Fungal Mildew"],
+                nutrient_focus: "Balanced NPK according to crop stage",
+                irrigation_need: "Regular drip/sprinkler schedule"
+            };
+        });
+
+        journeyData = {
+            crop_name: currentFarmProfile.current_crop,
+            variety: currentFarmProfile.variety || "Standard Hybrid",
+            sowing_date: currentFarmProfile.sowing_date,
+            crop_age_days: metrics.crop_age_days,
+            total_duration_days: metrics.total_duration_days,
+            progress_percentage: metrics.progress_percentage,
+            current_stage_name: metrics.current_stage_name,
+            days_to_harvest: metrics.days_to_harvest,
+            days_to_next_stage: 15,
+            stages: stagesList
+        };
+    }
+
+    renderCropJourneyUI(journeyData);
+}
+
+// Initial Crop Journey Load
+loadCropJourney();
+
 
 
 

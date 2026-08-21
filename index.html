@@ -182,6 +182,9 @@
                     <button class="nav-tab-btn active" id="tabDashboardBtn" data-view="dashboardView">
                         <i class="fa-solid fa-chart-pie"></i> <span data-i18n="tab_dashboard">Farm Dashboard & Plan</span>
                     </button>
+                    <button class="nav-tab-btn" id="tabJourneyBtn" data-view="journeyView">
+                        <i class="fa-solid fa-seedling"></i> <span data-i18n="tab_journey">Crop Journey Timeline</span>
+                    </button>
                     <button class="nav-tab-btn" id="tabChatBtn" data-view="chatView">
                         <i class="fa-solid fa-comments"></i> <span data-i18n="tab_advisory">AI Field Voice Assistant</span>
                     </button>
@@ -327,8 +330,100 @@
                     </div>
                 </div>
 
-                <!-- 2. Main Conversation & Audio Interface (Tab 2) -->
+                <!-- 2. Crop Journey Timeline View (Tab 2) -->
+                <div class="view-panel hidden" id="journeyView">
+                    <!-- Journey Header Banner -->
+                    <div class="journey-hero-card">
+                        <div class="journey-hero-top">
+                            <div class="journey-hero-meta">
+                                <div class="journey-crop-badge">
+                                    <div class="crop-icon-bubble"><i class="fa-solid fa-seedling"></i></div>
+                                    <div>
+                                        <h3 id="journeyCropTitle">Cotton (Hybrid)</h3>
+                                        <p id="journeySowingSubtitle">Sown on 2026-07-15 • Day 37 of 160</p>
+                                    </div>
+                                </div>
+                                <div class="journey-stage-badge" id="journeyActiveBadge">
+                                    <span>Active Stage:</span>
+                                    <strong id="journeyActiveStageName">Squaring & Branching</strong>
+                                </div>
+                            </div>
+                            <div class="journey-countdown-card">
+                                <span class="countdown-label">Next Stage In</span>
+                                <span class="countdown-days" id="journeyDaysToNext">28 Days</span>
+                                <small id="journeyTotalHarvestDays">123 days to harvest</small>
+                            </div>
+                        </div>
+
+                        <!-- Horizontal Step Progress Tracker -->
+                        <div class="journey-timeline-track" id="journeyTimelineTrack">
+                            <!-- Dynamic stages inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Active / Selected Stage Detail Dossier -->
+                    <div class="stage-dossier-card" id="stageDossierCard">
+                        <div class="dossier-header">
+                            <div class="dossier-title-box">
+                                <span class="stage-num-pill" id="dossierStageNumber">Stage 3</span>
+                                <div>
+                                    <h3 id="dossierStageName">Squaring & Branching</h3>
+                                    <span class="dossier-day-range" id="dossierDayRange">Day 36 - 65 • Active Stage</span>
+                                </div>
+                            </div>
+                            <span class="dossier-status-badge" id="dossierStatusBadge">🟢 Current Active Stage</span>
+                        </div>
+
+                        <p class="dossier-summary" id="dossierSummary">
+                            Sympodial fruiting branches develop. Floral buds (squares) appear on nodes. Critical stage for fruit initiation.
+                        </p>
+
+                        <!-- Dos & Don'ts Grid -->
+                        <div class="dossier-grid">
+                            <div class="dossier-col dos-col">
+                                <div class="dossier-col-header text-green">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                    <h4 data-i18n="lbl_dos">Critical Dos (What to Do)</h4>
+                                </div>
+                                <ul class="dossier-list" id="dossierDosList">
+                                    <!-- Dynamic dos -->
+                                </ul>
+                            </div>
+
+                            <div class="dossier-col donts-col">
+                                <div class="dossier-col-header text-red">
+                                    <i class="fa-solid fa-circle-xmark"></i>
+                                    <h4 data-i18n="lbl_donts">Critical Don'ts (Avoid Mistakes)</h4>
+                                </div>
+                                <ul class="dossier-list" id="dossierDontsList">
+                                    <!-- Dynamic donts -->
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Nutrient & Pest Watch Footer -->
+                        <div class="dossier-footer-grid">
+                            <div class="dossier-footer-item">
+                                <span class="footer-lbl"><i class="fa-solid fa-flask"></i> <span data-i18n="lbl_nutrient_focus">Nutrient Focus</span></span>
+                                <strong id="dossierNutrient">Urea @ 25 kg/acre + MOP @ 15 kg/acre</strong>
+                            </div>
+                            <div class="dossier-footer-item">
+                                <span class="footer-lbl"><i class="fa-solid fa-faucet-drip"></i> <span data-i18n="lbl_irrigation_need">Irrigation Need</span></span>
+                                <strong id="dossierIrrigation">Maintain regular 4-5 day drip cycle</strong>
+                            </div>
+                            <div class="dossier-footer-item threats-item">
+                                <span class="footer-lbl"><i class="fa-solid fa-bug"></i> <span data-i18n="lbl_pest_threats">Major Pest Threats</span></span>
+                                <div class="threats-pills" id="dossierThreats">
+                                    <!-- Dynamic threat pills -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Main Conversation & Audio Interface (Tab 3) -->
                 <div class="view-panel hidden" id="chatView">
+
                     <!-- Dialogue History Stream -->
                     <div class="dialogue-stream" id="messagesContainer">
                         <!-- Default Field Advisory Welcome Banner -->

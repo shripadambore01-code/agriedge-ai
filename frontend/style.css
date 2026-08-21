@@ -1730,6 +1730,386 @@ body {
     font-weight: 600;
 }
 
+/* ==========================================================================
+   Phase 4: Crop Lifecycle Journey & Stage Dossier Styles
+   ========================================================================== */
+
+.journey-hero-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    margin: 18px 18px 14px 18px;
+    padding: 18px;
+    box-shadow: 0 4px 16px rgba(45, 106, 79, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.journey-hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.journey-hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.journey-crop-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.crop-icon-bubble {
+    width: 44px;
+    height: 44px;
+    background: var(--primary-100);
+    color: var(--primary-800);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: var(--shadow-sm);
+}
+
+.journey-crop-badge h3 {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--primary-950);
+}
+
+.journey-crop-badge p {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.journey-stage-badge {
+    background: #ffffff;
+    border: 1px solid var(--border-medium);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12.5px;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.journey-stage-badge strong {
+    color: var(--primary-800);
+}
+
+.journey-countdown-card {
+    background: #ffffff;
+    border: 1.5px solid var(--primary-300);
+    border-radius: var(--radius-sm);
+    padding: 8px 16px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-sm);
+}
+
+.countdown-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}
+
+.countdown-days {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--primary-700);
+    font-family: var(--font-mono);
+}
+
+.journey-countdown-card small {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+/* Horizontal Step Progress Tracker */
+.journey-timeline-track {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    position: relative;
+    padding: 10px 0 6px 0;
+    overflow-x: auto;
+    gap: 12px;
+}
+
+.journey-timeline-track::before {
+    content: "";
+    position: absolute;
+    top: 24px;
+    left: 20px;
+    right: 20px;
+    height: 4px;
+    background: #e2e8f0;
+    z-index: 1;
+}
+
+.journey-step-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    min-width: 105px;
+    text-align: center;
+    gap: 6px;
+    transition: transform 0.2s;
+}
+
+.journey-step-node:hover {
+    transform: translateY(-2px);
+}
+
+.step-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 3px solid #cbd5e1;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    transition: all 0.2s;
+}
+
+.journey-step-node.completed .step-circle {
+    background: var(--primary-600);
+    border-color: var(--primary-700);
+    color: #ffffff;
+}
+
+.journey-step-node.active .step-circle {
+    background: #ffffff;
+    border-color: var(--primary-700);
+    color: var(--primary-800);
+    box-shadow: 0 0 0 4px rgba(45, 106, 79, 0.25);
+    animation: pulseGlow 2s infinite;
+}
+
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 0 0 rgba(45, 106, 79, 0.4); }
+    70% { box-shadow: 0 0 0 8px rgba(45, 106, 79, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(45, 106, 79, 0); }
+}
+
+.step-label-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.step-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-main);
+    line-height: 1.2;
+}
+
+.journey-step-node.active .step-name {
+    color: var(--primary-800);
+}
+
+.step-day-pill {
+    font-size: 9.5px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+/* Stage Detail Dossier Card */
+.stage-dossier-card {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    margin: 0 18px 18px 18px;
+    padding: 20px;
+    box-shadow: 0 4px 16px rgba(45, 106, 79, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.dossier-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dossier-title-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.stage-num-pill {
+    background: var(--primary-700);
+    color: #ffffff;
+    font-size: 11.5px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+}
+
+.dossier-title-box h3 {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--primary-900);
+}
+
+.dossier-day-range {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+.dossier-status-badge {
+    background: #e8f5e9;
+    color: #1b5e20;
+    border: 1px solid #c8e6c9;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 14px;
+}
+
+.dossier-summary {
+    font-size: 13.5px;
+    color: var(--text-main);
+    line-height: 1.45;
+    background: var(--bg-surface-alt);
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--primary-600);
+}
+
+.dossier-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.dossier-col {
+    background: #fafbfc;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dos-col { border-top: 3px solid #16a34a; }
+.donts-col { border-top: 3px solid #dc2626; }
+
+.dossier-col-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.text-green { color: #16a34a; }
+.text-red { color: #dc2626; }
+
+.dossier-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dossier-list li {
+    font-size: 12.5px;
+    color: var(--text-main);
+    line-height: 1.35;
+    position: relative;
+    padding-left: 16px;
+}
+
+.dos-col .dossier-list li::before {
+    content: "•";
+    color: #16a34a;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+.donts-col .dossier-list li::before {
+    content: "•";
+    color: #dc2626;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+.dossier-footer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    border-top: 1px solid var(--border-light);
+    padding-top: 14px;
+}
+
+.dossier-footer-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.footer-lbl {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.footer-lbl i {
+    color: var(--primary-600);
+}
+
+.dossier-footer-item strong {
+    font-size: 12.5px;
+    color: var(--text-main);
+}
+
+.threats-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.threat-pill {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fee2e2;
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
     .app-layout {
@@ -1756,7 +2136,17 @@ body {
     .forecast-strip {
         grid-template-columns: repeat(7, 90px);
     }
+    .journey-timeline-track {
+        justify-content: flex-start;
+    }
+    .dossier-grid {
+        grid-template-columns: 1fr;
+    }
+    .dossier-footer-grid {
+        grid-template-columns: 1fr;
+    }
 }
+
 
 
 

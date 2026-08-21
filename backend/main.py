@@ -444,6 +444,47 @@ def calculate_custom_economics_endpoint(req: CustomEconomicsRequest):
     )
     return report.model_dump()
 
+# ==========================================
+# Phase 9: Government Scheme Matching & Assistant
+# ==========================================
+from backend.schemes import (
+    match_government_schemes,
+    SchemeMatchResponse
+)
+
+class CustomSchemeCheckRequest(BaseModel):
+    farmer_name: Optional[str] = None
+    location: Optional[str] = None
+    farm_size: Optional[float] = None
+    crop_name: Optional[str] = None
+    irrigation_method: Optional[str] = None
+
+@app.get("/api/schemes/matched")
+@app.get("/schemes/matched")
+def get_matched_schemes_endpoint():
+    """Matches agricultural subsidy schemes using active farm profile."""
+    matched = match_government_schemes(
+        farmer_name=active_farm_profile.farmer_name,
+        location=active_farm_profile.location,
+        farm_size_acres=active_farm_profile.farm_size,
+        crop_name=active_farm_profile.current_crop,
+        irrigation_method=active_farm_profile.irrigation_method
+    )
+    return matched.model_dump()
+
+@app.post("/api/schemes/check")
+@app.post("/schemes/check")
+def check_custom_schemes_endpoint(req: CustomSchemeCheckRequest):
+    """Matches agricultural schemes for custom farm parameters."""
+    matched = match_government_schemes(
+        farmer_name=req.farmer_name or active_farm_profile.farmer_name,
+        location=req.location or active_farm_profile.location,
+        farm_size_acres=req.farm_size or active_farm_profile.farm_size,
+        crop_name=req.crop_name or active_farm_profile.current_crop,
+        irrigation_method=req.irrigation_method or active_farm_profile.irrigation_method
+    )
+    return matched.model_dump()
+
 @app.post("/api/set-mode")
 
 

@@ -197,6 +197,9 @@
                     <button class="nav-tab-btn" id="tabEconomicsBtn" data-view="economicsView">
                         <i class="fa-solid fa-coins"></i> <span data-i18n="tab_economics">Farm Economics</span>
                     </button>
+                    <button class="nav-tab-btn" id="tabSchemesBtn" data-view="schemesView">
+                        <i class="fa-solid fa-landmark"></i> <span data-i18n="tab_schemes">Govt Schemes</span>
+                    </button>
                     <button class="nav-tab-btn" id="tabChatBtn" data-view="chatView">
                         <i class="fa-solid fa-comments"></i> <span data-i18n="tab_advisory">AI Field Voice Assistant</span>
                     </button>
@@ -862,8 +865,36 @@
                     </div>
                 </div>
 
-                <!-- 7. Main Conversation & Audio Interface (Tab 7) -->
+                <!-- 7. Government Schemes & Subsidy Assistant View (Tab 7) -->
+                <div class="view-panel hidden" id="schemesView">
+                    <!-- Schemes Hero Summary Card -->
+                    <div class="schemes-hero-card">
+                        <div class="schemes-hero-left">
+                            <span class="schemes-badge" id="schemesCategoryBadge">Small Farmer (1-2 Hectares)</span>
+                            <h2 class="schemes-amount" id="schemesTotalBenefit">₹2,72,500+</h2>
+                            <p class="schemes-sub" data-i18n="lbl_total_subsidy_potential">Total Potential Government Subsidies & Benefits</p>
+                        </div>
+                        <div class="schemes-hero-right">
+                            <div class="scheme-stat-pill">
+                                <span data-i18n="lbl_eligible_schemes_count">Eligible Schemes:</span>
+                                <strong id="schemesMatchedCount">6 Schemes Active</strong>
+                            </div>
+                            <div class="scheme-stat-pill">
+                                <span data-i18n="lbl_dbt_status">DBT Mode:</span>
+                                <strong>Direct Bank Transfer</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Schemes Container Grid -->
+                    <div class="schemes-cards-container" id="schemesCardsContainer">
+                        <!-- Dynamic scheme cards injected here -->
+                    </div>
+                </div>
+
+                <!-- 8. Main Conversation & Audio Interface (Tab 8) -->
                 <div class="view-panel hidden" id="chatView">
+
 
 
 

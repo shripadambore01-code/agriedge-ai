@@ -85,6 +85,10 @@ const languageSelect = document.getElementById("languageSelect");
 // 9-Language Localization Dictionary for Field Agriculture
 const TRANSLATIONS = {
     en: {
+        tab_schemes: "Govt Schemes",
+        lbl_total_subsidy_potential: "Total Potential Government Subsidies & Benefits",
+        lbl_eligible_schemes_count: "Eligible Schemes:",
+        lbl_dbt_status: "DBT Mode:",
         tab_economics: "Farm Economics",
         lbl_projected_net_profit: "Estimated Net Profit for Your Harvest",
         lbl_gross_revenue: "Gross Revenue:",
@@ -207,6 +211,10 @@ const TRANSLATIONS = {
         signal_web_offline: "Signal: <strong>Offline (Field Mode)</strong>"
     },
     hi: {
+        tab_schemes: "सरकारी योजनाएं व सब्सिडी",
+        lbl_total_subsidy_potential: "कुल संभावित सरकारी सब्सिडी व लाभ",
+        lbl_eligible_schemes_count: "पात्र योजनाएं:",
+        lbl_dbt_status: "डीबीटी मोड:",
         tab_economics: "खेत अर्थशास्त्र और मुनाफा",
         lbl_projected_net_profit: "आपकी फसल का अनुमानित शुद्ध लाभ",
         lbl_gross_revenue: "कुल अनुमानित आय:",
@@ -329,6 +337,10 @@ const TRANSLATIONS = {
         signal_web_offline: "सिग्नल: <strong>ऑफ़लाइन (फील्ड मोड)</strong>"
     },
     mr: {
+        tab_schemes: "शासकीय योजना व सबसिडी",
+        lbl_total_subsidy_potential: "एकूण संभाव्य शासकीय सबसिडी व लाभ",
+        lbl_eligible_schemes_count: "पात्र योजना:",
+        lbl_dbt_status: "डीबीटी पद्धत:",
         tab_economics: "शेत अर्थशास्त्र व नफा",
         lbl_projected_net_profit: "आपल्या पिकाचा अंदाजित निव्वळ नफा",
         lbl_gross_revenue: "एकूण अंदाजित उत्पन्न:",
@@ -1630,6 +1642,7 @@ const tabDoctorBtn = document.getElementById("tabDoctorBtn");
 const tabIrrigationBtn = document.getElementById("tabIrrigationBtn");
 const tabSoilBtn = document.getElementById("tabSoilBtn");
 const tabEconomicsBtn = document.getElementById("tabEconomicsBtn");
+const tabSchemesBtn = document.getElementById("tabSchemesBtn");
 const tabChatBtn = document.getElementById("tabChatBtn");
 const dashboardView = document.getElementById("dashboardView");
 const journeyView = document.getElementById("journeyView");
@@ -1637,11 +1650,12 @@ const doctorView = document.getElementById("doctorView");
 const irrigationView = document.getElementById("irrigationView");
 const soilView = document.getElementById("soilView");
 const economicsView = document.getElementById("economicsView");
+const schemesView = document.getElementById("schemesView");
 const chatView = document.getElementById("chatView");
 
 function switchMainView(viewName) {
-    [tabDashboardBtn, tabJourneyBtn, tabDoctorBtn, tabIrrigationBtn, tabSoilBtn, tabEconomicsBtn, tabChatBtn].forEach(btn => { if (btn) btn.classList.remove("active"); });
-    [dashboardView, journeyView, doctorView, irrigationView, soilView, economicsView, chatView].forEach(view => { if (view) view.classList.add("hidden"); });
+    [tabDashboardBtn, tabJourneyBtn, tabDoctorBtn, tabIrrigationBtn, tabSoilBtn, tabEconomicsBtn, tabSchemesBtn, tabChatBtn].forEach(btn => { if (btn) btn.classList.remove("active"); });
+    [dashboardView, journeyView, doctorView, irrigationView, soilView, economicsView, schemesView, chatView].forEach(view => { if (view) view.classList.add("hidden"); });
 
     if (viewName === "dashboardView") {
         if (tabDashboardBtn) tabDashboardBtn.classList.add("active");
@@ -1661,6 +1675,9 @@ function switchMainView(viewName) {
     } else if (viewName === "economicsView") {
         if (tabEconomicsBtn) tabEconomicsBtn.classList.add("active");
         if (economicsView) economicsView.classList.remove("hidden");
+    } else if (viewName === "schemesView") {
+        if (tabSchemesBtn) tabSchemesBtn.classList.add("active");
+        if (schemesView) schemesView.classList.remove("hidden");
     } else {
         if (tabChatBtn) tabChatBtn.classList.add("active");
         if (chatView) chatView.classList.remove("hidden");
@@ -1673,6 +1690,7 @@ if (tabDoctorBtn) tabDoctorBtn.addEventListener("click", () => switchMainView("d
 if (tabIrrigationBtn) tabIrrigationBtn.addEventListener("click", () => switchMainView("irrigationView"));
 if (tabSoilBtn) tabSoilBtn.addEventListener("click", () => switchMainView("soilView"));
 if (tabEconomicsBtn) tabEconomicsBtn.addEventListener("click", () => switchMainView("economicsView"));
+if (tabSchemesBtn) tabSchemesBtn.addEventListener("click", () => switchMainView("schemesView"));
 if (tabChatBtn) tabChatBtn.addEventListener("click", () => switchMainView("chatView"));
 
 let completedTasksState = JSON.parse(localStorage.getItem("agriedge_completed_tasks") || "{}");
@@ -2231,7 +2249,7 @@ async function loadSmartWeather() {
         };
     }
 
-// Hook into save profile to reload dashboard, weather, crop journey, irrigation, soil health, and economics instantly
+// Hook into save profile to reload dashboard, weather, crop journey, irrigation, soil health, economics, and schemes instantly
 const origSaveFarmProfileData = saveFarmProfileData;
 saveFarmProfileData = async function(profileData) {
     await origSaveFarmProfileData(profileData);
@@ -2241,6 +2259,7 @@ saveFarmProfileData = async function(profileData) {
     await loadIrrigationAdvisor();
     await loadSoilHealthRecommendation(activeSoilPreset);
     await loadFarmEconomics();
+    await loadMatchedGovtSchemes();
 };
 
 // Initial Smart Weather Load
@@ -3143,6 +3162,185 @@ if (recalcEconBtn) {
 
 // Initial Farm Economics Load
 loadFarmEconomics();
+
+// ==========================================================================
+// Phase 9: Government Scheme Matching & Assistant Client Engine
+// ==========================================================================
+
+function renderGovtSchemesUI(data) {
+    const badgeEl = document.getElementById("schemesCategoryBadge");
+    const totalBenefitEl = document.getElementById("schemesTotalBenefit");
+    const matchedCountEl = document.getElementById("schemesMatchedCount");
+    const container = document.getElementById("schemesCardsContainer");
+
+    if (badgeEl) badgeEl.textContent = data.farmer_category;
+    if (totalBenefitEl) totalBenefitEl.textContent = `₹${data.total_potential_benefit_inr.toLocaleString('en-IN')}+`;
+    if (matchedCountEl) matchedCountEl.textContent = `${data.matched_count} Schemes Active`;
+
+    if (container && data.matched_schemes) {
+        container.innerHTML = "";
+        data.matched_schemes.forEach(s => {
+            const card = document.createElement("div");
+            card.className = "scheme-card-item";
+
+            const docsList = s.required_documents.map(d => `<li>${d}</li>`).join("");
+            const stepsList = s.how_to_apply.map(st => `<li>${st}</li>`).join("");
+
+            card.innerHTML = `
+                <div class="scheme-header">
+                    <div class="scheme-title-box">
+                        <h4>${s.name}</h4>
+                        <span class="scheme-ministry"><i class="fa-solid fa-building-columns"></i> ${s.ministry_or_dept}</span>
+                    </div>
+                    <span class="scheme-status-badge">${s.eligibility_status}</span>
+                </div>
+
+                <div class="scheme-benefit-box">
+                    <strong><i class="fa-solid fa-gift"></i> Benefit:</strong> ${s.benefit_summary}
+                </div>
+
+                <div class="scheme-content-grid">
+                    <div class="scheme-box-inner">
+                        <h5><i class="fa-solid fa-file-lines"></i> Required Documents Checklist:</h5>
+                        <ul>${docsList}</ul>
+                    </div>
+                    <div class="scheme-box-inner">
+                        <h5><i class="fa-solid fa-list-check"></i> Step-by-Step Application:</h5>
+                        <ol>${stepsList}</ol>
+                    </div>
+                </div>
+
+                <div class="scheme-card-footer">
+                    <span class="scheme-est-val"><i class="fa-solid fa-sack-dollar"></i> Estimated Financial Value: <strong>₹${s.estimated_benefit_inr.toLocaleString('en-IN')}</strong></span>
+                    <a href="${s.official_portal_url}" target="_blank" rel="noopener" class="btn-apply-portal">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Apply on Official Portal
+                    </a>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+}
+
+async function loadMatchedGovtSchemes() {
+    let data = null;
+
+    if (hasBackend) {
+        try {
+            const res = await fetch("/api/schemes/matched");
+            if (res.ok) {
+                data = await res.json();
+            }
+        } catch (e) {
+            console.log("Using client offline schemes engine:", e);
+        }
+    }
+
+    if (!data) {
+        // Direct offline fallback schemes matching
+        const size = currentFarmProfile.farm_size || 3.0;
+        const crop = currentFarmProfile.current_crop || "Cotton";
+        const cat = size <= 2.5 ? "Marginal Farmer (< 1 Ha / 2.5 Acres)" : "Small Farmer (1-2 Ha / 2.5-5 Acres)";
+        const insVal = size * 25000;
+        const dripVal = size * 22000;
+
+        data = {
+            farmer_name: currentFarmProfile.farmer_name,
+            location: currentFarmProfile.location,
+            farm_size_acres: size,
+            farmer_category: cat,
+            crop_name: crop,
+            total_potential_benefit_inr: 6000 + insVal + dripVal + 145000 + 45000 + 1500,
+            matched_count: 6,
+            matched_schemes: [
+                {
+                    id: "pm_kisan",
+                    name: "PM-KISAN (Pradhan Mantri Kisan Samman Nidhi)",
+                    ministry_or_dept: "Ministry of Agriculture & Farmers Welfare",
+                    scheme_type: "Direct Cash Transfer",
+                    benefit_summary: "₹6,000 / year paid directly in 3 equal installments of ₹2,000 into bank account via DBT.",
+                    eligibility_status: "Eligible 🟢",
+                    eligibility_reason: "All landholding farmer families qualifying under operational guidelines are eligible.",
+                    estimated_benefit_inr: 6000,
+                    required_documents: ["Aadhaar Card linked to Mobile", "7/12 Extract / RoR Land Record", "Bank Passbook (NPCI Seeded)", "Self-Declaration Form"],
+                    how_to_apply: ["Visit pmkisan.gov.in -> New Farmer Registration", "Verify Aadhaar with OTP", "Enter Land Survey numbers and submit"],
+                    official_portal_url: "https://pmkisan.gov.in/"
+                },
+                {
+                    id: "pmfby",
+                    name: "PMFBY (Pradhan Mantri Fasal Bima Yojana)",
+                    ministry_or_dept: "Ministry of Agriculture & Farmers Welfare",
+                    scheme_type: "Crop Risk Insurance",
+                    benefit_summary: `Comprehensive insurance coverage up to ₹${insVal.toLocaleString()} against crop loss.`,
+                    eligibility_status: "Highly Recommended 🟢",
+                    eligibility_reason: `Notified for ${crop} with subsidized 1.5% - 2.0% premium.`,
+                    estimated_benefit_inr: insVal,
+                    required_documents: ["7/12 Land Record", "Sowing Certificate / Patwari Report", "Bank Passbook Copy", "Aadhaar Card"],
+                    how_to_apply: ["Visit pmfby.gov.in or local CSC / Bank", "Select crop & district notification unit", "Pay nominal premium and receive policy receipt"],
+                    official_portal_url: "https://pmfby.gov.in/"
+                },
+                {
+                    id: "pmksy_micro_irrigation",
+                    name: "PMKSY - Per Drop More Crop (Micro-Irrigation Subsidy)",
+                    ministry_or_dept: "Department of Agriculture & Farmers Welfare",
+                    scheme_type: "Equipment Subsidy",
+                    benefit_summary: `Up to 55% capital subsidy (approx. ₹${dripVal.toLocaleString()}) for Drip/Sprinkler system.`,
+                    eligibility_status: "Eligible 🟢",
+                    eligibility_reason: "Small and marginal farmers receive 55% subsidy.",
+                    estimated_benefit_inr: dripVal,
+                    required_documents: ["Land Ownership 7/12 Title", "Water Source Certificate", "Aadhaar Card", "Approved Drip Vendor Quotation"],
+                    how_to_apply: ["Register on State Agriculture DBT portal", "Upload land title and water proof", "Select vendor for GPS survey and get subsidy sanction"],
+                    official_portal_url: "https://pmksy.gov.in/"
+                },
+                {
+                    id: "pm_kusum",
+                    name: "PM-KUSUM (Solar Agriculture Water Pump Subsidy)",
+                    ministry_or_dept: "Ministry of New and Renewable Energy",
+                    scheme_type: "Capital Subsidy",
+                    benefit_summary: "60% combined Central + State subsidy for standalone 3HP to 7.5HP off-grid Solar Water Pump.",
+                    eligibility_status: "Eligible 🟢",
+                    eligibility_reason: "Farmers with agricultural land qualify for Component B.",
+                    estimated_benefit_inr: 145000,
+                    required_documents: ["Land Holding Document", "Aadhaar Card", "No Electric Agriculture Line Certificate", "Water Table NOC"],
+                    how_to_apply: ["Apply on State Renewable Energy Portal", "Pay 10% farmer share", "Vendor installs solar pump with 5-year warranty"],
+                    official_portal_url: "https://pmkusum.mnre.gov.in/"
+                },
+                {
+                    id: "smam_mechanization",
+                    name: "SMAM (Sub-Mission on Agricultural Mechanization)",
+                    ministry_or_dept: "Ministry of Agriculture & Farmers Welfare",
+                    scheme_type: "Farm Machinery Subsidy",
+                    benefit_summary: "40% to 50% subsidy on purchase of Rotavators, Seed Drills, Sprayers, and Power Weeders.",
+                    eligibility_status: "Eligible 🟢",
+                    eligibility_reason: `Special 50% subsidy allocation for ${cat}.`,
+                    estimated_benefit_inr: 45000,
+                    required_documents: ["Aadhaar Card", "RoR Land Record", "Bank Passbook Copy", "Caste / Small Farmer Certificate"],
+                    how_to_apply: ["Register on agrimachinery.nic.in DBT portal", "Choose farm machinery", "Purchase from registered dealer to receive subsidy in bank"],
+                    official_portal_url: "https://agrimachinery.nic.in/"
+                },
+                {
+                    id: "soil_health_card",
+                    name: "National Soil Health Card Scheme",
+                    ministry_or_dept: "Department of Agriculture & Farmers Welfare",
+                    scheme_type: "Free Laboratory Testing",
+                    benefit_summary: "100% Free laboratory testing of farm soil across 12 parameters.",
+                    eligibility_status: "Eligible 🟢",
+                    eligibility_reason: "Free service provided by Ministry of Agriculture.",
+                    estimated_benefit_inr: 1500,
+                    required_documents: ["Farmer Aadhaar Card", "Farm Khasra / Survey Number"],
+                    how_to_apply: ["Krishi Mitra collects GPS soil sample", "Laboratory tests 12 parameters", "Receive printed Soil Card at village Panchayat"],
+                    official_portal_url: "https://soilhealth.dac.gov.in/"
+                }
+            ]
+        };
+    }
+
+    renderGovtSchemesUI(data);
+}
+
+// Initial Matched Schemes Load
+loadMatchedGovtSchemes();
+
 
 
 

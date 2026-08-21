@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="app-layout">
@@ -21,9 +21,9 @@
                 <div class="brand-title">
                     <div class="brand-row">
                         <h2>AgriVoice</h2>
-                        <span class="version-tag">v1.0 Offline-First</span>
+                        <span class="version-tag" data-i18n="version_tag">v1.0 Offline-First</span>
                     </div>
-                    <p class="brand-desc">Voice Advisory System for Field Agriculture</p>
+                    <p class="brand-desc" data-i18n="brand_desc">Voice Advisory System for Field Agriculture</p>
                 </div>
             </div>
 
@@ -36,17 +36,36 @@
 
                 <div class="telemetry-pill" id="ragStatusPill" title="Local Agricultural Knowledge Base">
                     <i class="fa-solid fa-database pill-icon"></i>
-                    <span>RAG Index: <strong>8 Records</strong></span>
+                    <span data-i18n="rag_index">RAG Index: <strong>8 Records</strong></span>
+                </div>
+
+                <!-- Language Selector -->
+                <div class="lang-selector-wrapper">
+                    <label for="languageSelect" class="selector-label" data-i18n="lang_label">Language:</label>
+                    <div class="custom-select-box">
+                        <select id="languageSelect">
+                            <option value="en" selected>🌐 English</option>
+                            <option value="hi">🇮🇳 हिंदी (Hindi)</option>
+                            <option value="mr">🚩 मराठी (Marathi)</option>
+                            <option value="te">🌾 తెలుగు (Telugu)</option>
+                            <option value="ta">🌿 தமிழ் (Tamil)</option>
+                            <option value="kn">🌱 ಕನ್ನಡ (Kannada)</option>
+                            <option value="pa">🚜 ਪੰਜਾਬੀ (Punjabi)</option>
+                            <option value="gu">🌻 ગુજરાતી (Gujarati)</option>
+                            <option value="bn">🌾 বাংলা (Bengali)</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down select-arrow"></i>
+                    </div>
                 </div>
 
                 <!-- Engine Mode Selector -->
                 <div class="mode-selector-wrapper">
-                    <label for="smartModeSelect" class="selector-label">Processing Engine:</label>
+                    <label for="smartModeSelect" class="selector-label" data-i18n="engine_label">Engine:</label>
                     <div class="custom-select-box">
                         <select id="smartModeSelect">
-                            <option value="off">🔒 Offline Default (Llama 3.2 3B)</option>
-                            <option value="auto" selected>⚡ Hybrid Auto (Local + Cloud Boost)</option>
-                            <option value="on">🌐 Cloud Priority (Gemini Flash)</option>
+                            <option value="off" data-i18n="engine_off">🔒 Offline Default (Llama 3.2 3B)</option>
+                            <option value="auto" selected data-i18n="engine_auto">⚡ Hybrid Auto (Local + Cloud Boost)</option>
+                            <option value="on" data-i18n="engine_on">🌐 Cloud Priority (Gemini Flash)</option>
                         </select>
                         <i class="fa-solid fa-chevron-down select-arrow"></i>
                     </div>
@@ -59,39 +78,39 @@
             <!-- Left Sidebar: Quick Agricultural Workflows -->
             <aside class="sidebar">
                 <div class="sidebar-section">
-                    <h3 class="section-title"><i class="fa-solid fa-compass"></i> Field Quick Actions</h3>
+                    <h3 class="section-title"><i class="fa-solid fa-compass"></i> <span data-i18n="quick_actions">Field Quick Actions</span></h3>
                     <div class="quick-chips">
-                        <button class="chip-btn" data-query="How do I identify and treat Yellow Rust in wheat crops?">
+                        <button class="chip-btn" data-chip="wheat_yellow_rust" data-query="How do I identify and treat Yellow Rust in wheat crops?">
                             <i class="fa-solid fa-seedling"></i>
-                            <span>Wheat Yellow Rust</span>
+                            <span data-i18n="chip_yellow_rust">Wheat Yellow Rust</span>
                         </button>
-                        <button class="chip-btn" data-query="How to control Pink Bollworm in cotton crops?">
+                        <button class="chip-btn" data-chip="cotton_pink_bollworm" data-query="How to control Pink Bollworm in cotton crops?">
                             <i class="fa-solid fa-bug"></i>
-                            <span>Cotton Pink Bollworm</span>
+                            <span data-i18n="chip_pink_bollworm">Cotton Pink Bollworm</span>
                         </button>
-                        <button class="chip-btn" data-query="What are symptoms of Rice Blast disease and what is the spray dosage?">
+                        <button class="chip-btn" data-chip="rice_blast" data-query="What are symptoms of Rice Blast disease and what is the spray dosage?">
                             <i class="fa-solid fa-leaf"></i>
-                            <span>Rice Blast Treatment</span>
+                            <span data-i18n="chip_rice_blast">Rice Blast Treatment</span>
                         </button>
-                        <button class="chip-btn" data-query="How do I treat Early Blight concentric spots on tomato plants?">
+                        <button class="chip-btn" data-chip="tomato_early_blight" data-query="How do I treat Early Blight concentric spots on tomato plants?">
                             <i class="fa-solid fa-circle-dot"></i>
-                            <span>Tomato Early Blight</span>
+                            <span data-i18n="chip_early_blight">Tomato Early Blight</span>
                         </button>
-                        <button class="chip-btn" data-query="What are signs of Nitrogen deficiency in crops and how to fix with Urea?">
+                        <button class="chip-btn" data-chip="soil_nitrogen_deficiency" data-query="What are signs of Nitrogen deficiency in crops and how to fix with Urea?">
                             <i class="fa-solid fa-flask"></i>
-                            <span>Nitrogen Deficiency</span>
+                            <span data-i18n="chip_nitrogen">Nitrogen Deficiency</span>
                         </button>
-                        <button class="chip-btn" data-query="What are the benefits and maintenance steps for drip irrigation systems?">
+                        <button class="chip-btn" data-chip="drip_irrigation_guidance" data-query="What are the benefits and maintenance steps for drip irrigation systems?">
                             <i class="fa-solid fa-faucet-drip"></i>
-                            <span>Drip Maintenance</span>
+                            <span data-i18n="chip_drip">Drip Maintenance</span>
                         </button>
-                        <button class="chip-btn" data-query="What is the PM-KISAN subsidy scheme and what documents are required?">
+                        <button class="chip-btn" data-chip="pm_kisan_scheme" data-query="What is the PM-KISAN subsidy scheme and what documents are required?">
                             <i class="fa-solid fa-building-columns"></i>
-                            <span>PM-KISAN Rs 6000 Scheme</span>
+                            <span data-i18n="chip_pmkisan">PM-KISAN Rs 6000 Scheme</span>
                         </button>
-                        <button class="chip-btn" data-query="How does PMFBY Crop Insurance work and what is the claim deadline?">
+                        <button class="chip-btn" data-chip="pm_fby_crop_insurance" data-query="How does PMFBY Crop Insurance work and what is the claim deadline?">
                             <i class="fa-solid fa-shield-heart"></i>
-                            <span>PMFBY Crop Insurance</span>
+                            <span data-i18n="chip_pmfby">PMFBY Crop Insurance</span>
                         </button>
                     </div>
                 </div>
@@ -100,14 +119,14 @@
                 <div class="sidebar-card">
                     <div class="card-header-mini">
                         <i class="fa-solid fa-circle-info"></i>
-                        <h4>Architecture Specs</h4>
+                        <h4 data-i18n="arch_specs">Architecture Specs</h4>
                     </div>
                     <ul class="spec-list">
-                        <li><span>Voice In:</span> <strong>faster-whisper (Offline)</strong></li>
-                        <li><span>Retrieval:</span> <strong>ChromaDB / JSON RAG</strong></li>
-                        <li><span>Local LLM:</span> <strong>Llama 3.2 3B Q4_K_M</strong></li>
-                        <li><span>Cloud LLM:</span> <strong>Gemini 2.5 Flash</strong></li>
-                        <li><span>Voice Out:</span> <strong>Piper TTS (Offline)</strong></li>
+                        <li><span data-i18n="spec_voice_in">Voice In:</span> <strong>Cloud STT / Whisper</strong></li>
+                        <li><span data-i18n="spec_retrieval">Retrieval:</span> <strong>ChromaDB / JSON RAG</strong></li>
+                        <li><span data-i18n="spec_local_llm">Local LLM:</span> <strong>Llama 3.2 3B Q4_K_M</strong></li>
+                        <li><span data-i18n="spec_cloud_llm">Cloud LLM:</span> <strong>Gemini 2.5 Flash</strong></li>
+                        <li><span data-i18n="spec_voice_out">Voice Out:</span> <strong>Piper TTS / Web Speech</strong></li>
                     </ul>
                 </div>
             </aside>
@@ -123,16 +142,16 @@
                                 <i class="fa-solid fa-tractor"></i>
                             </div>
                             <div class="agent-meta">
-                                <h3>Farmer Field Assistant Ready</h3>
-                                <span class="meta-status">100% Offline Capable • Local RAG Active</span>
+                                <h3 data-i18n="welcome_title">Farmer Field Assistant Ready</h3>
+                                <span class="meta-status" data-i18n="welcome_status">100% Offline Capable • Local RAG Active</span>
                             </div>
                         </div>
                         <div class="entry-body">
-                            <p>Press the <strong>Microphone button</strong> below or select a quick topic from the left panel to ask about crop diseases, pest outbreaks, fertilizer dosages, or government welfare schemes.</p>
+                            <p data-i18n="welcome_desc">Press the <strong>Microphone button</strong> below or select a quick topic from the left panel to ask about crop diseases, pest outbreaks, fertilizer dosages, or government welfare schemes.</p>
                             <div class="feature-pills">
-                                <span class="feature-tag"><i class="fa-solid fa-microphone-lines"></i> Offline Voice In</span>
-                                <span class="feature-tag"><i class="fa-solid fa-brain"></i> On-Device Reasoning</span>
-                                <span class="feature-tag"><i class="fa-solid fa-volume-high"></i> Offline Voice Out</span>
+                                <span class="feature-tag" data-i18n="tag_voice_in"><i class="fa-solid fa-microphone-lines"></i> Voice Command</span>
+                                <span class="feature-tag" data-i18n="tag_reasoning"><i class="fa-solid fa-brain"></i> Multi-Dialect AI</span>
+                                <span class="feature-tag" data-i18n="tag_voice_out"><i class="fa-solid fa-volume-high"></i> Spoken Audio Out</span>
                             </div>
                         </div>
                     </div>
@@ -143,7 +162,7 @@
                     <div class="wave-spinner">
                         <span></span><span></span><span></span><span></span>
                     </div>
-                    <span id="processingText" class="loader-text">Analyzing query with Local Agricultural RAG...</span>
+                    <span id="processingText" class="loader-text" data-i18n="processing_text">Analyzing query with Agricultural RAG...</span>
                 </div>
 
                 <!-- Bottom Input Console -->
@@ -154,8 +173,8 @@
                             <i class="fa-solid fa-microphone mic-icon"></i>
                         </button>
                         <div class="voice-state-text">
-                            <h4 id="micStatusTitle">Press Microphone to Speak</h4>
-                            <p id="micStatusSubtitle">Works without internet connection</p>
+                            <h4 id="micStatusTitle" data-i18n="mic_title">Press Microphone to Speak</h4>
+                            <p id="micStatusSubtitle" data-i18n="mic_sub">Works with Cloud Voice API & Offline Engine</p>
                         </div>
                     </div>
 
@@ -163,10 +182,10 @@
                     <form class="text-query-bar" id="chatForm">
                         <div class="input-wrapper">
                             <i class="fa-solid fa-keyboard input-icon"></i>
-                            <input type="text" id="textQueryInput" placeholder="Type crop question or pest symptom..." autocomplete="off">
+                            <input type="text" id="textQueryInput" data-i18n-placeholder="input_placeholder" placeholder="Type crop question or pest symptom..." autocomplete="off">
                         </div>
                         <button type="submit" class="submit-btn" id="sendButton" title="Send Question">
-                            <span>Ask Assistant</span>
+                            <span data-i18n="send_btn">Ask Assistant</span>
                             <i class="fa-solid fa-arrow-right"></i>
                         </button>
                     </form>
@@ -181,3 +200,4 @@
     <script src="app.js"></script>
 </body>
 </html>
+

@@ -180,11 +180,13 @@ body {
     background-color: var(--earth-accent);
 }
 
-.mode-selector-wrapper {
+.mode-selector-wrapper,
+.lang-selector-wrapper {
     display: flex;
     align-items: center;
     gap: 8px;
 }
+
 
 .selector-label {
     font-size: 12px;

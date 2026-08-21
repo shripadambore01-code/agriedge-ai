@@ -48,6 +48,8 @@ tts = AgriTTS(model_path=PIPER_VOICE_MODEL, config_path=PIPER_VOICE_CONFIG)
 class TextQueryRequest(BaseModel):
     query: str
     mode: str = "auto"
+    language: str = "en"
+
 
 @app.get("/", response_class=HTMLResponse)
 def read_root():
@@ -135,7 +137,7 @@ def process_text_query(req: TextQueryRequest):
 
 @app.post("/api/voice")
 @app.post("/voice")
-async def process_voice_query(audio_file: UploadFile = File(...), mode: str = Form("auto")):
+async def process_voice_query(audio_file: UploadFile = File(...), mode: str = Form("auto"), language: str = Form("en")):
     """Processes recorded audio input via Offline STT, RAG, Dual-Brain Router, and TTS."""
     # Save uploaded audio file
     input_audio_id = f"input_{uuid.uuid4().hex[:8]}.wav"
@@ -145,10 +147,11 @@ async def process_voice_query(audio_file: UploadFile = File(...), mode: str = Fo
         content = await audio_file.read()
         f.write(content)
 
-    # 1. Offline STT
-    transcription = stt.transcribe(str(input_audio_path))
+    # 1. Speech-to-Text with multi-dialect support
+    transcription = stt.transcribe(str(input_audio_path), language=language)
     if not transcription.strip():
         transcription = "No audible question detected."
+
 
     # 2. RAG Retrieval
     rag_result = rag.retrieve(transcription)

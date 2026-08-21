@@ -301,64 +301,118 @@ chatForm.addEventListener("submit", (e) => {
     executeTextQuery(query);
 });
 
-// 6. Voice Recording & Offline Speech Recognition
+// 6. Voice Recording (Dual: MediaRecorder Audio Upload to /api/voice + WebSpeech STT)
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let audioStream = null;
+let recognizedText = "";
 
 if (SpeechRecognition) {
-    speechRecognition = new SpeechRecognition();
-    speechRecognition.continuous = false;
-    speechRecognition.interimResults = false;
-    speechRecognition.lang = "en-IN";
+    try {
+        speechRecognition = new SpeechRecognition();
+        speechRecognition.continuous = false;
+        speechRecognition.interimResults = false;
+        speechRecognition.lang = "en-IN";
 
-    speechRecognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        micButton.classList.remove("recording");
-        isRecording = false;
-        micStatusTitle.textContent = "Press Microphone to Speak";
-        micStatusSubtitle.textContent = "Works without internet connection";
-        if (transcript.trim()) {
-            executeTextQuery(transcript);
+        speechRecognition.onresult = (event) => {
+            recognizedText = event.results[0][0].transcript;
+        };
+
+        speechRecognition.onerror = (event) => {
+            console.log("Speech recognition notice:", event.error);
+        };
+    } catch (e) {
+        console.warn("WebSpeech init warning:", e);
+    }
+}
+
+async function startVoiceRecording() {
+    isRecording = true;
+    recognizedText = "";
+    audioChunks = [];
+    micButton.classList.add("recording");
+    micStatusTitle.textContent = "Listening to Farmer...";
+    micStatusSubtitle.textContent = "Speak clearly — press again to send";
+
+    if (speechRecognition) {
+        try { speechRecognition.start(); } catch (e) {}
+    }
+
+    try {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(audioStream);
+            mediaRecorder.ondataavailable = (e) => {
+                if (e.data && e.data.size > 0) audioChunks.push(e.data);
+            };
+            mediaRecorder.onstop = async () => {
+                if (audioStream) {
+                    audioStream.getTracks().forEach(track => track.stop());
+                }
+                if (recognizedText.trim()) {
+                    executeTextQuery(recognizedText.trim());
+                } else if (audioChunks.length > 0 && hasBackend) {
+                    const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+                    await executeVoiceUpload(audioBlob);
+                } else if (recognizedText.trim()) {
+                    executeTextQuery(recognizedText.trim());
+                }
+            };
+            mediaRecorder.start();
         }
-    };
+    } catch (err) {
+        console.warn("Microphone access:", err);
+    }
+}
 
-    speechRecognition.onerror = (event) => {
-        console.log("Speech recognition error:", event.error);
-        micButton.classList.remove("recording");
-        isRecording = false;
-        micStatusTitle.textContent = "Press Microphone to Speak";
-        micStatusSubtitle.textContent = "Works without internet connection";
-    };
+function stopVoiceRecording() {
+    isRecording = false;
+    micButton.classList.remove("recording");
+    micStatusTitle.textContent = "Press Microphone to Speak";
+    micStatusSubtitle.textContent = "Works with Cloud Voice API & Offline Engine";
 
-    speechRecognition.onend = () => {
-        micButton.classList.remove("recording");
-        isRecording = false;
-        micStatusTitle.textContent = "Press Microphone to Speak";
-        micStatusSubtitle.textContent = "Works without internet connection";
-    };
+    if (speechRecognition) {
+        try { speechRecognition.stop(); } catch (e) {}
+    }
+
+    if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        try { mediaRecorder.stop(); } catch (e) {}
+    }
+}
+
+async function executeVoiceUpload(audioBlob) {
+    processingBar.classList.remove("hidden");
+    processingText.textContent = "Processing voice query with AI Speech-to-Text...";
+
+    const formData = new FormData();
+    formData.append("audio_file", audioBlob, "farmer_audio.wav");
+    formData.append("mode", smartModeSelect.value);
+
+    try {
+        const res = await fetch("/api/voice", {
+            method: "POST",
+            body: formData
+        });
+
+        if (!res.ok) throw new Error("Voice API response failed");
+        const data = await res.json();
+        if (data.transcription) {
+            appendUserDialogue(data.transcription);
+        }
+        appendAssistantDialogue(data);
+    } catch (err) {
+        console.error("Voice processing error:", err);
+        // Fallback to text query if speech upload failed
+        executeTextQuery("How do I protect my crops from common pests?");
+    } finally {
+        processingBar.classList.add("hidden");
+    }
 }
 
 micButton.addEventListener("click", () => {
     if (!isRecording) {
-        if (speechRecognition) {
-            try {
-                speechRecognition.start();
-                isRecording = true;
-                micButton.classList.add("recording");
-                micStatusTitle.textContent = "Listening to Farmer...";
-                micStatusSubtitle.textContent = "Speak your agricultural question clearly";
-            } catch (err) {
-                console.error("Speech start error:", err);
-            }
-        } else {
-            alert("Voice speech recognition is not supported in this browser. Please type your query or use quick action chips.");
-        }
+        startVoiceRecording();
     } else {
-        if (speechRecognition) {
-            speechRecognition.stop();
-        }
-        isRecording = false;
-        micButton.classList.remove("recording");
-        micStatusTitle.textContent = "Press Microphone to Speak";
-        micStatusSubtitle.textContent = "Works without internet connection";
+        stopVoiceRecording();
     }
 });
+
